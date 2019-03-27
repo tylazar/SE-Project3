@@ -1,0 +1,18 @@
+version: '1'
+services:
+  web:
+    build: flaskapp
+    ports:
+      - "5000:5000"
+    links:
+      -mysql
+  mysql:
+    build: mysqlapp
+    ports:
+      - "3307:3307"
+    enviroment:
+      MYSQL_DATABASE: Aoc
+      MYSQL_ROOT_PASSWORD: bluecrew
+      MYSQL_ROOT_HOST: 0.0.0.0
+      MYSQL_USER: root
+      MYSQL_PASSWORD: bluecrew
