@@ -1,3 +1,4 @@
+import datetime
 #-----------------------------------------------------------------------------
 #HELPER FOR THE HELPERS
 def connectCursor():
@@ -17,6 +18,40 @@ def studentProgress(student):
 	#1 - the student is taking for classes a semester
 	#2 - the student has at least 3 of those classes each semester in their AOC
 	#3 - all courses the student needs are being offered when they need/want them
+	connection, cur = connectCursor()
+	now = datetime.datetime.now()
+	currentYear = int(now.year)
+	Total_NUM_to_complete = 0
+	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
+	values = (student,)
+	cur.execute()
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	AOCID = ""
+	for AOC_id in results:
+		AOCID = AOC_id
+	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id = %s"
+	values = (AOCID,)
+	cur.execute()
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for NUM_to_complete in results:
+		Total_NUM_to_complete += NUM_to_complete
+	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s"
+	values = (student,)
+	cur.execute()
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for NUM_completed in results:
+		Total_NUM_to_complete -= NUM_completed
+	currentYear += (Total_NUM_to_complete/3)
+	return currentYear
 
 def aocInformation(AOC):
 	#this function will grab all information attached to an AOC, including name

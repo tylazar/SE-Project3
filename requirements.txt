@@ -1,3 +1,4 @@
 flask
 mysql
 mysqlconnector
+flask-oauth
