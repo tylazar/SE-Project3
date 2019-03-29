@@ -151,6 +151,60 @@ def newAccountCreation(username,password,name,email,studentOrProfessor):
 def studentInformation(student):
 	#this function will grab all information pertaining to a student
 	#returns a tuple of said information
+	calculatedGraduation = studentProgress(student)
+	AOCname = ""
+	AOCid = 0
+	connection, cur = connectCursor()
+	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
+	values = (student,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+
+	for AOC_id in results:
+		AOCid = AOC_id
+
+	query = "SELECT name FROM AOCs WHERE id = %s"
+	values = (AOC_id,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+
+	for name in results:
+		AOCname = name
+
+	numCompleted = 0
+
+	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s"
+	values = (student,)
+	cur.execute()
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for NUM_completed in results:
+		numCompleted -= NUM_completed
+
+	numTotal = 0
+
+	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id = %s"
+	values = (AOCID,)
+	cur.execute()
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for NUM_to_complete in results:
+		numTotal += NUM_to_complete
+
+		
+	numLeft = numTotal - numCompleted
+
+	return (calculatedGraduation,AOCname,numLeft)
 
 
 #-----------------------------------------------------------------------------
