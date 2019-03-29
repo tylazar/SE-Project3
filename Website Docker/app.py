@@ -55,3 +55,7 @@ def editProfessorProfile(professor):
 def browseClasses():
 	#stuff here
 	pass
+
+
+if __name__ == "__main__":
+	app.run()
