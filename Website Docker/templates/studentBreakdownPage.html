@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Student Breakdown Page</title>
+</head>
+<body>
+	<h3>{{ progress_sentence }}</h3>
+	<!--things here -->
+	{% for AOC in AOC_List %}
+	<div><!-- this is the AOC progress div -->
+		<h4>{{ AOC[0] }}</h4>
+		{% for requirement in Requirements %}
+		<!-- these will probably be checkboxes or something of 
+			 that sort later -->
+		<p>{{ requirement }}</p>
+		{% endfor %}
+	</div>
+	{% endfor %}
+	<div><!-- this is the LAC progress div -->
+		
+	</div>
+	<div><!-- this is the Courses taken div -->
+		{% for class in Courses %}
+		<p>{{ class }}</p>
+		{% endfor %}
+	</div>
+</body>
+</html>

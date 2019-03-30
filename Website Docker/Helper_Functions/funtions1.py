@@ -24,7 +24,7 @@ def studentProgress(student):
 	Total_NUM_to_complete = 0
 	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
 	values = (student,)
-	cur.execute()
+	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
@@ -34,7 +34,7 @@ def studentProgress(student):
 		AOCID = AOC_id
 	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id = %s"
 	values = (AOCID,)
-	cur.execute()
+	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
@@ -43,7 +43,7 @@ def studentProgress(student):
 		Total_NUM_to_complete += NUM_to_complete
 	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s"
 	values = (student,)
-	cur.execute()
+	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
@@ -92,7 +92,7 @@ def aocInformation(AOC):
 		for Course_id in results2:
 			query = "SELECT name,Department_id FROM Courses WHERE id = %s"
 			values = (Course_id,)
-			cur.execute()
+			cur.execute(query,values)
 			results3 = cur.fetchall()
 			connection.commit()
 			cur.close()
@@ -181,7 +181,7 @@ def studentInformation(student):
 
 	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s"
 	values = (student,)
-	cur.execute()
+	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
@@ -193,7 +193,7 @@ def studentInformation(student):
 
 	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id = %s"
 	values = (AOCID,)
-	cur.execute()
+	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
@@ -201,7 +201,7 @@ def studentInformation(student):
 	for NUM_to_complete in results:
 		numTotal += NUM_to_complete
 
-		
+
 	numLeft = numTotal - numCompleted
 
 	return (calculatedGraduation,AOCname,numLeft)
@@ -220,16 +220,63 @@ def adviseeInfo(professor):
 #STUDENT BREAKDOWN PAGE
 
 def getLACProgress(student):
-	#this function will grab all the information for that student and return the tuple of 
-	#that information
+	#this function will grab all the information for that student and return the list of 
+	#tuples of that information
+	connection, cur = connectCursor()
+	tempList = [("Math_proficiency",False),("Divisional_coursework",False),("Disiplinary_breadth",False),("Diverse_perspective",False),("Eight_liberal_art",False)]
+	query "SELECT Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art FROM LAC_Requirements WHERE Student_id = %s"
+	values = (student,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+
+	for Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art in results:
+		tempList[0][1] = Math_proficiency
+		tempList[1][1] = Divisional_coursework
+		tempList[2][1] = Disiplinary_breadth
+		tempList[3][1] = Diverse_perspective
+		tempList[4][1] = Eight_liberal_art
+
+	return tempList
+
 
 def getStudentCourses(student):
 	#this function will grab all courses the student has taken and return them in a list of
 	#tuples with the course name and course Id
+	CoursesTaken = []
+	connection, cur = connectCursor()
+	query = "SELECT Course_id FROM Courses_completed WHERE Student_id = %s"
+	values = (student,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
 
-def updateStudentAOCProgress(student,progress):
+	for Course_id in results:
+		query = "SELECT * FROM Courses WHERE id = %s"
+		values = (Course_id,)
+		cur.execute(query,values)
+		results2 = cur.fetchall()
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		for id,name,Department_id in results2:
+			CoursesTaken.append((id,name,Department_id))
+
+	return CoursesTaken
+
+def updateStudentAOCProgress(student,requirement_id,requirement_progress):
 	#this function will update a students progress in aoc requirements
 	#returns nothing
+	connection, cur = connectCursor()
+	query = "UPDATE Requirements_completed SET NUM_completed = %s WHERE Student_id = %s AND Requirement_id = %s"
+	values = (requirement_progress,student,requirement_id)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
 
 
 #-----------------------------------------------------------------------------
