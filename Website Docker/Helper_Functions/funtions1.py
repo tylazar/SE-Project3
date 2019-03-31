@@ -252,7 +252,7 @@ def adviseeInfo(professor):
 
 	for id, name, Agreed_to_advisee in results:
 		if Agreed_to_advisee == False:
-			adviseeList.append((name,'[hidden]'))
+			adviseeList.append((name,'[hidden]','[hidden]'))
 		else:
 			query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
 			values = (id,)

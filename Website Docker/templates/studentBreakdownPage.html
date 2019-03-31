@@ -4,22 +4,30 @@
 	<title>Student Breakdown Page</title>
 </head>
 <body>
-	<h3>{{ progress_sentence }}</h3>
+	<a href="BACK_ADDRESS_HERE">Back</a>
+	<h1>Student Progress Breakdown</h1>
+	<h2>{{ progress_sentence }}</h2>
 	<!--things here -->
 	{% for AOC in AOC_List %}
-	<div><!-- this is the AOC progress div -->
-		<h4>{{ AOC[0] }}</h4>
-		{% for requirement in Requirements %}
-		<!-- these will probably be checkboxes or something of 
-			 that sort later -->
-		<p>{{ requirement }}</p>
+		<div class="AOC_div"><!-- this is the AOC progress div -->
+			<h4>{{ AOC[0] }}</h4>
+			{% for requirement in AOC[1] %}
+			<p>{{ requirement }}</p>
+			<!-- these will probably be checkboxes or something of that sort later, but for the meantime it will simply be text-->
+			{% endfor %}
+		</div>
+	{% endfor %}
+	<!-- {% for Slash in SlashList %} -->
+		<div class="Slash_div">
+			<!-- this is here simply for expansion purposes (if we do it) -->
+		</div>
+	<!-- {% endfor %} -->
+	<div class="LAC_div"><!-- this is the LAC progress div -->
+		{% for LAC in LACList %}
+		<p>{{ LAC[0] }} : {{ LAC[1] }}</p>
 		{% endfor %}
 	</div>
-	{% endfor %}
-	<div><!-- this is the LAC progress div -->
-		
-	</div>
-	<div><!-- this is the Courses taken div -->
+	<div class="Courses_div"><!-- this is the Courses taken div -->
 		{% for class in Courses %}
 		<p>{{ class }}</p>
 		{% endfor %}

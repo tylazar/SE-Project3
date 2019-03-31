@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Browse AOCs</title>
+</head>
+<body>
+	<a href="BACK_ADRESS_HERE">Back</a>
+	<form>
+		<p>Select an AOC from the dropdown menu to view more detail about that AOC</p>
+		<select name="AOCs">
+			{% for AOC in AOCList %}
+			<option value="{{ AOC }}">{{ AOC }}</option>
+			{% endfor %}
+		</select>
+		<div class="AOC_info_div">
+			<!-- there is nothing in this div until the person clicks the button to choose a AOC to view -->
+		</div>
+		<button type="submit">View AOC Details</button>
+	</form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add AOC</title>
+</head>
+<body>
+	<a href="BACK_ADDRESS_HERE">Back</a>
+	<p>Please enter the following information to create a new AOC and add it to the database</p>
+	<br>
+	<p>AOC Name</p>
+	<input type="text" name="AOC_name">
+	<br>
+	<p>{{ Department }}  Note: this item is locked to what department you are part of, if you want to create an AOC in another department, contact a professor in that department to do so</p>
+	<br>
+	<form>
+		<p>Enter Requirements for AOC</p>
+		<div class="AOC_div">
+			<div class="Requirement_div">
+				<p>Requirement Name</p>
+				<p>Number of courses for this requirement</p>
+				<input type="number" name="num_for_requirement">
+				<p>Courses for the requirement</p>
+				<div class="Courses_div">
+					<select name="courses">
+						{% for course in courses %}
+						<option value="{{ course }}">{{ course }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<button>Add another course to the Requirement</button>
+			</div>
+			<button>Add another Requirement</button>
+		</div>
+		<button>Cancel</button>
+		<button type="submit">Submit</button>
+	</form>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Browse Courses</title>
+</head>
+<body>
+	<a href="BACK_ADDRESS_HERE">Back</a>
+	<h1>Browse Courses</h1>
+	<div class="Courses_div"> <!-- we want this div to have a set size and a scrollbar -->
+		{% for Course in CourseList %}
+		<h4>{{ Course }}</h4>
+		{% endfor %}	
+	</div>
+</body>
+</html>
