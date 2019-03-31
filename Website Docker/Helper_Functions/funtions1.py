@@ -125,7 +125,8 @@ def grabAllCourses():
 #-----------------------------------------------------------------------------
 #LOGIN PAGE
 
-def loginAuthentication(username,password):
+#doesn't look like this function is needed, covered by oauth
+#def loginAuthentication(email):
 	#this function will authenticate whether a user has a correct username and
 	#password pair
 	#returns a boolean
@@ -134,15 +135,38 @@ def loginAuthentication(username,password):
 #-----------------------------------------------------------------------------
 #CREATE NEW ACCOUNT PAGE
 
-def newAccountAuthentication(name,username,studentOrProfessor):
+def newAccountAuthentication(email):
 	#this function will authenticate whether that username and name are currently being used
-	#in either students or professors, the variable studentOrProfessor is a boolean
+	#in either students or professors
 	#returns a boolean
+	connection, cur = connectCursor()
+	query = "SELECT (SELECT email FROM Students) as student, (SELECT email FROM Professors) as professor"
+	cur.execute(query,)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
 
-def newAccountCreation(username,password,name,email,studentOrProfessor):
+	for student, professor in results:
+		if (student or professor) == email:
+			return False
+	return True
+
+def newAccountCreation(name,email,studentOrProfessor):
 	#this function will create the new account in either student or professors
 	#the variable studentOrProfessor is a boolean
 	#this function returns nothing
+	if not newAccountAuthentication(email):
+		return False
+	connection, cur = connectCursor()
+	query = "INSERT INTO %s (name,email) VALUES (%s,%s)"
+	if studentOrProfessor:
+		table = "Students"
+	else:
+		table = "Professors"
+	values = (table,name,email)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
 
 
 #-----------------------------------------------------------------------------
@@ -214,6 +238,80 @@ def adviseeInfo(professor):
 	#this function will grab all pertinant information from students who have the given
 	#professor as an advisor
 	#returns a list of tuples for this information
+	#for students who have not agreed to give their inormation to their advisor they will appear
+	#but with their information said as simply [hidden]
+	adviseeList = []
+	connection, cur = connectCursor()
+	query = "SELECT id, name, Agreed_to_advisee FROM Students WHERE advisor = %s"
+	values = (professor,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+
+	for id, name, Agreed_to_advisee in results:
+		if Agreed_to_advisee == False:
+			adviseeList.append((name,'[hidden]'))
+		else:
+			query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
+			values = (id,)
+			cur.execute(query,values)
+			results2 = cur.fetchall()
+			connection.commit()
+			cur.close()
+			cur = connection.cursor()
+			AOC_name = ""
+			for AOC_id in results2:
+				query = "SELECT name from AOCs WHERE id = %s"
+				values = (AOC_id,)
+				cur.execute(query,values)
+				results3 = cur.fetchall()
+				connection.commit()
+				cur.close()
+				cur = connection.cursor()
+				for name in results3:
+					AOC_name = name
+			adviseeList.append((name,AOC_name,adviseeInfoHelper(id)))
+
+	return adviseeList
+
+def adviseeInfoHelper(student):
+	#this function basically does the same thing as the student progress function
+	#but instead of returning a year returns a percentage
+	connection, cur = connectCursor()
+	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
+	values = (student,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	AOC_ID = 0
+	totalNumber = 0
+	completedNumber = 0
+	for AOC_id in results:
+		AOC_ID = AOC_id
+	query = "SELECT id, NUM_to_complete FROM Requirements WHERE AOC_id = %s"
+	values = (AOC_ID,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for id, NUM_to_complete in results:
+		totalNumber += NUM_to_complete
+		query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s, Requirement_id = %s"
+		values = (student,id)
+		cur.execute(query,values)
+		results2 = cur.fetchall()
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		for NUM_completed in results2:
+			completedNumber += NUM_completed
+
+	return float(float(completedNumber)/float(totalNumber))
 
 
 #-----------------------------------------------------------------------------
@@ -274,6 +372,16 @@ def updateStudentAOCProgress(student,requirement_id,requirement_progress):
 	connection, cur = connectCursor()
 	query = "UPDATE Requirements_completed SET NUM_completed = %s WHERE Student_id = %s AND Requirement_id = %s"
 	values = (requirement_progress,student,requirement_id)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
+
+def updateStudentLACProgress(student,LAC_requirement_column,LAC_progress):
+	#this function will update a students progress in LAC requirements
+	#returns nothing
+	connection, cur = connectCursor()
+	query = "UPDATE LAC_Requirements SET %s = %s WHERE Student_id = %s"
+	values = (LAC_requirement_column,LAC_progress,student)
 	cur.execute(query,values)
 	connection.commit()
 	cur.close()
