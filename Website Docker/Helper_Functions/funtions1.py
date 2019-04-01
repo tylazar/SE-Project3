@@ -464,7 +464,7 @@ def addProfessorCourse(course_name, department_id):
 		return False
 
 	connection, cur = connectCursor()
-	query = "INSERT INTO Courses (Name,Department-ID) VALUES (%s,%s)"
+	query = "INSERT INTO Courses (Name,Department_id) VALUES (%s,%s)"
 	values = (course_name, department_id)
 	cur.execute(query,values)
 	connection.commit()
@@ -472,6 +472,57 @@ def addProfessorCourse(course_name, department_id):
 
 #-----------------------------------------------------------------------------
 #EDIT STUDENT PROFILE PAGE
+def getStudentProfile(studentEmail):
+	'''
+	Main function is to grab all info for a student’s “profile”,
+	from the student table, student AOC table, and AOC table.
+	Args
+		studentEmail: The email of the student. This is used as
+			a key for getting the student row.
+	Returns
+		student_row: [ID, name, email, advisor, graduation-year, agreed_to_advisee_info_trad]
+		aoc_row: [ID, name, department-id]
+	'''
+	connection, cur = connectCursor()
+
+	query = "SELECT 1 FROM Students WHERE Email=%s"
+	values = studentEmail
+	cur.execute(query, values)
+	student_row = cur.fetchall()[0]
+	student_id = student_row[0]
+
+	query = "SELECT 1 FROM Student_aoc WHERE Student_id=%s"
+	values = (student_id)
+	cur.execute(query, values)
+	student_aoc_row = cur.fetchall()[0]
+	aoc_id = student_aoc_row[1]
+
+	query = "SELECT 1 FROM Student_aoc WHERE id=%s"
+	values = (aoc_id)
+	cur.execute(query, values)
+	aoc_row = cur.fetchall()[1]
+
+	connection.commit()
+	cur.close()
+
+	return student_row, aoc_row
+
+def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id):
+	'''
+	Main function is to submit all info for a student’s “profile”,
+	submits to the student table and student AOC table
+	'''
+	connection, cur = connectCursor()
+
+	query = "UPDATE Student_aoc SET aoc_id=%s WHERE student_id=%s"
+	values = (aoc_id, student_id)
+	cur.execute()
+	cur.commit()
+
+	query = "UPDATE Students SET name=%s,advisor=%s,graduation_year=%s WHERE student_id=%s"
+	values = (name, advisor, graduation_year, student_id)
+	cur.execute()
+	cur.commit()
 
 #-----------------------------------------------------------------------------
 #BROWSE CLASSES PAGE
