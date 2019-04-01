@@ -497,7 +497,7 @@ def getStudentProfile(studentEmail):
 	student_aoc_row = cur.fetchall()[0]
 	aoc_id = student_aoc_row[1]
 
-	query = "SELECT 1 FROM Student_aoc WHERE id=%s"
+	query = "SELECT 1 FROM AOCs WHERE id=%s"
 	values = (aoc_id)
 	cur.execute(query, values)
 	aoc_row = cur.fetchall()[1]
@@ -527,8 +527,28 @@ def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id):
 #-----------------------------------------------------------------------------
 #BROWSE CLASSES PAGE
 
+def getCourses():
+	connection, cur = connectionCurson()
+	query = "SELECT * FROM Courses"
+	cur.execute()
+	ret = cur.fetchall()
+	cur.commit()
+	cur.close()
+
+	return ret
+
 #-----------------------------------------------------------------------------
 #BROWSE AOCS PAGE
+
+def getAoCs():
+	connection, cur = connectionCurson()
+	query = "SELECT * FROM AOCs"
+	cur.execute()
+	ret = cur.fetchall()
+	cur.commit()
+	cur.close()
+
+	return ret
 
 #-----------------------------------------------------------------------------
 #STUDENT AOC DETAIL PAGE
