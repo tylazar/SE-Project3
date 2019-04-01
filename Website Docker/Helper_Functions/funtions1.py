@@ -423,8 +423,11 @@ def studentAddCourse(student,course):
 	returns nothing
 	'''
 	connection, cur = connectCursor()
-	query = "INSERT INTO Courses_completed () VALUES ()"
-	values = ()
+	query = "INSERT INTO Courses_completed (Student_id,Course_id) VALUES (%s,%s)"
+	values = (student,course)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
 
 #-----------------------------------------------------------------------------
 #PROFESSOR ADD COURSE PAGE
