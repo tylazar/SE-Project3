@@ -432,6 +432,44 @@ def studentAddCourse(student,course):
 #-----------------------------------------------------------------------------
 #PROFESSOR ADD COURSE PAGE
 
+def authenticateProfessorCourse(course_name):
+	'''
+	Check to see if submitted name is the same as any other Course in the table
+	Args
+		course_name: The name of the course to be checked
+	Returns
+		bool: If the course can be created
+	'''
+	connection, cur = connectCursor()
+	query = "SELECT 1 FROM Courses WHERE Name=%s"
+	values = (course_name)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+
+	return len(results) == 0
+
+def addProfessorCourse(course_name, department_id):
+	'''
+	Main function to submit new Course into the Courses table
+	Args
+		course_name: The name of the course to be checked
+		department_name: The department that the professor creating the course belongs to
+	Returns
+		bool: If the course was created
+	'''
+	if !authenticateProfessorCourse(course_name):
+		# Should we log something too?
+		return False
+
+	connection, cur = connectCursor()
+	query = "INSERT INTO Courses (Name,Department-ID) VALUES (%s,%s)"
+	values = (course_name, department_id)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
+
 #-----------------------------------------------------------------------------
 #EDIT STUDENT PROFILE PAGE
 
