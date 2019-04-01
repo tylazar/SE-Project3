@@ -1,10 +1,70 @@
-from flask import flask, session, render_template, redirect, request
+=from flask import flask, session, render_template, redirect, request
 import mysql.connector
 
 from Helper_Functions import functions1
 import datetime as dt
 
+from flask_oauthlib.client import OAuth
+
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' # Change this
+
+OAUTH = OAuth()
+GOOGLE = OAUTH.remote_app('google',
+						consumer_key='ASK_HUNT', # keeping off git for security
+						consumer_secret='ASK_HUNT', # ditto
+						request_token_params={'scope': 'email'},
+						base_url='https://www.googleapis.com/oauth2/v1/',
+						request_token_url=None,
+						access_token_method='POST',
+						access_token_url='https://accounts.google.com/o/oauth2/token',
+						authorize_url='https://accounts.google.com/o/oauth2/auth',)
+
+#=========================================#
+# OAuth Functions                         #
+#=========================================#
+
+@GOOGLE.tokengetter
+def get_google_token(token=None):
+	return session.get('token')
+
+#=========================================#
+# Flask Pages for OAuth                   #
+#=========================================#
+
+@app.route('/authorize')
+def oauth_google():
+	'''
+	Page that redirects to Google's OAuth authorization page
+	'''
+	return GOOGLE.authorize(callback=url_for('oauth_google_authorized', _external=True))
+
+@app.route('/authorized')
+def oauth_google_authorized():
+	'''
+	Page that is returned after authorization passes or fails
+	'''
+	resp = GOOGLE.authorized_response()
+	if resp is None:
+		return redirect(url_for('/')) # Where to direct if the authorization fails
+	else:
+		# passed
+		print(resp)
+		token = resp['access_token'] # "thing google uses to see if you are logged in"
+		session['token'] = token
+
+		user_info = GOOGLE.get('userinfo').data # "namesake"
+		username = user_info['email']
+
+		session['email'] = username
+
+		return redirect('/'+username+'/homepage') # Do normal string construction later on
+
+	# do redirects here
+
+#=========================================#
+# Flask Pages                             #
+#=========================================#
 
 @app.route('/')
 def landingPage():
