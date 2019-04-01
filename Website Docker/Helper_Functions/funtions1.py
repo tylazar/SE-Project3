@@ -2,6 +2,9 @@ import datetime
 #-----------------------------------------------------------------------------
 #HELPER FOR THE HELPERS
 def connectCursor():
+	'''
+	returns the mysql connection and the cursor for further use
+	'''
 	connection = mysql.connector.connect(user='root', password='bluecrew', database='Aoc')
 	cur = connection.cursor()
 	return (connection,cur)
@@ -10,14 +13,16 @@ def connectCursor():
 #GENERAL HELPER FUNCTIONS
 
 def studentProgress(student):
-	#this function will calculate how much time a student needs to graduate
-	#returns a year that is the current year plus the number of years needed
-	#to graduatate at the current rate
-	#-----------------------------------
-	#ASSUMTIONS MADE DURING THIS CALCULATION
-	#1 - the student is taking for classes a semester
-	#2 - the student has at least 3 of those classes each semester in their AOC
-	#3 - all courses the student needs are being offered when they need/want them
+	'''
+	this function will calculate how much time a student needs to graduate
+	returns a year that is the current year plus the number of years needed
+	to graduatate at the current rate
+	-----------------------------------
+	ASSUMTIONS MADE DURING THIS CALCULATION
+	1 - the student is taking for classes a semester
+	2 - the student has at least 3 of those classes each semester in their AOC
+	3 - all courses the student needs are being offered when they need/want them
+	'''
 	connection, cur = connectCursor()
 	now = datetime.datetime.now()
 	currentYear = int(now.year)
@@ -54,9 +59,11 @@ def studentProgress(student):
 	return currentYear
 
 def aocInformation(AOC):
-	#this function will grab all information attached to an AOC, including name
-	#department, requirements, and courses for each requirement
-	#returns a tuple
+	'''
+	this function will grab all information attached to an AOC, including name
+	department, requirements, and courses for each requirement
+	returns a tuple
+	'''
 	connection, cur = connectCursor()
 	query = "SELECT name FROM AOCs WHERE id = %s"
 	values = (AOC,)
@@ -106,7 +113,9 @@ def aocInformation(AOC):
 	return (AOCname,tempReqList)
 
 def grabAllCourses():
-	#this function will return a list of tuples of all course names and Id numbers
+	'''
+	this function will return a list of tuples of all course names and Id numbers
+	'''
 	tempList = []
 	connection, cur = connectCursor()
 	query = "SELECT * FROM Courses"
@@ -136,9 +145,11 @@ def grabAllCourses():
 #CREATE NEW ACCOUNT PAGE
 
 def newAccountAuthentication(email):
-	#this function will authenticate whether that username and name are currently being used
-	#in either students or professors
-	#returns a boolean
+	'''
+	this function will authenticate whether that username and name are currently being used
+	in either students or professors
+	returns a boolean
+	'''
 	connection, cur = connectCursor()
 	query = "SELECT (SELECT email FROM Students) as student, (SELECT email FROM Professors) as professor"
 	cur.execute(query,)
@@ -152,9 +163,11 @@ def newAccountAuthentication(email):
 	return True
 
 def newAccountCreation(name,email,studentOrProfessor):
-	#this function will create the new account in either student or professors
-	#the variable studentOrProfessor is a boolean
-	#this function returns nothing
+	'''
+	this function will create the new account in either student or professors
+	the variable studentOrProfessor is a boolean
+	this function returns nothing
+	'''
 	if not newAccountAuthentication(email):
 		return False
 	connection, cur = connectCursor()
@@ -173,8 +186,10 @@ def newAccountCreation(name,email,studentOrProfessor):
 #STUDENT HOMEPAGE
 
 def studentInformation(student):
-	#this function will grab all information pertaining to a student
-	#returns a tuple of said information
+	'''
+	this function will grab all information pertaining to a student
+	returns a tuple of said information
+	'''
 	calculatedGraduation = studentProgress(student)
 	AOCname = ""
 	AOCid = 0
@@ -235,11 +250,13 @@ def studentInformation(student):
 #PROFESSOR HOMEPAGE
 
 def adviseeInfo(professor):
-	#this function will grab all pertinant information from students who have the given
-	#professor as an advisor
-	#returns a list of tuples for this information
-	#for students who have not agreed to give their inormation to their advisor they will appear
-	#but with their information said as simply [hidden]
+	'''
+	this function will grab all pertinant information from students who have the given
+	professor as an advisor
+	returns a list of tuples for this information
+	for students who have not agreed to give their inormation to their advisor they will appear
+	but with their information said as simply [hidden]
+	'''
 	adviseeList = []
 	connection, cur = connectCursor()
 	query = "SELECT id, name, Agreed_to_advisee FROM Students WHERE advisor = %s"
@@ -277,8 +294,10 @@ def adviseeInfo(professor):
 	return adviseeList
 
 def adviseeInfoHelper(student):
-	#this function basically does the same thing as the student progress function
-	#but instead of returning a year returns a percentage
+	'''
+	this function basically does the same thing as the student progress function
+	but instead of returning a year returns a percentage
+	'''
 	connection, cur = connectCursor()
 	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
 	values = (student,)
@@ -318,8 +337,10 @@ def adviseeInfoHelper(student):
 #STUDENT BREAKDOWN PAGE
 
 def getLACProgress(student):
-	#this function will grab all the information for that student and return the list of 
-	#tuples of that information
+	'''
+	this function will grab all the information for that student and return the list of 
+	tuples of that information
+	'''
 	connection, cur = connectCursor()
 	tempList = [("Math_proficiency",False),("Divisional_coursework",False),("Disiplinary_breadth",False),("Diverse_perspective",False),("Eight_liberal_art",False)]
 	query "SELECT Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art FROM LAC_Requirements WHERE Student_id = %s"
@@ -341,8 +362,10 @@ def getLACProgress(student):
 
 
 def getStudentCourses(student):
-	#this function will grab all courses the student has taken and return them in a list of
-	#tuples with the course name and course Id
+	'''
+	this function will grab all courses the student has taken and return them in a list of
+	tuples with the course name and course Id
+	'''
 	CoursesTaken = []
 	connection, cur = connectCursor()
 	query = "SELECT Course_id FROM Courses_completed WHERE Student_id = %s"
@@ -367,8 +390,10 @@ def getStudentCourses(student):
 	return CoursesTaken
 
 def updateStudentAOCProgress(student,requirement_id,requirement_progress):
-	#this function will update a students progress in aoc requirements
-	#returns nothing
+	'''
+	this function will update a students progress in aoc requirements
+	returns nothing
+	'''
 	connection, cur = connectCursor()
 	query = "UPDATE Requirements_completed SET NUM_completed = %s WHERE Student_id = %s AND Requirement_id = %s"
 	values = (requirement_progress,student,requirement_id)
@@ -377,8 +402,10 @@ def updateStudentAOCProgress(student,requirement_id,requirement_progress):
 	cur.close()
 
 def updateStudentLACProgress(student,LAC_requirement_column,LAC_progress):
-	#this function will update a students progress in LAC requirements
-	#returns nothing
+	'''
+	this function will update a students progress in LAC requirements
+	returns nothing
+	'''
 	connection, cur = connectCursor()
 	query = "UPDATE LAC_Requirements SET %s = %s WHERE Student_id = %s"
 	values = (LAC_requirement_column,LAC_progress,student)
@@ -389,6 +416,15 @@ def updateStudentLACProgress(student,LAC_requirement_column,LAC_progress):
 
 #-----------------------------------------------------------------------------
 #STUDENT ADD COURSE PAGE
+
+def studentAddCourse(student,course):
+	'''
+	this function will add a course to a student's courses completed
+	returns nothing
+	'''
+	connection, cur = connectCursor()
+	query = "INSERT INTO Courses_completed () VALUES ()"
+	values = ()
 
 #-----------------------------------------------------------------------------
 #PROFESSOR ADD COURSE PAGE
