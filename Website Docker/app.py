@@ -1,4 +1,4 @@
-=from flask import flask, session, render_template, redirect, request
+from flask import flask, session, render_template, redirect, request
 import mysql.connector
 
 from Helper_Functions import functions1
@@ -99,7 +99,7 @@ def studentAddCourse():
 @app.route('/Professor__AddCourse')
 def professorAddCourse():
 	#stuff here
-	return render_template("ProfessorAddCoursePage.html",Department=getDepartment(professor))
+	return render_template("ProfessorAddCoursePage.html")
 
 @app.route('/EditProfile/<student>')
 def editStudentProfile(student):
@@ -119,7 +119,7 @@ def browseAOCs():
 @app.route('/<professor>/AddAOC')
 def addAOC(professor):
 	#stuff here
-	return render_template("addAOCPage.html",Department=getDepartment(professor),courses=getCourseList())
+	return render_template("addAOCPage.html",courses=getCourseList())
 
 @app.route('/FERPA')
 def FERPA():
@@ -129,7 +129,7 @@ def FERPA():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP):
 	#stuff here
-	return render_template("generalAOCDetailPage.html",AOC=AOC,Department=department,StudentorProfessor=SoP)
+	return render_template("generalAOCDetailPage.html",AOC=AOC,StudentorProfessor=SoP)
 
 @app.route('/<student>/StudentProgressBreakdown')
 def studentProgressBreakdown(student):
