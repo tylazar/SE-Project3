@@ -97,7 +97,7 @@ def aocInformation(AOC):
 		Courses_for_requirementList = []
 
 		for Course_id in results2:
-			query = "SELECT name,Department_id FROM Courses WHERE id = %s"
+			query = "SELECT * FROM Courses WHERE id = %s"
 			values = (Course_id,)
 			cur.execute(query,values)
 			results3 = cur.fetchall()
@@ -105,8 +105,8 @@ def aocInformation(AOC):
 			cur.close()
 			cur = connection.cursor()
 
-			for name,Department_id in results3:
-				Courses_for_requirementList.append((name,Department_id))
+			for id,name in results3:
+				Courses_for_requirementList.append((id,name))
 
 		tempReqList.append((id,name,AOC_id,Courses_for_requirementList,NUM_to_complete))
 
@@ -125,8 +125,8 @@ def grabAllCourses():
 	cur.close()
 	cur = connection.cursor()
 
-	for id,name,Department_id in results:
-		tempList.append((id,name,Department_id))
+	for id,name in results:
+		tempList.append((id,name))
 
 	return tempList
 
@@ -450,7 +450,7 @@ def authenticateProfessorCourse(course_name):
 
 	return len(results) == 0
 
-def addProfessorCourse(course_name, department_id):
+def addProfessorCourse(course_name):
 	'''
 	Main function to submit new Course into the Courses table
 	Args
@@ -464,11 +464,12 @@ def addProfessorCourse(course_name, department_id):
 		return False
 
 	connection, cur = connectCursor()
-	query = "INSERT INTO Courses (Name,Department_id) VALUES (%s,%s)"
-	values = (course_name, department_id)
+	query = "INSERT INTO Courses (Name) VALUES (%s)"
+	values = (course_name,)
 	cur.execute(query,values)
 	connection.commit()
 	cur.close()
+	return True
 
 #-----------------------------------------------------------------------------
 #EDIT STUDENT PROFILE PAGE
@@ -486,19 +487,25 @@ def getStudentProfile(studentEmail):
 	connection, cur = connectCursor()
 
 	query = "SELECT 1 FROM Students WHERE Email=%s"
-	values = studentEmail
+	values = (studentEmail,)
 	cur.execute(query, values)
 	student_row = cur.fetchall()[0]
 	student_id = student_row[0]
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
 
 	query = "SELECT 1 FROM Student_aoc WHERE Student_id=%s"
-	values = (student_id)
+	values = (student_id,)
 	cur.execute(query, values)
 	student_aoc_row = cur.fetchall()[0]
 	aoc_id = student_aoc_row[1]
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
 
 	query = "SELECT 1 FROM AOCs WHERE id=%s"
-	values = (aoc_id)
+	values = (aoc_id,)
 	cur.execute(query, values)
 	aoc_row = cur.fetchall()[1]
 
@@ -517,22 +524,28 @@ def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id):
 	query = "UPDATE Student_aoc SET aoc_id=%s WHERE student_id=%s"
 	values = (aoc_id, student_id)
 	cur.execute()
-	cur.commit()
+	connection.commit()
+	cur.close()
+	cur = connection.commit()
 
 	query = "UPDATE Students SET name=%s,advisor=%s,graduation_year=%s WHERE student_id=%s"
 	values = (name, advisor, graduation_year, student_id)
 	cur.execute()
-	cur.commit()
+	connection.commit()
+	cur.close()
 
 #-----------------------------------------------------------------------------
 #BROWSE CLASSES PAGE
 
 def getCourses():
+	'''
+	retuns a list of tuples of Course information from the Courses table
+	'''
 	connection, cur = connectionCurson()
 	query = "SELECT * FROM Courses"
 	cur.execute()
 	ret = cur.fetchall()
-	cur.commit()
+	connection.commit()
 	cur.close()
 
 	return ret
@@ -541,23 +554,115 @@ def getCourses():
 #BROWSE AOCS PAGE
 
 def getAoCs():
+	'''
+	retuns a list of tuples of AOC information from the AOC table
+	'''
 	connection, cur = connectionCurson()
 	query = "SELECT * FROM AOCs"
 	cur.execute()
 	ret = cur.fetchall()
-	cur.commit()
+	connection.commit()
 	cur.close()
 
 	return ret
 
 #-----------------------------------------------------------------------------
-#STUDENT AOC DETAIL PAGE
-
-#-----------------------------------------------------------------------------
-#PROFESSOR AOC DETAIL PAGE
+#AOC DETAIL PAGE
+#will use the above function and simply grab the correct tuple needed for the AOC needed
 
 #-----------------------------------------------------------------------------
 #ADD AOC PAGE
 
+def addAOC(AOC_name,Requirements):
+	'''
+	AOC_name is the name of the AOC, requirements is a list of tuples that hold information for each requirement
+	this tuple is structure as such, (requirement_name,NUM_to_complete,[list of courses associated with said requirement])
+	the list of courses is a list of tuples of ids and names, respectively
+	this structure makes this function and the editAOC function a lot easier
+	returns nothing
+	'''
+	connection, cur = connectCursor()
+	query = "INSERT INTO AOCs (name) VALUES (%s)"
+	values = (AOC_name,)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	query = "SELECT id FROM AOCs WHERE name = %s"
+	values = (AOC_name,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	AOC_id = 0
+
+	for id in results:
+		AOC_id = id
+
+	for requirement in Requirements
+		query = "INSERT INTO Requirements (name,AOC_id,NUM_to_complete) VALUES (%s,%s,%s)"
+		values = (requirement[0],AOC_id,requirement[1])
+		cur.execute(query,values)
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		query = "SELECT id FROM Requirements WHERE name = %s AND AOC_id = %s"
+		values = (requirement[0],AOC_id)
+		cur.execute(query,values)
+		results2 = cur.fetchall()
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		requirement_id = 0
+
+		for id in results2:
+			requirement_id = id
+
+		for Course in requirement[2]:
+			query = "INSERT INTO Courses_for_requirement (Requirement_id,Course_id) VALUES (%s,%s)"
+			values = (requirement_id,Course[0])
+			cur.execute(query,values)
+			connection.commit()
+			cur.close()
+
+
 #-----------------------------------------------------------------------------
 #EDIT AOC PAGE
+
+def editAOC(AOC_name,AOC_id,oldRequirements,newRequirements):
+	'''
+	AOC_name is the name of the AOC, AOC_id is its id, requirements is a list of tuples that hold information for each requirement
+	this tuple is structure as such, (requirement_name,NUM_to_complete,requirement_id,[list of courses associated with said requirement])
+	the list of courses is a list of tuples of ids and names, respectively
+	this structure makes this function and the addAOC function a lot easier
+	'''
+	connection, cur = connectCursor()
+	query = "UPDATE AOCs SET name = %s WHERE id = %s"
+	values = (AOC_name,AOC_id)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	for x in range(len(newRequirements)):
+		oldRequirement = oldRequirements[x]
+		newRequirement = newRequirements[x]
+		query = "UPDATE Requirements SET name = %s, NUM_to_complete = %s WHERE AOC_id = %s and name = %s"
+		values = (newRequirement[0],newRequirement[1],AOC_id,oldRequirement[0])
+		cur.execute(query,values)
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		query = "DELETE FROM Courses_for_requirement WHERE Requirement_id = %s"
+		values = (oldRequirement[2],)
+		cur.execute(query,values)
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		for Course in newRequirement[3]:
+			query = "INSERT INTO Courses_for_requirement (Requirement_id,Course_id) VALUES (%s,%s)"
+			values = (newRequirement[2],Course[0])
+			cur.execute(query,values)
+			connection.commit()
+			cur.close()
+
