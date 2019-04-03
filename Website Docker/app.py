@@ -21,7 +21,7 @@ GOOGLE = OAUTH.remote_app('google',
 						authorize_url='https://accounts.google.com/o/oauth2/auth',)
 
 
-localhost_addr = 'http://127.0.0.1:5000/'
+localhost_addr = 'http://127.0.0.1:5000'
 server_addr = 'https://www.ncfbluedream.com'
 
 addr = localhost_addr # Change this to serve on website or local
@@ -85,7 +85,7 @@ def loginPage(SoP):
 @app.route('/newAccount/<SoP>')
 def newAccountPage(SoP):
 	#stuff here
-	return render_template("generalNewAccount.html",StudentorProfessor=SoP)
+	return render_template("generalNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
 @app.route('/<student>/homepage')
 def studentHomepage(student):

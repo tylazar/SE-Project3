@@ -4,7 +4,7 @@
     <title>{{ StudentorProfessor }} New Account</title>
 </head>
 <body>
-    <a href="BACK_ADDRESS_HERE">Back</a>
+    <a href="{{ BACK }}">Back</a>
     <h1>Create a {{ StudentorProfessor }} Account</h1>
     <form action="/new_account.php" method="post">
 
@@ -18,6 +18,6 @@
         <input type="submit" value="Create New Account">
     </form>
 
-    <a href="LOGIN_ADDRESS_HERE">Already have an account?</a>
+    <a href="{{ ADDRESS }}/{{ StudentorProfessor }}/login">Already have an account?</a>
 </body>
 </html>
