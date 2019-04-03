@@ -1,7 +1,7 @@
-from flask import flask, session, render_template, redirect, request
-import mysql.connector
+from flask import Flask, session, render_template, redirect, request
+# import mysql.connector
 
-from Helper_Functions import functions1
+# from Helper_Functions import functions1
 import datetime as dt
 
 from flask_oauthlib.client import OAuth
@@ -19,6 +19,12 @@ GOOGLE = OAUTH.remote_app('google',
 						access_token_method='POST',
 						access_token_url='https://accounts.google.com/o/oauth2/token',
 						authorize_url='https://accounts.google.com/o/oauth2/auth',)
+
+
+localhost_addr = 'http://127.0.0.1:5000/'
+server_addr = 'https://www.ncfbluedream.com'
+
+addr = localhost_addr # Change this to serve on website or local
 
 #=========================================#
 # OAuth Functions                         #
@@ -74,7 +80,7 @@ def landingPage():
 @app.route('/login/<SoP>')
 def loginPage(SoP):
 	#stuff here
-	return render_template("generalLogin.html",StudentorProfessor=SoP)
+	return render_template("generalLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>')
 def newAccountPage(SoP):
