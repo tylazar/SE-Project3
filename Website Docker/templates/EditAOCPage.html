@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit AOC</title>
+</head>
+<script>
+	//this is here because it will definatly be used later
+</script>
+<body>
+	<a href="BACK_ADDRESS_HERE">Back</a>
+	<h1>Edit AOC:</h1>
+	<form>
+		<div class="AOC_div">
+			<p id="Requirement_1">Requirement </p>
+			<div class="requirement_div">
+				<p>Minimum number of Courses for this Requirement</p>
+				<input type="number">
+				<div class="Course_div">
+					<table>
+						<tr>
+							<th>Course Options for this Requirement</th>
+						</tr>
+						<tr>
+							<td id="Course_1">Course </td>
+							<td>
+								<select>
+									{% for Course in CourseList %}
+										<option value="{{ Course }}">{{ Course }}</option>
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<button>Remove Course</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<button>Add Course to Requirement</button>
+			</div>
+			<button>Add New Requirement</button>
+		</div>
+		<button>Cancel</button>
+		<button type="submit">Submit AOC Changes</button>
+	</form>
+</body>
+</html>

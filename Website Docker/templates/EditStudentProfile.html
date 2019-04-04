@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit Profile</title>
+</head>
+<body>
+	<a href="BACK_ADDRESS_HERE">Back</a>
+	<form>
+		<p>Name</p>
+		<input type="text" name="name" value="{{ StudentName }}">
+		<br>
+		<p>AOC</p>
+		<select name="StudentAOC">
+			{% for AOC in AOCList %}
+			<option value="{{ AOC }}">{{ AOC }}</option>
+			{% endfor %}
+		</select>
+		<br>
+		<p>Expected Graduation Year</p>
+		<input type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10">
+		<br><br>
+		<button>Cancel</button>
+		<button type="submit">Submit Profile Changes</button>
+	</form>
+</body>
+</html>

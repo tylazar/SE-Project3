@@ -72,7 +72,8 @@ create table Students (
 	name VARCHAR(30) NOT NULL,
 	email VARCHAR(320) NOT NULL,
 	advisor INT,
-	Graduation_year INT NOT NULL,
+	Graduation_year INT,
+	Agreed_as_advisee TINYINT,
 	PRIMARY KEY (id)
 );
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ Professor }} Homepage</title>
+</head>
+<body>
+    <a href="LOGOUT_ADDRESS_HERE">Logout</a>
+    <h1>Welcome back Prof. {{ Professor }}!</h1>
+    <h2>You are currently advising students under the following AoCs:</h2>
+    <h4>Note: if one of your students' progress and AOC is marked as [hidden] this is because that student has not agreed to share information with you, contact this student if this is important to you.</h4> 
+    <table style="width:50%">
+        <tr>
+            <th>Student</th>
+            <th>AOC</th>
+            <th>Progress</th>
+        </tr>
+        {% for advisee in adviseeList %}
+        <tr>
+            <td>{{ advisee[0] }}</td>
+            <td>{{ advisee[1] }}</td>
+            <td>{{ advisee[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="ADD_AOC_ADDRESS_HERE">Add AoC</a>
+    <br>
+    <a href="EDIT_AOC_ADDRESS_HERE">Edit AoC</a>
+    <br>
+    <a href="ADD_COURSE_ADDRESS_HERE">Add Course</a>
+</body>
+</html>
