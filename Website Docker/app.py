@@ -80,6 +80,7 @@ def landingPage():
 @app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
 	if request.method == 'POST':
+		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
 	#stuff here
@@ -89,7 +90,9 @@ def loginPage(SoP):
 def newAccountPage(SoP):
 	#stuff here
 	if request.method == 'POST':
-		return redirect(url_for(".userHomepage", user=request.form['email'], user_type=SoP))
+		session['user'] = request.form['email']
+		session['user_type'] = SoP
+		return redirect('/'+request.form['email']+'/homepage')
 	return render_template("generalNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
 @app.route('/<user>/homepage')
@@ -107,37 +110,40 @@ def studentHomepage(student):
 
 def professorHomepage(professor):
 	#stuff here
-	return render_template("ProfessorHomepage.html",Professor=professor,adviseeList=getAdviseeList())
+	return render_template("ProfessorHomepage.html", LOGOUT=addr, ADDRESS=addr, Professor=professor,adviseeList=getAdviseeList())
 
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
 	#stuff here
-	return render_template("StudentAddCoursePage.html", BACK = addr+"/"+student+"/homepage", ADDRESS=addr, CourseList=getCourses(student))
+	return render_template("StudentAddCoursePage.html", BACK=addr+"/"+student+"/homepage", ADDRESS=addr, CourseList=getCourses(student))
 
-@app.route('/professorAddCourse')
-def professorAddCourse():
+@app.route('/<professor>/professorAddCourse')
+def professorAddCourse(professor):
 	#stuff here
-	return render_template("ProfessorAddCoursePage.html")
+	return render_template("ProfessorAddCoursePage.html", BACK=addr+"/"+professor+"/homepage")
 
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
 	#stuff here
-	return render_template("EditStudentProfile.html", BACK = addr+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
+	return render_template("EditStudentProfile.html", BACK=addr+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
 
 @app.route('/browseClasses')
 def browseClasses():
 	#stuff here
 	return render_template("BrowseCourses.html",CourseList=getCourseList())
 
-@app.route('/browseAOCs')
+@app.route('/browseAOCs', methods=['GET', 'POST'])
 def browseAOCs():
 	#stuff here
-	return render_template("BrowseAOCs.html",AOCList=getAOCList())
+	if request.method == 'POST':
+		aoc = request.form['AOCs']
+		return redirect('/AOCDetails/'+session['user_type']+'/'+aoc)
+	return render_template("BrowseAOCs.html", BACK=addr+"/"+session['user']+"/homepage", AOCList=getAOCList())
 
 @app.route('/<professor>/addAOC')
 def addAOC(professor):
 	#stuff here
-	return render_template("addAOCPage.html",courses=getCourseList())
+	return render_template("addAOCPage.html", BACK=addr+"/"+professor+"/homepage", courses=getCourseList())
 
 @app.route('/FERPA')
 def FERPA():
@@ -145,15 +151,15 @@ def FERPA():
 	return render_template("FERPA.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
-def AOCDetails(SoP):
+def AOCDetails(SoP, AOC):
 	#stuff here
-	return render_template("generalAOCDetailPage.html",AOC=AOC,StudentorProfessor=SoP)
+	return render_template("generalAOCDetailPage.html", BACK=addr+'/'+session['user']+'/homepage', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
 def studentProgressBreakdown(student, AOC="General Studies"):
 	#stuff here
-	return render_template("StudentBreakdownPage.html", BACK = addr+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
+	return render_template("StudentBreakdownPage.html", BACK=addr+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
 
 if __name__ == "__main__":
 	app.run()
@@ -182,3 +188,11 @@ def getStudentName(student):
 
 def getAOCList():
 	return ["Computer Science", "Biology", "Political Science", "Pekeology"]
+
+def getAdviseeList():
+	hts = ["Hunt Thomas Sparra", "Panting", "...no comment"]
+	ys = ["Yourself", "Computer Science", "On Track"]
+	return [hts, ys]
+
+def getCourseList():
+	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]

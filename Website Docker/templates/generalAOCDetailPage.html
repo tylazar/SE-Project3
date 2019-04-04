@@ -4,16 +4,11 @@
 	<title>AOC Detail Page</title>
 </head>
 <body>
-	<a href="BACK_ADDRESS_HERE">Back</a>
+	<a href="{{ BACK }}">Back</a>
 	<h1>{{ AOC }} Details:</h1>
-	<h3>Department: {{ Department }}</h3>
-	{% if not StudentorProfessor %}
-		{% if StudentorProfessorDepartment == Department %}
-			<p>Since the AOC you are currently viewing is within your department you have access to edit it, but be warned this will change this AOC for everyone</p>
-			<a href="AOC_EDIT_ADDRESS_HERE">Edit AOC</a>
-		{% else %}
-			<p>Note: since are not in the same department as this AOC you do not have access to edit it. If you see an edit that needs to be made please contact another professor in the same department as this AOC</p>
-		{% endif %}
+	{% if StudentorProfessor == "Professor" %}
+		<p>You may edit this AOC, but be warned this will change this AOC for EVERYONE!</p>
+		<a href="DEAD">Edit AOC</a>
 	{% endif %}
 	<div class="AOC_Detils_div">
 		<p>{{ AOC }} Requirements </p>
