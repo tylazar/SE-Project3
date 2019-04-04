@@ -7,7 +7,7 @@ services:
   mysql:
     build: 'Mysql Docker'
     ports:
-      - "3307:3307"
+      - "3307:80"
     environment:
       MYSQL_DATABASE: Aoc
       MYSQL_ROOT_PASSWORD: bluecrew
