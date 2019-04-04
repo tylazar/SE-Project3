@@ -4,8 +4,8 @@
 	<title>Browse AOCs</title>
 </head>
 <body>
-	<a href="BACK_ADRESS_HERE">Back</a>
-	<form>
+	<a href="{{ BACK }}">Back</a>
+	<form action="/browseAOCs" method="post">
 		<p>Select an AOC from the dropdown menu to view more detail about that AOC</p>
 		<select name="AOCs">
 			{% for AOC in AOCList %}
