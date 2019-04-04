@@ -10,7 +10,6 @@ create table AOCs (
 create table Courses (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL,
-	Department_id INT,
 	PRIMARY KEY (id)
 );
 
@@ -41,10 +40,7 @@ create table LAC_Requirements (
 create table Professors (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(30) NOT NULL,
-	username VARCHAR(50) NOT NULL,
-	password VARCHAR(20) NOT NULL,
 	email VARCHAR(320) NOT NULL,
-	Department_id INT,
 	PRIMARY KEY (id)
 );
 
@@ -74,16 +70,9 @@ create table Student_aoc (
 create table Students (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(30) NOT NULL,
-	username VARCHAR(50) NOT NULL,
-	password VARCHAR(20) NOT NULL,
 	email VARCHAR(320) NOT NULL,
 	advisor INT,
 	Graduation_year INT NOT NULL,
 	PRIMARY KEY (id)
 );
 
-create table departments (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(30) NOT NULL,
-	PRIMARY KEY (id)
-);
