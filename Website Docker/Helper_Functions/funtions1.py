@@ -600,7 +600,7 @@ def addAOC(AOC_name,Requirements):
 	for id in results:
 		AOC_id = id
 
-	for requirement in Requirements
+	for requirement in Requirements:
 		query = "INSERT INTO Requirements (name,AOC_id,NUM_to_complete) VALUES (%s,%s,%s)"
 		values = (requirement[0],AOC_id,requirement[1])
 		cur.execute(query,values)
