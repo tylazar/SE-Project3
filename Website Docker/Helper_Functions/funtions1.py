@@ -459,7 +459,7 @@ def addProfessorCourse(course_name):
 	Returns
 		bool: If the course was created
 	'''
-	if !authenticateProfessorCourse(course_name):
+	if not authenticateProfessorCourse(course_name):
 		# Should we log something too?
 		return False
 
