@@ -153,7 +153,7 @@ def FERPA():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#stuff here
-	return render_template("generalAOCDetailPage.html", BACK=addr+'/'+session['user']+'/homepage', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
+	return render_template("generalAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
