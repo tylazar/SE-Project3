@@ -6,7 +6,7 @@
 <body>
 	<a href="{{ BACK }}">Back</a>
 	<h1>{{ StudentorProfessor }} Login</h1>
-    <form action="/authentication.php" method="post">
+    <form action="/login/{{ StudentorProfessor }}" method="post">
     	<p>Enter the email attached to your account</p>
     	<input type="email" name="email">
         <br>

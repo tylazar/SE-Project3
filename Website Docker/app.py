@@ -1,4 +1,4 @@
-from flask import Flask, session, render_template, redirect, request
+from flask import Flask, session, render_template, redirect, request, url_for
 # import mysql.connector
 
 # from Helper_Functions import functions1
@@ -77,52 +77,64 @@ def landingPage():
 	#stuff here
 	return render_template("LandingPage.html")
 
-@app.route('/login/<SoP>')
+@app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
+	if request.method == 'POST':
+		session['user_type'] = SoP
+		return redirect('/'+request.form['email']+'/homepage')
 	#stuff here
 	return render_template("generalLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 	
-@app.route('/newAccount/<SoP>')
+@app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	#stuff here
+	if request.method == 'POST':
+		return redirect(url_for(".userHomepage", user=request.form['email'], user_type=SoP))
 	return render_template("generalNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
-@app.route('/<student>/homepage')
+@app.route('/<user>/homepage')
+def userHomepage(user):
+	if session['user_type'] == 'Student':
+		return studentHomepage(user)
+	elif session['user_type'] == 'Professor':
+		return professorHomepage(user)
+
+	return 'ERROR'
+
 def studentHomepage(student):
 	#stuff here
-	return render_template("StudentHomepage.html",Student=student,progress_sentece=getProgressSentence(student))
+	return render_template("StudentHomepage.html",Student=student,progress_sentece=getProgressSentence(student), LOGOUT=addr, ADDRESS=addr)
 
-@app.route('/<professor>/homepage')
 def professorHomepage(professor):
 	#stuff here
 	return render_template("ProfessorHomepage.html",Professor=professor,adviseeList=getAdviseeList())
 
-@app.route('/Student__AddCourse')
-def studentAddCourse():
+@app.route('/<student>/studentAddCourse')
+def studentAddCourse(student):
 	#stuff here
-	return render_template("StudentAddCoursePage.html",CourseList=getCourseList())
+	return render_template("StudentAddCoursePage.html", BACK = addr+"/"+student+"/homepage", ADDRESS=addr, CourseList=getCourses(student))
 
-@app.route('/Professor__AddCourse')
+@app.route('/professorAddCourse')
 def professorAddCourse():
 	#stuff here
 	return render_template("ProfessorAddCoursePage.html")
 
-@app.route('/EditProfile/<student>')
+@app.route('/<student>/editProfile')
 def editStudentProfile(student):
 	#stuff here
-	return render_template("EditStudentProfile.html",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=datetime.datetime.now().year)
+	return render_template("EditStudentProfile.html", BACK = addr+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
 
-@app.route('/BrowseClasses')
+@app.route('/browseClasses')
 def browseClasses():
 	#stuff here
 	return render_template("BrowseCourses.html",CourseList=getCourseList())
 
-@app.route('/BrowseAOCs')
+@app.route('/browseAOCs')
 def browseAOCs():
 	#stuff here
 	return render_template("BrowseAOCs.html",AOCList=getAOCList())
 
-@app.route('/<professor>/AddAOC')
+@app.route('/<professor>/addAOC')
 def addAOC(professor):
 	#stuff here
 	return render_template("addAOCPage.html",courses=getCourseList())
@@ -137,10 +149,36 @@ def AOCDetails(SoP):
 	#stuff here
 	return render_template("generalAOCDetailPage.html",AOC=AOC,StudentorProfessor=SoP)
 
-@app.route('/<student>/StudentProgressBreakdown')
-def studentProgressBreakdown(student):
+# We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
+@app.route('/<student>/studentProgressBreakdown')
+def studentProgressBreakdown(student, AOC="General Studies"):
 	#stuff here
-	return render_template("StudentBreakdownPage.html",progress_sentence=getProgressSentence(student),AOC_List=getAOCList(),LACList=getLAC(student),Courses=getCourseList())
+	return render_template("StudentBreakdownPage.html", BACK = addr+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
 
 if __name__ == "__main__":
 	app.run()
+
+
+
+#=========================================#
+# Dummy Functions                         #
+#=========================================#
+
+def getProgressSentence(student):
+	return ["Bwee", "Bwee2"]
+
+def getAOC(student):
+	requirements = ["Intro to Programming Course", "Scheme", "C++", "Software Engineering"]
+	return ["Computer Science", requirements]
+
+def getLAC(student):
+	return [('What goes', 'here?')]
+
+def getCourses(student):
+	return ['Scheme', 'Competitive Programming', 'Intro to Pekes', 'Advance Pekeonomics', 'Gender, Equality, & the Pekingese', 'Pekesis']
+
+def getStudentName(student):
+	return "Hunt Sparra"
+
+def getAOCList():
+	return ["Computer Science", "Biology", "Political Science", "Pekeology"]
