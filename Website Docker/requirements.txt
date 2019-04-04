@@ -1,5 +1,4 @@
 flask
 mysql
 mysql-connector
-flask-oauthlib
-
+flask-oauthlib==3.0.0
