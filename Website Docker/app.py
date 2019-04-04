@@ -1,5 +1,5 @@
 from flask import Flask, session, render_template, redirect, request, url_for
-import mysql.connector
+# import mysql.connector
 
 from Helper_Functions import funtions1
 
@@ -85,7 +85,7 @@ def loginPage(SoP):
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
 	#stuff here
-	return render_template("generalLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
+	return render_template("GeneralLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
@@ -94,7 +94,7 @@ def newAccountPage(SoP):
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	return render_template("generalNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
+	return render_template("GeneralNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
 @app.route('/<user>/homepage')
 def userHomepage(user):
@@ -154,7 +154,7 @@ def FERPA():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#stuff here
-	return render_template("generalAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
+	return render_template("GeneralAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
