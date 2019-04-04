@@ -1,16 +1,14 @@
-version: '3'
+version: '2'
 services:
   web:
-    build: flaskapp
+    build: 'Website Docker'
     ports:
-      - "5000:5000"
-    links:
-      -mysql
+      - "5000:80"
   mysql:
-    build: mysqlapp
+    build: 'Mysql Docker'
     ports:
-      - "3307:3307"
-    enviroment:
+      - "3307:80"
+    environment:
       MYSQL_DATABASE: Aoc
       MYSQL_ROOT_PASSWORD: bluecrew
       MYSQL_ROOT_HOST: 0.0.0.0

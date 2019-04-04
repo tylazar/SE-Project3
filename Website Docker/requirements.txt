@@ -1,0 +1,6 @@
+flask
+mysql
+mysql-connector
+flask-oauthlib
+requests-oauthlib==1.0.0
+uWSGI==2.0.17.1

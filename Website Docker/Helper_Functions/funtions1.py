@@ -343,7 +343,7 @@ def getLACProgress(student):
 	'''
 	connection, cur = connectCursor()
 	tempList = [("Math_proficiency",False),("Divisional_coursework",False),("Disiplinary_breadth",False),("Diverse_perspective",False),("Eight_liberal_art",False)]
-	query "SELECT Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art FROM LAC_Requirements WHERE Student_id = %s"
+	query = "SELECT Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art FROM LAC_Requirements WHERE Student_id = %s"
 	values = (student,)
 	cur.execute(query,values)
 	results = cur.fetchall()
@@ -459,7 +459,7 @@ def addProfessorCourse(course_name):
 	Returns
 		bool: If the course was created
 	'''
-	if !authenticateProfessorCourse(course_name):
+	if not authenticateProfessorCourse(course_name):
 		# Should we log something too?
 		return False
 
@@ -600,7 +600,7 @@ def addAOC(AOC_name,Requirements):
 	for id in results:
 		AOC_id = id
 
-	for requirement in Requirements
+	for requirement in Requirements:
 		query = "INSERT INTO Requirements (name,AOC_id,NUM_to_complete) VALUES (%s,%s,%s)"
 		values = (requirement[0],AOC_id,requirement[1])
 		cur.execute(query,values)

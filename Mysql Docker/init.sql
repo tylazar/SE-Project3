@@ -10,7 +10,6 @@ create table AOCs (
 create table Courses (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL,
-	Department_id INT,
 	PRIMARY KEY (id)
 );
 
@@ -42,7 +41,6 @@ create table Professors (
 	id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(30) NOT NULL,
 	email VARCHAR(320) NOT NULL,
-	Department_id INT,
 	PRIMARY KEY (id)
 );
 
@@ -79,8 +77,3 @@ create table Students (
 	PRIMARY KEY (id)
 );
 
-create table departments (
-	id INT NOT NULL AUTO_INCREMENT,
-	name VARCHAR(30) NOT NULL,
-	PRIMARY KEY (id)
-);

@@ -1,7 +1,8 @@
 from flask import Flask, session, render_template, redirect, request, url_for
-# import mysql.connector
+import mysql.connector
 
-# from Helper_Functions import functions1
+from Helper_Functions import funtions1
+
 import datetime as dt
 
 from flask_oauthlib.client import OAuth
