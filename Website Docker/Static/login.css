@@ -1,11 +1,86 @@
+/*
+Changes to HTML:
+- Changes the wording of the explanation text
+- I may have put breaks between stuff?
+- Changed new account link to button
+- Changed login input to button (is this allowed?)
+*/
+
 body {
 	text-align: center;
-	font-family: sans-serif;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background4.png");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+}
+
+h1, h2 {
+	font-weight: normal;
+}
+
+h1 {
+	text-shadow: -2px 2px #53256C;
+}
+
+h2 {
+	text-decoration: underline;
 }
 
 button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+ 	font-size: 1.2em;
+}
+
+button:hover {
  border-radius: 12px;
- border: 1px solid gray;
- background-color: white;
- padding: 10px;
+ border: 1px solid #D3D9FF;
+ background-color: #53256C;
+ padding: 12px;
+}
+
+.button {
+	border-radius: 12px;
+	border: none;
+	padding: 12px;
+	background-color: #83bbc4;
+	color: white;
+	font-weight: bold;
+	box-shadow: 2px 2px 4px #696969;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+ 	font-size: 1.2em;
+}
+
+.button:hover {
+	border-radius: 12px;
+	border: none;
+	background-color: #e0ffff;
+	padding: 12px;
+	color: white;
+	font-weight: bold;
+	color: #708090;
+	margin-bottom: 20px;
+}
+
+.back { /*back button has special placement*/
+	transform: translateX(-45vw);
+	margin-top: 5px;
+	margin-left: 10px;
+}
+
+input {
+	margin-bottom: 20px;
+	border: none;
+	border-bottom: 2px solid #D3D9FF;
+	background-color: transparent;
+	color: #D3D9FF;
 }
