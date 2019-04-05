@@ -2,22 +2,31 @@
 <html>
 <head>
 	<title>Edit Profile</title>
+	<link rel="stylesheet" type="text/css" href="editprofile.css">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-	<a href="{{ BACK }}">Back</a>
+	<button class="back">Back</button>
+	<h1>Edit Your Student Profile</h1>
 	<form>
-		<p>Name</p>
-		<input type="text" name="name" value="{{ StudentName }}">
+		<div>
+			<h3 class="label">Name:</h3>
+			<input class="input" type="text" name="name" value="{{ StudentName }}">
+		</div>
 		<br>
-		<p>AOC</p>
-		<select name="StudentAOC">
-			{% for AOC in AOCList %}
-			<option value="{{ AOC }}">{{ AOC }}</option>
-			{% endfor %}
-		</select>
+		<div>
+			<h3 class="label">AOC:</h3>
+			<select class="input" id="dropdown" name="StudentAOC">
+				{% for AOC in AOCList %}
+				<option value="{{ AOC }}">{{ AOC }}</option>
+				{% endfor %}
+			</select>
+		</div>
 		<br>
-		<p>Expected Graduation Year</p>
-		<input type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10">
+		<div>
+			<h3 class="label">Expected Graduation Year:</h3>
+			<input class="input" type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10">
+		</div>
 		<br><br>
 		<button>Cancel</button>
 		<button type="submit">Submit Profile Changes</button>

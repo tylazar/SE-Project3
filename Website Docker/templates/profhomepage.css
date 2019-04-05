@@ -1,0 +1,91 @@
+/*Changes to HTML:
+- Added a class to the logout button
+- Changed the explanatory text to match UX sketches
+*/
+
+body {
+	text-align: center;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background3.jpg");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+	font-weight: normal;
+}
+
+button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-bottom: 20px;
+	color: #D3D9FF;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+}
+
+button:hover {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+	background-color: #53256C;
+	padding: 12px;
+}
+
+.logout {
+	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+	display: block;
+	transform: translateX(-12vw);
+	margin-top: 5px;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.logout:hover {
+	border-color: #4e7075;
+	border-width: 2px;
+	border: solid;
+}
+
+table.center {
+	margin-left: auto;
+	margin-right: auto;
+	border-collapse: collapse;
+	overflow-y: scroll;
+	border: 1px solid #D3D9FF;
+	width: 75%;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 50vh;
+	overflow-y: scroll;
+	background-color: #050608;
+}
+
+th, td {
+	background-color: transparent;
+	padding: 8px;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 15px;
+  	border: 1px solid #D3D9FF;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  	background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  	background: #D3D9FF; 
+}

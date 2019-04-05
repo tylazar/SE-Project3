@@ -2,36 +2,52 @@
 <html>
 <head>
 	<title>Add AOC</title>
+	<link rel="stylesheet" type="text/css" href="addaoc.css">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-	<a href="{{ BACK }}">Back</a>
+	<button class="back">Back</button>
+	<h1>Add an AOC</h1>
 	<p>Please enter the following information to create a new AOC and add it to the database</p>
 	<br>
-	<p>AOC Name</p>
-	<input type="text" name="AOC_name">
+	<div class="aoc_name">
+		<p class="aoc_name_p">AOC Name:</p>
+		<input class="aoc_name_input" type="text" name="AOC_name">
+	</div>
 	<br>
 	<p>{{ Department }}  Note: this item is locked to what department you are part of, if you want to create an AOC in another department, contact a professor in that department to do so</p>
 	<br>
 	<form>
-		<p>Enter Requirements for AOC</p>
+		<h3>Enter Requirements for AOC</h3>
 		<div class="AOC_div">
 			<div class="Requirement_div">
-				<p>Requirement Name</p>
-				<p>Number of courses for this requirement</p>
-				<input type="number" name="num_for_requirement">
-				<p>Courses for the requirement</p>
-				<div class="Courses_div">
-					<select name="courses">
-						{% for course in courses %}
-						<option value="{{ course }}">{{ course }}</option>
-						{% endfor %}
-					</select>
+				<div class="name">
+					<p class="div_label">Requirement Name:</p>
+					<input type="text" name="requirement_name">
 				</div>
+
+				<div class="number">
+					<p class="div_label">Number of courses for this requirement:</p>
+					<input type="number" name="num_for_requirement">
+				</div>
+
+				<div class="req_courses">
+					<p class="div_label">Courses for the requirement:</p>
+					<div class="Courses_div">
+						<select name="courses">
+							{% for course in courses %}
+							<option value="{{ course }}">{{ course }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
 				<button>Add another course to the Requirement</button>
 			</div>
-			<button>Add another Requirement</button>
 		</div>
-		<a href="{{ BACK }}">Cancel</a>
+		<button>Add another Requirement</button>
+		<br>
+		<button class="cancel">Cancel</button>
 		<button type="submit">Submit</button>
 	</form>
 </body>

@@ -1,0 +1,98 @@
+/*Changes to HTML:
+- Links
+- added class to back link and made it a button
+- addded a title
+- added classes to the elements in course_individual
+- changed the red x button to just have an x and gave it an id
+- gave the dropdown an id
+*/
+
+body {
+	text-align: center;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background2.jpg");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+	font-weight: normal;
+}
+
+button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-top: 5vh;
+ 	margin-bottom: 5vh;
+	color: #D3D9FF;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+}
+
+button:hover {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+	background-color: #53256C;
+	padding: 12px;
+}
+
+.back {
+	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+	display: block;
+	transform: translateX(-12vw);
+	margin-top: 5px;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.back:hover {
+	border-color: #4e7075;
+	border-width: 2px;
+	border: solid;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 15px;
+  	border: 1px solid #D3D9FF;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  	background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  	background: #D3D9FF; 
+}
+
+.course_item {
+	display: inline-block;
+	margin-right: 3vw;
+	font-size: 1.2em;
+}
+
+#dropdown {
+	background-color: transparent;
+	border: 1px solid #D3D9FF;
+	color: #D3D9FF;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	padding-left: 1vw;
+	padding-right: 1vw;
+}
+
+#x {
+	border: none;
+	background-color: transparent;
+	margin-right: 1vw;
+}

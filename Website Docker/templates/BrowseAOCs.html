@@ -2,10 +2,13 @@
 <html>
 <head>
 	<title>Browse AOCs</title>
+	<link rel="stylesheet" type="text/css" href="browseaocs.css">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-	<a href="{{ BACK }}">Back</a>
-	<form action="/browseAOCs" method="post">
+	<button class="back">Back</button>
+	<h1>Browse AOCs</h1>
+	<form>
 		<p>Select an AOC from the dropdown menu to view more detail about that AOC</p>
 		<select name="AOCs">
 			{% for AOC in AOCList %}

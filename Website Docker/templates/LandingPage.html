@@ -2,14 +2,25 @@
 <html>
 <head>
 	<title>FERPA</title>
+	<link rel="stylesheet" type="text/css" href="landingpage.css">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-    <h1>Welcome to NCF Blue Dream!</h1>
-    <h2>Students</h2>
-        <a href="{{ ADDRESS }}/login/Student">Login</a>
-        <a href="{{ ADDRESS }}/newAccount/Student">Create New Account</a>
-    <h2>Professors</h2>
-        <a href="{{ ADDRESS }}/login/Professor">Login</a>
-        <a href="{{ ADDRESS }}/newAccount/Professor">Create New Account</a>
+    <h1>NCF BLUE DREAM</h1>
+    <p> Welcome! Please select login under your respective category to begin the smooth, stress-free journey to graduation with NCF Blue Dream.</p>
+    <div class="container">
+	    <div class="students">
+	    	<h2>Students</h2>
+	        <button onclick="location.href='generalLogin.html'">Login</button>
+	        <br>
+	        <button onclick="location.href='generalNewAccount.html'">Create New Account</button>
+	    </div>
+	    <div class="profs">
+	    	<h2>Professors</h2>
+	        <button onclick="location.href='generalLogin.html'">Login</button>
+	        <br>
+	        <button onclick="location.href='generalNewAccount.html'">Create New Account</button>
+	    </div>
+	</div>
 </body>
 </html>

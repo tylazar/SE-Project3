@@ -2,22 +2,24 @@
 <html>
 <head>
     <title>{{ StudentorProfessor }} New Account</title>
+    <link rel="stylesheet" type="text/css" href="newaccount.css">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-    <a href="{{ BACK }}">Back</a>
+    <button class="back" onclick="location.href='landingpage.html'">Back</button>
     <h1>Create a {{ StudentorProfessor }} Account</h1>
-    <form action="/newAccount/{{ StudentorProfessor }}" method="post">
-
-        <p>Email</p>
+    <p>Greetings, new friend! Please enter your information so we can begin our journey together.</p>
+    <form action="/new_account.php" method="post">
+        <p>Email:</p>
         <input type="text" name="email">
         <br>
-        <p>Name</p>
+        <p>Name:</p>
         <input type="text" name="name">
         <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
-
-        <input type="submit" value="Create New Account">
+        <br>
+        <button type="submit">Create New Account</button>
+        <br>
     </form>
-
-    <a href="{{ ADDRESS }}/login/{{ StudentorProfessor }}">Already have an account?</a>
+    <button>Login to Existing Account</button>
 </body>
 </html>

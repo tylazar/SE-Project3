@@ -2,26 +2,28 @@
 <html>
 <head>
 	<title>Edit AOC</title>
+	<link rel="stylesheet" type="text/css" href="editaoc.css">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <script>
 	//this is here because it will definatly be used later
 </script>
 <body>
-	<a href="BACK_ADDRESS_HERE">Back</a>
-	<h1>Edit AOC:</h1>
+	<button class="back">Back</button>
+	<h1>Edit AOC</h1>
 	<form>
 		<div class="AOC_div">
-			<p id="Requirement_1">Requirement </p>
+			<p class="course_name" id="Requirement_1">Requirement:</p>
 			<div class="requirement_div">
-				<p>Minimum number of Courses for this Requirement</p>
-				<input type="number">
+				<div class="req_num">
+					<p class="req_num_p">Minimum number of Courses for this Requirement:</p>
+					<input class="req_num_input" type="number">
+				</div>
 				<div class="Course_div">
+					<p>Course Options for this Requirement</p>
 					<table>
 						<tr>
-							<th>Course Options for this Requirement</th>
-						</tr>
-						<tr>
-							<td id="Course_1">Course </td>
+							<td id="Course_1">Course: </td>
 							<td>
 								<select>
 									{% for Course in CourseList %}
@@ -39,7 +41,7 @@
 			</div>
 			<button>Add New Requirement</button>
 		</div>
-		<button>Cancel</button>
+		<button class="cancel">Cancel</button>
 		<button type="submit">Submit AOC Changes</button>
 	</form>
 </body>
