@@ -1,0 +1,96 @@
+/*Changes to HTML:
+- Added explanatory text
+- Wrapped the FERPA text in a div
+- Added a bunch of text to the div to demonstrate behavior
+- Added buttons to a div
+- Added classes to the buttons
+- Changed 'cancel' to 'I do not agree'
+*/
+
+body {
+	text-align: center;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background2.jpg");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+}
+
+h1, h2 {
+	font-weight: normal;
+}
+
+h1 {
+	text-shadow: -2px 2px #53256C;
+}
+
+h2 {
+	text-decoration: underline;
+}
+
+button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+ 	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+}
+
+button:hover {
+ border-radius: 12px;
+ border: 1px solid #D3D9FF;
+ background-color: #53256C;
+ padding: 12px;
+}
+
+.ferpa {
+	border: 1px solid #D3D9FF;
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 50vh;
+	overflow-y: scroll;
+	background-color: #050608;
+	line-height: 1.4em;
+	padding: 1vw;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+  border: 1px solid #D3D9FF;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #D3D9FF; 
+}
+
+.buttons {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.no {
+	display: inline-block;
+	float: left;
+}
+
+.yes {
+	display: inline-block;
+	float: right;
+}
