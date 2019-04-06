@@ -2,13 +2,15 @@
 <html>
 <head>
     <title>{{ Professor }} Homepage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profhomepage.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-    <a href="{{ LOGOUT }}">Logout</a>
+    <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
     <h1>Welcome back Prof. {{ Professor }}!</h1>
-    <h2>You are currently advising students under the following AoCs:</h2>
-    <h4>Note: if one of your students' progress and AOC is marked as [hidden] this is because that student has not agreed to share information with you, contact this student if this is important to you.</h4> 
-    <table style="width:50%">
+    <p>Below is a list of the students you're currently advising and their AOCS.</p>
+    <p>To view an AOC's requirements, click on the AOC's name.</p>
+    <table class="center" style="width:50%">
         <tr>
             <th>Student</th>
             <th>AOC</th>
@@ -22,10 +24,10 @@
         </tr>
         {% endfor %}
     </table>
-    <a href="{{ ADDRESS }}/{{ Professor }}/addAOC">Add AoC</a>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Professor }}/addAOC'">Add AOC</button>
     <br>
-    <a href="{{ ADDRESS }}/browseAOCs">Edit AoC</a>
+    <button onclick="location.href='{{ ADDRESS }}/browseAOCs'">Edit AOC</button>
     <br>
-    <a href="{{ ADDRESS }}/{{ Professor }}/professorAddCourse">Add Course</a>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Professor }}/professorAddCourse'">Add Course</button>
 </body>
 </html>

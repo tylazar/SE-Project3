@@ -2,13 +2,16 @@
 <html>
 <head>
 	<title>AOC Detail Page</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='aocdetail.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
-	<a href="{{ BACK }}">Back</a>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>{{ AOC }} Details:</h1>
+	<h3>Department: {{ Department }}</h3>
 	{% if StudentorProfessor == "Professor" %}
 		<p>You may edit this AOC, but be warned this will change this AOC for EVERYONE!</p>
-		<a href="DEAD">Edit AOC</a>
+		<button>Edit AOC</button>
 	{% endif %}
 	<div class="AOC_Detils_div">
 		<p>{{ AOC }} Requirements </p>
