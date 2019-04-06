@@ -25,7 +25,7 @@ GOOGLE = OAUTH.remote_app('google',
 localhost_addr = 'http://127.0.0.1:5000'
 server_addr = 'https://www.ncfbluedream.com'
 
-addr = localhost_addr # Change this to serve on website or local
+addr = server_addr # Change this to serve on website or local
 
 #=========================================#
 # OAuth Functions                         #
@@ -85,7 +85,7 @@ def loginPage(SoP):
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
 	#stuff here
-	return render_template("generalLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
+	return render_template("GeneralLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
@@ -94,7 +94,7 @@ def newAccountPage(SoP):
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	return render_template("generalNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
+	return render_template("GeneralNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
 @app.route('/<user>/homepage')
 def userHomepage(user):
@@ -154,7 +154,7 @@ def FERPA():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#stuff here
-	return render_template("generalAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
+	return render_template("GeneralAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')

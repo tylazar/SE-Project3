@@ -1,15 +1,11 @@
-FROM python:3
-ENV APP /app
+FROM python:3.6
 
 ADD . /code
 WORKDIR /code
 
-EXPOSE 5000
+RUN pip3 install -r requirements.txt
 
-COPY requirements.txt .
+ENTRYPOINT ["python3"]
+CMD ["app.py"]
 
-RUN pip install -r requirements.txt
-
-COPY . .
-
-CMD [ "uwsgi", "--ini", "app.ini" ]
+EXPOSE 80 443
