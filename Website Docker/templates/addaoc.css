@@ -55,10 +55,11 @@ button:hover {
 }
 
 .back:hover {
-	border: 1px solid #4E7075;
-	border: solid;
+	border: 1px solid #D3D9FF;
 	padding-top: 0;
 	padding-bottom: 0;
+	margin-top: 5px;
+	margin-bottom: 20px;
 }
 
 /* width */

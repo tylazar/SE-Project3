@@ -75,6 +75,13 @@ button:hover {
 	transform: translateX(-45vw);
 	margin-top: 5px;
 	margin-left: 10px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.back:hover {
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 input {
