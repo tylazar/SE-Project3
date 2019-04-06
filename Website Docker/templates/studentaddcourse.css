@@ -58,6 +58,8 @@ button:hover {
 	border-color: #4e7075;
 	border-width: 2px;
 	border: solid;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 /* width */
