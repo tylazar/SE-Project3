@@ -2,19 +2,22 @@
 <html>
 <head>
 	<title>Add Course</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='studentaddcourse.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <script>
 	//this is here for later, this page will definarlt require it
 </script>
 <body>
-	<a href="{{ BACK }}">Back</a>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+	<h1>Add Courses</h1>
 	<p>To find the course you would like to add click on 'Browse Courses' and select the course you want from the menu. If you would like to add multiple courses at one time simply click 'Add Another Course' and repeat the process above. If you decide you don't want to add a course simply click the red X next to that course. When you are done with adding courses click 'Submit New Courses'.</p>
 	<form>
 		<div class="Courses">
 			<div class="Course_indiviual" id="1">
-				<button>red X</button>
-				<p>Add Course</p>
-				<select>
+				<button class="course_item" id="x">X</button>
+				<p class="course_item">Add Course</p>
+				<select class="course_item" id="dropdown">
 					{% for Course in CourseList %}
 					<option value="{{ Course }}">{{ Course }}</option>
 					{% endfor %}

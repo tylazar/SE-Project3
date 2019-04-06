@@ -1,11 +1,83 @@
+/*Changes to HTML:
+- Links
+- added class to back link and made it a button
+- added a title
+*/
+
 body {
 	text-align: center;
-	font-family: sans-serif;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background4.png");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+	font-weight: normal;
 }
 
 button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-top: 5vh;
+ 	margin-bottom: 5vh;
+	color: #D3D9FF;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+}
+
+button:hover {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+	background-color: #53256C;
+	padding: 12px;
+}
+
+.back {
 	border-radius: 12px;
-	border: 1px solid gray;
-	background-color: white;
-	padding: 10px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+	display: block;
+	transform: translateX(-12vw);
+	margin-top: 5px;
+	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.back:hover {
+	border: 1px solid #4E7075;
+	border: solid;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 15px;
+  	border: 1px solid #D3D9FF;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  	background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  	background: #D3D9FF; 
+}
+
+select {
+	border: 1px solid #D3D9FF;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background: transparent;
+	font-size: 1.2em;
+	color: #D3D9FF;
 }
