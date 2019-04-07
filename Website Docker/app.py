@@ -4,6 +4,9 @@ from flask import Flask, session, render_template, redirect, request, url_for
 #from Helper_Functions import funtions1
 
 import datetime as dt
+
+app = Flask(__name__)
+
 '''
 from flask_oauthlib.client import OAuth
 
