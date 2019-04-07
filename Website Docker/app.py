@@ -21,10 +21,10 @@ GOOGLE = OAUTH.remote_app('google',
 						access_token_url='https://accounts.google.com/o/oauth2/token',
 						authorize_url='https://accounts.google.com/o/oauth2/auth',)
 
-
+'''
 localhost_addr = 'http://127.0.0.1:5000'
 server_addr = 'https://www.ncfbluedream.com'
-
+'''
 addr = server_addr # Change this to serve on website or local
 
 #=========================================#
