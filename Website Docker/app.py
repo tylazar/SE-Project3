@@ -80,7 +80,7 @@ def landingPage():
 
 @app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
-	global addr
+	#global addr
 	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
@@ -91,7 +91,7 @@ def loginPage(SoP):
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
-	global addr
+	#global addr
 	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
@@ -110,36 +110,36 @@ def userHomepage(user):
 	return 'ERROR'
 
 def studentHomepage(student):
-	global addr
+	#global addr
 	return render_template("StudentHomepage.html",Student=student,progress_sentece=getProgressSentence(student), LOGOUT='https://www.ncfbluedream.com', ADDRESS='https://www.ncfbluedream.com')
 
 def professorHomepage(professor):
-	global addr
+	#global addr
 	return render_template("ProfessorHomepage.html", LOGOUT='https://www.ncfbluedream.com', ADDRESS='https://www.ncfbluedream.com', Professor=professor,adviseeList=getAdviseeList())
 
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
-	global addr
+	#global addr
 	return render_template("StudentAddCoursePage.html", BACK='https://www.ncfbluedream.com'+"/"+student+"/homepage", ADDRESS='https://www.ncfbluedream.com', CourseList=getCourses(student))
 
 @app.route('/<professor>/professorAddCourse')
 def professorAddCourse(professor):
-	global addr
+	#global addr
 	return render_template("ProfessorAddCoursePage.html", BACK='https://www.ncfbluedream.com'+"/"+professor+"/homepage")
 
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
-	global addr
+	#global addr
 	return render_template("EditStudentProfile.html", BACK='https://www.ncfbluedream.com'+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
 
 @app.route('/browseClasses')
 def browseClasses():
-	global addr
+	#global addr
 	return render_template("BrowseCourses.html",CourseList=getCourseList())
 
 @app.route('/browseAOCs', methods=['GET', 'POST'])
 def browseAOCs():
-	global addr
+	#global addr
 	if request.method == 'POST':
 		aoc = request.form['AOCs']
 		return redirect('/AOCDetails/'+session['user_type']+'/'+aoc)
@@ -147,23 +147,23 @@ def browseAOCs():
 
 @app.route('/<professor>/addAOC')
 def addAOC(professor):
-	global addr
+	#global addr
 	return render_template("addAOCPage.html", BACK='https://www.ncfbluedream.com'+"/"+professor+"/homepage", courses=getCourseList())
 
 @app.route('/FERPA')
 def FERPA():
-	global addr
+	#global addr
 	return render_template("FERPA.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
-	global addr
+	#global addr
 	return render_template("GeneralAOCDetailPage.html", BACK='https://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
 def studentProgressBreakdown(student, AOC="General Studies"):
-	global addr
+	#global addr
 	return render_template("StudentBreakdownPage.html", BACK='https://www.ncfbluedream.com'+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
 
 if __name__ == "__main__":
