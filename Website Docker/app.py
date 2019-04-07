@@ -81,20 +81,23 @@ def landingPage():
 @app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
 	global addr
+	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	#stuff here
+	'''
 	return render_template("GeneralLogin.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	global addr
+	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
+	'''
 	return render_template("GeneralNewAccount.html", BACK=addr, ADDRESS=addr, StudentorProfessor=SoP)
 
 @app.route('/<user>/homepage')
