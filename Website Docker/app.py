@@ -1,10 +1,10 @@
 from flask import Flask, session, render_template, redirect, request, url_for
-# import mysql.connector
+#import mysql.connector
 
-from Helper_Functions import funtions1
+#from Helper_Functions import funtions1
 
 import datetime as dt
-
+'''
 from flask_oauthlib.client import OAuth
 
 app = Flask(__name__)
@@ -41,16 +41,16 @@ def get_google_token(token=None):
 
 @app.route('/authorize')
 def oauth_google():
-	'''
-	Page that redirects to Google's OAuth authorization page
-	'''
+'''
+	#Page that redirects to Google's OAuth authorization page
+'''
 	return GOOGLE.authorize(callback=url_for('oauth_google_authorized', _external=True))
 
 @app.route('/authorized')
 def oauth_google_authorized():
-	'''
-	Page that is returned after authorization passes or fails
-	'''
+'''
+	#Page that is returned after authorization passes or fails
+'''
 	resp = GOOGLE.authorized_response()
 	if resp is None:
 		return redirect(url_for('/')) # Where to direct if the authorization fails
@@ -68,7 +68,7 @@ def oauth_google_authorized():
 		return redirect('/'+username+'/homepage') # Do normal string construction later on
 
 	# do redirects here
-
+'''
 #=========================================#
 # Flask Pages                             #
 #=========================================#
