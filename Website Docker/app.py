@@ -84,23 +84,19 @@ def landingPage():
 @app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
 	#global addr
-	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	'''
 	return render_template("GeneralLogin.html", BACK='https://www.ncfbluedream.com', ADDRESS='https://www.ncfbluedream.com', StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	#global addr
-	'''
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	'''
 	return render_template("GeneralNewAccount.html", BACK='https://www.ncfbluedream.com', ADDRESS='https://www.ncfbluedream.com', StudentorProfessor=SoP)
 
 @app.route('/<user>/homepage')
