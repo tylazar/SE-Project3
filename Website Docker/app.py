@@ -80,6 +80,7 @@ def landingPage():
 
 @app.route('/login/<SoP>', methods=['GET', 'POST'])
 def loginPage(SoP):
+	global addr
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
@@ -89,7 +90,7 @@ def loginPage(SoP):
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
-	#stuff here
+	global addr
 	if request.method == 'POST':
 		session['user'] = request.form['email']
 		session['user_type'] = SoP
@@ -106,36 +107,36 @@ def userHomepage(user):
 	return 'ERROR'
 
 def studentHomepage(student):
-	#stuff here
+	global addr
 	return render_template("StudentHomepage.html",Student=student,progress_sentece=getProgressSentence(student), LOGOUT=addr, ADDRESS=addr)
 
 def professorHomepage(professor):
-	#stuff here
+	global addr
 	return render_template("ProfessorHomepage.html", LOGOUT=addr, ADDRESS=addr, Professor=professor,adviseeList=getAdviseeList())
 
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
-	#stuff here
+	global addr
 	return render_template("StudentAddCoursePage.html", BACK=addr+"/"+student+"/homepage", ADDRESS=addr, CourseList=getCourses(student))
 
 @app.route('/<professor>/professorAddCourse')
 def professorAddCourse(professor):
-	#stuff here
+	global addr
 	return render_template("ProfessorAddCoursePage.html", BACK=addr+"/"+professor+"/homepage")
 
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
-	#stuff here
+	global addr
 	return render_template("EditStudentProfile.html", BACK=addr+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
 
 @app.route('/browseClasses')
 def browseClasses():
-	#stuff here
+	global addr
 	return render_template("BrowseCourses.html",CourseList=getCourseList())
 
 @app.route('/browseAOCs', methods=['GET', 'POST'])
 def browseAOCs():
-	#stuff here
+	global addr
 	if request.method == 'POST':
 		aoc = request.form['AOCs']
 		return redirect('/AOCDetails/'+session['user_type']+'/'+aoc)
@@ -143,23 +144,23 @@ def browseAOCs():
 
 @app.route('/<professor>/addAOC')
 def addAOC(professor):
-	#stuff here
+	global addr
 	return render_template("addAOCPage.html", BACK=addr+"/"+professor+"/homepage", courses=getCourseList())
 
 @app.route('/FERPA')
 def FERPA():
-	#stuff here
+	global addr
 	return render_template("FERPA.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
-	#stuff here
+	global addr
 	return render_template("GeneralAOCDetailPage.html", BACK=addr+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
 def studentProgressBreakdown(student, AOC="General Studies"):
-	#stuff here
+	global addr
 	return render_template("StudentBreakdownPage.html", BACK=addr+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
 
 if __name__ == "__main__":
