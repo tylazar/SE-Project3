@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Browse AOCs</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='browseaocs.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+	<h1>Browse AOCs</h1>
+	<form action="/browseAOCs" method="post">
+		<p>Select an AOC from the dropdown menu to view more detail about that AOC</p>
+		<select name="AOCs">
+			{% for AOC in AOCList %}
+			<option value="{{ AOC }}">{{ AOC }}</option>
+			{% endfor %}
+		</select>
+		<div class="AOC_info_div">
+			<!-- there is nothing in this div until the person clicks the button to choose a AOC to view -->
+		</div>
+		<button type="submit">View AOC Details</button>
+	</form>
+</body>
+</html>

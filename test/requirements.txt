@@ -1,0 +1,5 @@
+flask
+mysql
+mysql-connector
+flask-oauthlib
+requests-oauthlib==1.0.0

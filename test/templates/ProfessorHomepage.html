@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ Professor }} Homepage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profhomepage.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+    <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
+    <h1>Welcome back Prof. {{ Professor }}!</h1>
+    <p>Below is a list of the students you're currently advising and their AOCS.</p>
+    <p>To view an AOC's requirements, click on the AOC's name.</p>
+    <table class="center" style="width:50%">
+        <tr>
+            <th>Student</th>
+            <th>AOC</th>
+            <th>Progress</th>
+        </tr>
+        {% for advisee in adviseeList %}
+        <tr>
+            <td>{{ advisee[0] }}</td>
+            <td>{{ advisee[1] }}</td>
+            <td>{{ advisee[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Professor }}/addAOC'">Add AOC</button>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/browseAOCs'">Edit AOC</button>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Professor }}/professorAddCourse'">Add Course</button>
+</body>
+</html>
