@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit AOC</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='editaoc.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<script>
+	//this is here because it will definatly be used later
+</script>
+<body>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+	<h1>Edit AOC</h1>
+	<form>
+		<div class="AOC_div">
+			<p class="course_name" id="Requirement_1">Requirement:</p>
+			<div class="requirement_div">
+				<div class="req_num">
+					<p class="req_num_p">Minimum number of Courses for this Requirement:</p>
+					<input class="req_num_input" type="number">
+				</div>
+				<div class="Course_div">
+					<p>Course Options for this Requirement</p>
+					<table>
+						<tr>
+							<td id="Course_1">Course: </td>
+							<td>
+								<select>
+									{% for Course in CourseList %}
+										<option value="{{ Course }}">{{ Course }}</option>
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<button>Remove Course</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<button>Add Course to Requirement</button>
+			</div>
+			<button>Add New Requirement</button>
+		</div>
+		<button class="cancel">Cancel</button>
+		<button type="submit">Submit AOC Changes</button>
+	</form>
+</body>
+</html>

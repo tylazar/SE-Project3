@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NCF Blue Dream</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='landingpage.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+    <h1>NCF BLUE DREAM</h1>
+    <p> Welcome! Please select login under your respective category to begin the smooth, stress-free journey to graduation with NCF Blue Dream.</p>
+    <div class="container">
+	    <div class="students">
+	    	<h2>Students</h2>
+	        <button onclick="location.href='{{ ADDRESS }}/login/Student'">Login</button>
+	        <br>
+	        <button onclick="location.href='{{ ADDRESS }}/newAccount/Student'">Create New Account</button>
+	    </div>
+	    <div class="profs">
+	    	<h2>Professors</h2>
+	        <button onclick="location.href='{{ ADDRESS }}/login/Professor'">Login</button>
+	        <br>
+	        <button onclick="location.href='{{ ADDRESS }}/newAccount/Professor'">Create New Account</button>
+	    </div>
+	</div>
+</body>
+</html>

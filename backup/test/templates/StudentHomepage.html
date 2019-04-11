@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ Student }} Homepage</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='studenthomepage.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>        
+    <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
+    <h1>Welcome back {{ Student }}!</h1>
+    <h2>You have _______ class(es) left to complete your AOC _______.</h2>
+    <h2>{{ progress_sentece[0] }}</h2>
+    <h3>You are (not) on track to graduate by ________.</h3>
+    <h3>{{ progress_sentece[1] }}</h3>
+    <br>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Student }}/studentProgressBreakdown'">View Detailed Progress Report</button>
+    <br>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Student }}/studentAddCourse'">Add Courses to Transcript</button>
+    <br>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/{{ Student }}/editProfile'">Edit Your Profile</button>
+    <br>
+    <br>
+    <button onclick="location.href='{{ ADDRESS }}/browseAOCs'">Browse AoCS</button>
+    <br>
+    <br>
+</body>
+</html>

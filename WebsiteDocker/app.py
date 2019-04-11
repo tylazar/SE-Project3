@@ -7,16 +7,26 @@ import datetime as dt
 
 #app = Flask(__name__)
 
-'''
+import sys
+print(sys.path)
+print(sys.version)
+
+with open('/var/www/html/WebsiteDocker/keys', 'r') as f:
+    ck = f.readline()[:-1]
+    cs = f.readline()[:-1]
+
+# print(ck)
+# print(cs)
+
 from flask_oauthlib.client import OAuth
-'''
+
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' # Change this
-'''
+
 OAUTH = OAuth()
 GOOGLE = OAUTH.remote_app('google',
-						consumer_key='ASK_HUNT', # keeping off git for security
-						consumer_secret='ASK_HUNT', # ditto
+						consumer_key=ck, # keeping off git for security
+						consumer_secret=cs, # ditto
 						request_token_params={'scope': 'email'},
 						base_url='https://www.googleapis.com/oauth2/v1/',
 						request_token_url=None,
@@ -24,12 +34,12 @@ GOOGLE = OAUTH.remote_app('google',
 						access_token_url='https://accounts.google.com/o/oauth2/token',
 						authorize_url='https://accounts.google.com/o/oauth2/auth',)
 
-'''
+
 localhost_addr = 'http://127.0.0.1:5000'
 server_addr = 'http://www.ncfbluedream.com'
 
 addr = server_addr # Change this to serve on website or local
-'''
+
 #=========================================#
 # OAuth Functions                         #
 #=========================================#
@@ -44,16 +54,11 @@ def get_google_token(token=None):
 
 @app.route('/authorize')
 def oauth_google():
-'''
 	#Page that redirects to Google's OAuth authorization page
-'''
 	return GOOGLE.authorize(callback=url_for('oauth_google_authorized', _external=True))
 
 @app.route('/authorized')
 def oauth_google_authorized():
-'''
-	#Page that is returned after authorization passes or fails
-'''
 	resp = GOOGLE.authorized_response()
 	if resp is None:
 		return redirect(url_for('/')) # Where to direct if the authorization fails
@@ -71,7 +76,7 @@ def oauth_google_authorized():
 		return redirect('/'+username+'/homepage') # Do normal string construction later on
 
 	# do redirects here
-'''
+
 #=========================================#
 # Flask Pages                             #
 #=========================================#
@@ -85,9 +90,9 @@ def landingPage():
 def loginPage(SoP):
 	#global addr
 	if request.method == 'POST':
-		session['user'] = request.form['email']
+		# session['user'] = request.form['email']
 		session['user_type'] = SoP
-		return redirect('/'+request.form['email']+'/homepage')
+		return redirect('/authorize')
 	return render_template("GeneralLogin.html", BACK='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])

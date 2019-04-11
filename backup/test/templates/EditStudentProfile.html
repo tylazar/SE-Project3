@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit Profile</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='editprofile.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+	<h1>Edit Your Student Profile</h1>
+	<form>
+		<div>
+			<h3 class="label">Name:</h3>
+			<input class="input" type="text" name="name" value="{{ StudentName }}">
+		</div>
+		<br>
+		<div>
+			<h3 class="label">AOC:</h3>
+			<select class="input" id="dropdown" name="StudentAOC">
+				{% for AOC in AOCList %}
+				<option value="{{ AOC }}">{{ AOC }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<br>
+		<div>
+			<h3 class="label">Expected Graduation Year:</h3>
+			<input class="input" type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10">
+		</div>
+		<br><br>
+		<button>Cancel</button>
+		<button type="submit">Submit Profile Changes</button>
+	</form>
+</body>
+</html>

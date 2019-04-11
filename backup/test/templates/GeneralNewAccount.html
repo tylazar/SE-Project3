@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ StudentorProfessor }} New Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='newaccount.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+    <button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+    <h1>Create a {{ StudentorProfessor }} Account</h1>
+    <p>Greetings, new friend! Please enter your information so we can begin our journey together.</p>
+    <form action="/newAccount/{{ StudentorProfessor }}" method="post">
+        <p>Email:</p>
+        <input type="text" name="email">
+        <br>
+        <p>Name:</p>
+        <input type="text" name="name">
+        <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
+        <br>
+        <button type="submit">Create New Account</button>
+        <br>
+    </form>
+    <button onclick="location.href='{{ ADDRESS }}/login/{{ StudentorProfessor }}'">Login to Existing Account</button>
+</body>
+</html>

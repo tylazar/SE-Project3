@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ StudentorProfessor }} Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+    <button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+    <h1>{{ StudentorProfessor }} Login</h1>
+    <form action="/login/{{ StudentorProfessor }}" method="post">
+        <p>Welcome back! Please enter your email.</p>
+        <input type="email" name="email">
+        <br>
+        <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
+        <button type="submit">Login</button>
+    </form>
+    <button onclick="location.href='{{ ADDRESS }}/newAccount/{{ StudentorProfessor }}'">Create an Account</button>
+</body>
+</html>

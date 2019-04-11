@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Browse Courses</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='browseclasses.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+	<h1>Browse Courses</h1>
+	<div class="Courses_div"> <!-- we want this div to have a set size and a scrollbar -->
+		{% for Course in CourseList %}
+		<h4>{{ Course }}</h4>
+		{% endfor %}	
+	</div>
+</body>
+</html>

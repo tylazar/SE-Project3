@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Student Breakdown Page</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='coursebreakdown.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+	<div class="header">
+		<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
+		<h1>Detailed Progress Breakdown</h1>
+	</div>
+	<h2>{{ progress_sentence[0] }}</h2>
+	<!--things here -->
+	{% for AOC in AOC_List %}
+		<div class="AOC_div"><!-- this is the AOC progress div -->
+			<h4>{{ AOC[0] }}</h4>
+			{% for requirement in AOC[1] %}
+			<p>{{ requirement }}</p>
+			<!-- these will probably be checkboxes or something of that sort later, but for the meantime it will simply be text-->
+			{% endfor %}
+		</div>
+	{% endfor %}
+	<!-- {% for Slash in SlashList %} -->
+		<div class="Slash_div">
+			<!-- this is here simply for expansion purposes (if we do it) -->
+		</div>
+	<!-- {% endfor %} -->
+	<div class="LAC_div"><!-- this is the LAC progress div -->
+		{% for LAC in LACList %}
+		<p>{{ LAC[0] }} : {{ LAC[1] }}</p>
+		{% endfor %}
+	</div>
+	<div class="Courses_div"><!-- this is the Courses taken div -->
+		{% for class in Courses %}
+		<p>{{ class }}</p>
+		{% endfor %}
+		<br>
+		<button>Add Course</button>
+	</div>
+</body>
+</html>
