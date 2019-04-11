@@ -11,7 +11,7 @@ def connectCursor():
 	'''
 	returns the mysql connection and the cursor for further use
 	'''
-	connection = mysql.connector.connect(user='root', password='bluecrew', database='Aoc')
+	connection = mysql.connector.connect(user='pythonUser', password='bluecrew', database='Aoc')
 	cur = connection.cursor()
 	return (connection,cur)
 
