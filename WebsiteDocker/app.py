@@ -1,7 +1,7 @@
 from flask import Flask, session, render_template, redirect, request, url_for
-#import mysql.connector
+import mysql.connector
 
-#from Helper_Functions import funtions1
+from Helper_Functions import funtions1
 
 import datetime as dt
 
@@ -84,6 +84,7 @@ def oauth_google_authorized():
 @app.route('/')
 def landingPage():
 	#stuff here
+	funtions1.connectionTest()
 	return render_template("LandingPage.html")
 
 @app.route('/login/<SoP>', methods=['GET', 'POST'])

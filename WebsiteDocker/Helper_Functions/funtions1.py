@@ -1,4 +1,10 @@
 import datetime
+import mysql
+
+def connectionTest():
+    connection, cur = connectCursor()
+    cur.close()
+
 #-----------------------------------------------------------------------------
 #HELPER FOR THE HELPERS
 def connectCursor():
