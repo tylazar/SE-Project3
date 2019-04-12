@@ -152,6 +152,8 @@ def addAOC(professor):
 @app.route('/FERPA')
 def FERPA():
 	#global addr
+	#if request.method == 'POST':
+		#more stuff here for redirect
 	return render_template("FERPA.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')

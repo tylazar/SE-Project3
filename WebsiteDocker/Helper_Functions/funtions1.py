@@ -666,3 +666,14 @@ def editAOC(AOC_name,AOC_id,oldRequirements,newRequirements):
 			connection.commit()
 			cur.close()
 
+def studentRemoveCourse(student,course):
+	'''
+	removes a course from the Student's courses taken
+	'''
+	connection, cur = connectCursor()
+	query = "DELETE FROM Courses_completed WHERE Student_id = %s AND Course_id = %s"
+	values = (student,course)
+	cur.execute(query,values)
+	connection.commit()
+	cur.close()
+
