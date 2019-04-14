@@ -8,10 +8,7 @@
 <body>        
     <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
     <h1>Welcome back {{ Student }}!</h1>
-    <h2>You have _______ class(es) left to complete your AOC _______.</h2>
-    <h2>{{ progress_sentece[0] }}</h2>
-    <h3>You are (not) on track to graduate by ________.</h3>
-    <h3>{{ progress_sentece[1] }}</h3>
+    <h2>{{ progress_sentece }}</h2>
     <br>
     <br>
     <button onclick="location.href='{{ ADDRESS }}/{{ Student }}/studentProgressBreakdown'">View Detailed Progress Report</button>

@@ -10,14 +10,16 @@
 		<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 		<h1>Detailed Progress Breakdown</h1>
 	</div>
-	<h2>{{ progress_sentence[0] }}</h2>
+	<h2>{{ progress_sentence }}</h2>
 	<!--things here -->
 	{% for AOC in AOC_List %}
 		<div class="AOC_div"><!-- this is the AOC progress div -->
 			<h4>{{ AOC[0] }}</h4>
 			{% for requirement in AOC[1] %}
-			<p>{{ requirement }}</p>
-			<!-- these will probably be checkboxes or something of that sort later, but for the meantime it will simply be text-->
+			<p>{{ requirement[0] }}</p>
+				{% for course in requirement[1] %}
+				<input type="checkbox" name="{{ course }}" value="{{ course }}">{{ course }}<br>
+				{% endfor %}
 			{% endfor %}
 		</div>
 	{% endfor %}
@@ -33,7 +35,7 @@
 	</div>
 	<div class="Courses_div"><!-- this is the Courses taken div -->
 		{% for class in Courses %}
-		<p>{{ class }}</p>
+		<p>{{ class[1] }}</p>
 		{% endfor %}
 		<br>
 		<button>Add Course</button>

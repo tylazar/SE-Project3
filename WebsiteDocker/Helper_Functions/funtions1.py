@@ -16,7 +16,8 @@ def studentProgress(student):
 	'''
 	this function will calculate how much time a student needs to graduate
 	returns a year that is the current year plus the number of years needed
-	to graduatate at the current rate
+	to graduatate at the current rate as well as the number of classes need to
+	complete the current AOC
 	-----------------------------------
 	ASSUMTIONS MADE DURING THIS CALCULATION
 	1 - the student is taking for classes a semester
@@ -56,7 +57,7 @@ def studentProgress(student):
 	for NUM_completed in results:
 		Total_NUM_to_complete -= NUM_completed
 	currentYear += (Total_NUM_to_complete/3)
-	return currentYear
+	return (currentYear,Total_NUM_to_complete)
 
 def aocInformation(AOC):
 	'''
@@ -190,7 +191,7 @@ def studentInformation(student):
 	this function will grab all information pertaining to a student
 	returns a tuple of said information
 	'''
-	calculatedGraduation = studentProgress(student)
+	calculatedGraduation = studentProgress(student)[0]
 	AOCname = ""
 	AOCid = 0
 	connection, cur = connectCursor()
@@ -384,8 +385,8 @@ def getStudentCourses(student):
 		connection.commit()
 		cur.close()
 		cur = connection.cursor()
-		for id,name,Department_id in results2:
-			CoursesTaken.append((id,name,Department_id))
+		for id,name in results2:
+			CoursesTaken.append((id,name))
 
 	return CoursesTaken
 
@@ -482,7 +483,7 @@ def getStudentProfile(studentEmail):
 			a key for getting the student row.
 	Returns
 		student_row: [ID, name, email, advisor, graduation-year, agreed_to_advisee_info_trad]
-		aoc_row: [ID, name, department-id]
+		aoc_row: [ID, name]
 	'''
 	connection, cur = connectCursor()
 
@@ -568,7 +569,7 @@ def getAoCs():
 
 #-----------------------------------------------------------------------------
 #AOC DETAIL PAGE
-#will use the above function and simply grab the correct tuple needed for the AOC needed
+#will use the function AOCinformation and simply grab the correct tuple needed for the AOC needed
 
 #-----------------------------------------------------------------------------
 #ADD AOC PAGE
