@@ -2,6 +2,7 @@ from flask import Flask, session, render_template, redirect, request, url_for
 #import mysql.connector
 
 from Helper_Functions import funtions1
+from Helper_Functions.funtions1 import getStudentProfile, getstudentProgress
 
 import datetime as dt
 
