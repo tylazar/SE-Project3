@@ -110,7 +110,7 @@ def userHomepage(user):
 
 def studentHomepage(student):
 	#global addr
-	return render_template("StudentHomepage.html",Student=student,progress_sentece=ProgressSentence(student,session['user']), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
+	return render_template("StudentHomepage.html",Student=student,progress_sentece=progressSentence(student,session['user']), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
