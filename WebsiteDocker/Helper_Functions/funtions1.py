@@ -448,7 +448,7 @@ def authenticateProfessorCourse(course_name):
 		bool: If the course can be created
 	'''
 	connection, cur = connectCursor()
-	query = "SELECT 1 FROM Courses WHERE Name=%s"
+	query = "SELECT * FROM Courses WHERE Name=%s"
 	values = (course_name)
 	cur.execute(query,values)
 	results = cur.fetchall()
@@ -493,7 +493,7 @@ def getStudentProfile(studentEmail):
 	'''
 	connection, cur = connectCursor()
 
-	query = "SELECT 1 FROM Students WHERE Email=%s"
+	query = "SELECT * FROM Students WHERE email=%s"
 	values = (studentEmail,)
 	cur.execute(query, values)
 	student_row = cur.fetchall()[0]
@@ -502,7 +502,7 @@ def getStudentProfile(studentEmail):
 	cur.close()
 	cur = connection.cursor()
 
-	query = "SELECT 1 FROM Student_aoc WHERE Student_id=%s"
+	query = "SELECT * FROM Student_aoc WHERE Student_id=%s"
 	values = (student_id,)
 	cur.execute(query, values)
 	student_aoc_row = cur.fetchall()[0]
@@ -511,7 +511,7 @@ def getStudentProfile(studentEmail):
 	cur.close()
 	cur = connection.cursor()
 
-	query = "SELECT 1 FROM AOCs WHERE id=%s"
+	query = "SELECT * FROM AOCs WHERE id=%s"
 	values = (aoc_id,)
 	cur.execute(query, values)
 	aoc_row = cur.fetchall()[1]
