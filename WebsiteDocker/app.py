@@ -204,7 +204,7 @@ def getCourseList():
 	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]	
 
 def progressSentence(student,studentEmail):
-	studentProgress = studentProgress(student)
+	studentProgressVar = studentProgress(student)
 	studentProfile = getStudentProfile(studentEmail)
 	studentAOC = studentProfile[1][1]
 	expectedGraduationYear = studentProfile[0][4]
@@ -212,9 +212,9 @@ def progressSentence(student,studentEmail):
 	string2 = "class(es) left to complete your AOC "
 	string3 = ".\n You are "
 	string4 = "on track to graduate by "
-	variable1 = str(studentProgress[1])
+	variable1 = str(studentProgressVar[1])
 	variable2 = studentAOC
-	if studentProgress[0] <= expectedGraduationYear:
+	if studentProgressVar[0] <= expectedGraduationYear:
 		variable3 = ""
 	else:
 		variable3 = "not "
