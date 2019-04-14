@@ -210,7 +210,7 @@ def getCourseList():
 	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]	
 
 def progressSentence(student,studentEmail):
-	studentProgressVar = studentProgress(student)
+	studentProgressVar = getstudentProgress(student)
 	studentProfile = getStudentProfile(studentEmail)
 	studentAOC = studentProfile[1][1]
 	expectedGraduationYear = studentProfile[0][4]
