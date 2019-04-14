@@ -12,7 +12,7 @@ def connectCursor():
 #-----------------------------------------------------------------------------
 #GENERAL HELPER FUNCTIONS
 
-def studentProgress(student):
+def getstudentProgress(student):
 	'''
 	this function will calculate how much time a student needs to graduate
 	returns a year that is the current year plus the number of years needed
