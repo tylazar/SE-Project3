@@ -116,7 +116,7 @@ def userHomepage(user):
 
 def studentHomepage(student):
 	#global addr
-	return render_template("StudentHomepage.html",Student=student,progress_sentece=getProgressSentence(student), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
+	return render_template("StudentHomepage.html",Student=student,progress_sentece=ProgressSentence(student,session['user']), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
@@ -158,6 +158,8 @@ def addAOC(professor):
 @app.route('/FERPA')
 def FERPA():
 	#global addr
+	#if request.method == 'POST':
+		#more stuff here for redirect
 	return render_template("FERPA.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
@@ -169,7 +171,7 @@ def AOCDetails(SoP, AOC):
 @app.route('/<student>/studentProgressBreakdown')
 def studentProgressBreakdown(student, AOC="General Studies"):
 	#global addr
-	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", progress_sentence=getProgressSentence(student),AOC=getAOC(student),LACList=getLAC(student),Courses=getCourses(student))
+	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", progress_sentence=progressSentence(student,session['user']),AOC_List=getStudentAOC(session['user']),LACList=getLACProgress(student),Courses=getCourses(student))
 
 if __name__ == "__main__":
 	app.run()
@@ -205,4 +207,29 @@ def getAdviseeList():
 	return [hts, ys]
 
 def getCourseList():
-	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]
+	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]	
+
+def progressSentence(student,studentEmail):
+	studentProgress = studentProgress(student)
+	studentProfile = getStudentProfile(studentEmail)
+	studentAOC = studentProfile[1][1]
+	expectedGraduationYear = studentProfile[0][4]
+	string1 = "You have "
+	string2 = "class(es) left to complete your AOC "
+	string3 = ".\n You are "
+	string4 = "on track to graduate by "
+	variable1 = str(studentProgress[1])
+	variable2 = studentAOC
+	if studentProgress[0] <= expectedGraduationYear:
+		variable3 = ""
+	else:
+		variable3 = "not "
+	variable4 = str(expectedGraduationYear)
+	finalString = string1+variable1+string2+variable2+string3+variable3+string4+variable4+"."
+	return finalString
+
+def getStudentAOC(studentEmail):
+	studentProfile = getStudentProfile(studentEmail)
+	AOCinfo = aocInformation(studentProfile[1][0])
+	return [AOCinfo]
+
