@@ -224,7 +224,7 @@ def editAOC(AOC):
 def studentProgressBreakdown(student, AOC="General Studies"):
 	#global addr
 	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
-		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(session['userEmail']), 
+		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), 
 		LACList=getLACProgress(student), Courses=getCourses(student))
 
 if __name__ == "__main__":

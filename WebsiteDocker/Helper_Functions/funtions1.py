@@ -101,7 +101,7 @@ def aocInformation(AOC):
 
 		for Course_id in results2:
 			query = "SELECT * FROM Courses WHERE id = %s"
-			values = (Course_id,)
+			values = (Course_id[0],)
 			cur.execute(query,values)
 			results3 = cur.fetchall()
 			connection.commit()
