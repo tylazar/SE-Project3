@@ -132,7 +132,7 @@ def professorHomepage(professor):
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
 	#global addr
-	if request.method = 'POST':
+	if request.method == 'POST':
 		studentID = getStudentID(student)
 		for x in xrange(1,20):
 			courseID = request.form['courseChoice'+str(x)]
@@ -144,7 +144,7 @@ def studentAddCourse(student):
 @app.route('/<professor>/professorAddCourse')
 def professorAddCourse(professor):
 	#global addr
-	if request.method = 'POST':
+	if request.method == 'POST':
 		courseName = request.form['CourseName']
 		addedOrNot = addProfessorCourse(courseName)
 		if addedOrNot == True:
@@ -158,7 +158,7 @@ def professorAddCourse(professor):
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
 	#global addr
-	if request.method = 'POST':
+	if request.method == 'POST':
 		newName = request.form['name']
 		newAOC = request.form['StudentAOC']
 		newEGY = request.form['StudentGraduationYear']
