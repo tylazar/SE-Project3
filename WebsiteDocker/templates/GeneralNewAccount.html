@@ -9,12 +9,21 @@
     <button class="back" onclick="location.href='{{ BACK }}'">Back</button>
     <h1>Create a {{ StudentorProfessor }} Account</h1>
     <p>Greetings, new friend! Please enter your information so we can begin our journey together.</p>
+    <p>And don't worry about not knowing what your AOC or graduation year is yet, you can change them later, as well as your preferred name!</p>
     <form action="/newAccount/{{ StudentorProfessor }}" method="post">
-        <p>Email:</p>
-        <input type="text" name="email">
+        <p>Preferred Name:</p>
+        <input type="text" name="name" required>
         <br>
-        <p>Name:</p>
-        <input type="text" name="name">
+        <p>Expected Graduation Year:</p>
+        <input type="number" name="ExpectedGraduationYear" min="{{ currentYear }}" required>
+        <br>
+        <p>AOC:</p>
+        <input list="dropdown" name="AOC" required>
+        <select id="dropdown">
+            {% for course in courseList %}
+            <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        </select>
         <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
         <br>
         <button type="submit">Create New Account</button>

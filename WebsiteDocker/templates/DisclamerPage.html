@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Welcome!</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='disclaimer.css') }}">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+</head>
+<body>
+	<div>
+		<p>Hi! Thank you for visiting NCF Blue Dream. By using this site, you acknowledge and agree to the following terms for you and all individuals accessing the site through your computer:</p>
+
+		<ul>
+			<li>The current state of the website may not reflect the final product</li>
+			<li>This website is not a replacement for meeting with your professors and advisors</li>
+			<li>The website does not guarantee placement in classes nor graduation as indicated on the site</li>
+			<li>Since the site is still in development, any advice it may give should not be followed</li>
+			<li>The operators of this site are the sole holders of all rights to the information on it, including, but not limited to:</li>
+			<ol>
+				<li>Removing information</li>
+				<li>Modifying information</li>
+				<li>Sharing information with a third party</li>
+			</ol>
+			<li>You waive the rights to sue the operators of this site for any reasons including, but not limited to:</li>
+			<ol>
+				<li>Damages</li>
+				<li>Misleading or deceptive conduct</li>
+			</ol>
+			<li>You will not use this site for any activities illegal under US law</li>
+			<li>You cannot use this if you are subject to the GDPR</li>
+		</ul>
+
+		<p>Thank you and welcome to NCF Blue Dream!</p>
+	</dir>
+		<div class="buttons">
+			<button class="no" onclick="location.href='{{ ADDRESS }}/newAccount/Student'">I Do Not Agree</button>
+			<button class="yes" type="submit">I Agree</button>
+		</div>
+	</div>
+</body>
+</html>

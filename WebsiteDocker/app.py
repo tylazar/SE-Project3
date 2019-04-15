@@ -2,7 +2,7 @@ from flask import Flask, session, render_template, redirect, request, url_for
 #import mysql.connector
 
 from Helper_Functions import funtions1
-from Helper_Functions.funtions1 import getStudentProfile, getstudentProgress
+from Helper_Functions.funtions1 import getStudentProfile, getstudentProgress, newAccountCreation
 
 import datetime as dt
 
@@ -86,19 +86,25 @@ def landingPage():
 def loginPage(SoP):
 	#global addr
 	if request.method == 'POST':
-		session['user'] = request.form['email']
+		session['userEmail'] = request.form['email']
 		session['user_type'] = SoP
 		return redirect('/'+request.form['email']+'/homepage')
-	return render_template("GeneralLogin.html", BACK='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
+	return render_template("GeneralLogin.html", BACK='http://www.ncfbluedream.com', 
+		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
 	
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	#global addr
 	if request.method == 'POST':
-		session['user'] = request.form['email']
+		session['userEmail'] = request.form['email']
 		session['user_type'] = SoP
-		return redirect('/'+request.form['email']+'/homepage')
-	return render_template("GeneralNewAccount.html", BACK='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
+		session['EGY'] = request.form['ExpectedGraduationYear']
+		session['AOC'] = request.form['AOC']
+		session['name'] = request.form['name']
+		return redirect('/FERPA')
+	return render_template("GeneralNewAccount.html", BACK='http://www.ncfbluedream.com', 
+		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP, courseList=getCourseList(),
+		currentYear=dt.datetime.now().year)
 
 @app.route('/<user>/homepage')
 def userHomepage(user):
@@ -111,16 +117,23 @@ def userHomepage(user):
 
 def studentHomepage(student):
 	#global addr
-	return render_template("StudentHomepage.html",Student=student,progress_sentece=progressSentence(student), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
+	if len(getStudentProfile(student)[0]) == 0:
+		newAccountCreation(session['name'],student,session['EGY'],session['AOC'],True)
+	return render_template("StudentHomepage.html", Student=student, progress_sentece=progressSentence(student), 
+		LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
-	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com', Professor=professor,adviseeList=getAdviseeList())
+	if len(getProfessorProfile(professor)) == 0:
+		newAccountCreation(session['name'],professor,None,None,False)
+	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', 
+		ADDRESS='http://www.ncfbluedream.com', Professor=professor, adviseeList=getAdviseeList())
 
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
 	#global addr
-	return render_template("StudentAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", ADDRESS='http://www.ncfbluedream.com', CourseList=getCourses(student))
+	return render_template("StudentAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
+		ADDRESS='http://www.ncfbluedream.com', CourseList=getCourses(student))
 
 @app.route('/<professor>/professorAddCourse')
 def professorAddCourse(professor):
@@ -130,7 +143,8 @@ def professorAddCourse(professor):
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
 	#global addr
-	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage",StudentName=getStudentName(student),AOCList=getAOCList(),currentYear=dt.datetime.now().year)
+	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
+		StudentName=getStudentName(student), AOCList=getAOCList(), currentYear=dt.datetime.now().year)
 
 @app.route('/browseClasses')
 def browseClasses():
@@ -143,30 +157,41 @@ def browseAOCs():
 	if request.method == 'POST':
 		aoc = request.form['AOCs']
 		return redirect('/AOCDetails/'+session['user_type']+'/'+aoc)
-	return render_template("BrowseAOCs.html", BACK='http://www.ncfbluedream.com'+"/"+session['user']+"/homepage", AOCList=getAOCList())
+	return render_template("BrowseAOCs.html", BACK='http://www.ncfbluedream.com'+"/"+session['userEmail']+"/homepage", 
+		AOCList=getAOCList())
 
 @app.route('/<professor>/addAOC')
 def addAOC(professor):
 	#global addr
-	return render_template("addAOCPage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", courses=getCourseList())
+	return render_template("addAOCPage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
+		courses=getCourseList())
 
 @app.route('/FERPA')
 def FERPA():
 	#global addr
-	#if request.method == 'POST':
-		#more stuff here for redirect
+	if request.method == 'POST':
+		redirect('/Welcome')
 	return render_template("FERPA.html")
+
+@app.route('/Welcome')
+def Disclaimer():
+	if request.method == 'POST':
+		redirect('/'+session['userEmail']+'/homepage')s
+	return render_template("DisclaimerPage.html")
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#global addr
-	return render_template("GeneralAOCDetailPage.html", BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, StudentorProfessor=SoP, requirements=getAOC(''))
+	return render_template("GeneralAOCDetailPage.html", BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, 
+		StudentorProfessor=SoP, requirements=getAOC(''))
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
 def studentProgressBreakdown(student, AOC="General Studies"):
 	#global addr
-	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", progress_sentence=progressSentence(student,session['user']),AOC_List=getStudentAOC(session['user']),LACList=getLACProgress(student),Courses=getCourses(student))
+	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
+		progress_sentence=progressSentence(student, session['userEmail']), AOC_List=getStudentAOC(session['userEmail']), 
+		LACList=getLACProgress(student), Courses=getCourses(student))
 
 if __name__ == "__main__":
 	app.run()
@@ -188,7 +213,8 @@ def getLAC(student):
 	return [('What goes', 'here?')]
 
 def getCourses(student):
-	return ['Scheme', 'Competitive Programming', 'Intro to Pekes', 'Advance Pekeonomics', 'Gender, Equality, & the Pekingese', 'Pekesis']
+	return ['Scheme', 'Competitive Programming', 'Intro to Pekes', 'Advance Pekeonomics', 
+	'Gender, Equality, & the Pekingese', 'Pekesis']
 
 def getStudentName(student):
 	return "Hunt Sparra"
