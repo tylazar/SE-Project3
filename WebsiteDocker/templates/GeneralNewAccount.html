@@ -14,16 +14,18 @@
         <p>Preferred Name:</p>
         <input type="text" name="name" required>
         <br>
+        {% if StudentOrProfessor == "student" %}
         <p>Expected Graduation Year:</p>
-        <input type="number" name="ExpectedGraduationYear" min="{{ currentYear }}" required>
+        <input type="number" name="ExpectedGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10" required>
         <br>
         <p>AOC:</p>
         <input list="dropdown" name="AOC" required>
         <select id="dropdown">
-            {% for course in courseList %}
-            <option value="{{ course }}">{{ course }}</option>
+            {% for AOC in AOCList %}
+            <option value="{{ AOC[1] }}">{{ AOC[0] }}</option>
             {% endfor %}
         </select>
+        {% endif %}
         <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
         <br>
         <button type="submit">Create New Account</button>

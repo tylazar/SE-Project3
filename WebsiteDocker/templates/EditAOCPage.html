@@ -6,42 +6,161 @@
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <script>
-	//this is here because it will definatly be used later
+	var RequirementCount = 0
+	var listOfInnerCounts = []
+	var CourseList = {}
+	function removeCourse(courseNumber,requirementNumber) {
+		var row = document.getElementById("Course_"+toString(courseNumber)+"_table_"+toString(requirementNumber));
+		row.parentNode.removeChild(row);
+	}
+	function addCourse(requirementNumber){
+		var table = document.getElementById("CourseTable_"+toString(requirementNumber));
+		var newCourseRow = document.createElement("tr");
+		var newCourseFirstCell = document.createElement("td");
+		var innerLoopCount = 0;
+		for (var x = 0; x < listOfInnerCounts.length; x++){
+			if (x == requirementNumber) {
+				innerLoopCount = listOfInnerCounts[x]+1;
+				listOfInnerCounts[x] = innerLoopCount;
+				break;
+			}
+		}
+		newCourseFirstCell.id = "Course_"+toString(innerLoopCount);
+		newCourseFirstCell.innerHTML = "Course:";
+		var newCourseSecondCell = document.createElement("td");
+		var selectCourse = document.createElement("select");
+		selectCourse.id = "course_"+toString(innerLoopCount)+"_for_Requirement_"+toString(requirementNumber);
+		selectCourse.required = true;
+		Object.keys(CourseList).forEach(function(key){
+			var option = document.createElement("option");
+			option.value = CourseList[key];
+			option.innerHTML = key;
+			selectCourse.appendChild(option);
+		});
+		newCourseSecondCell.appendChild(selectCourse);
+		var newcourseThridCell = document.createElement("td");
+		var button = document.createElement("button");
+		button.onclick = "removeCourse("+toString(innerLoopCount)+","+toString(requirementNumber)+")";
+		button.innerHTML = "Remove Course";
+		newcourseThridCell.appendChild(button);
+		newCourseRow.appendChild(newCourseFirstCell);
+		newCourseRow.appendChild(newCourseSecondCell);
+		newCourseRow.appendChild(newcourseThridCell);
+		table.appendChild(newCourseRow);
+	}
+	function removeRequirement(requirementNumber){
+		var div = document.getElementById(toString(requirementNumber));
+		div.parentNode.removeChild(div);
+	}
+	function addRequirement(){
+		RequirementCount++;
+		listOfInnerCounts.append(0);
+		var requirementDiv = document.createElement("div");
+		requirementDiv.class = "requirement_div";
+		requirementDiv.id = "Requirement_"+toString(RequirementCount)+"_div";
+		var text = document.createElement("p");
+		text.class = "course_name";
+		text.id = "Requirement_"+toString(RequirementCount)+"_text";
+		text.innerHTML = "Requirement :";
+		requirementDiv.appendChild(text);
+		var textInput = document.createElement("input");
+		textInput.type = "text";
+		textInput.name = "RequirementName_"+toString(RequirementCount);
+		textInput.required = true;
+		requirementDiv.appendChild(textInput);
+		var numDiv = document.createElement("div");
+		numDiv.class = "req_num";
+		var numText = document.createElement("p");
+		numText.class = "req_num_p";
+		numText.innerHTML = "Minimum number of Courses for this Requirement:";
+		numDiv.appendChild(numText);
+		var numInput = document.createElement("input");
+		numInput.class = "req_num_input";
+		numInput.type = "number";
+		numInput.name = "MinRequired_"+toString(RequirementCount);
+		numInput.min = 1;
+		numInput.required = true;
+		numDiv.appendChild(numInput);
+		requirementDiv.appendChild(numDiv);
+		var coursesDiv = document.createElement("div");
+		coursesDiv.class = "Course_div";
+		var coursesText = document.createElement("p");
+		coursesText.innerHTML = "Course Options for this Requirement";
+		coursesDiv.appendChild(coursesText);
+		var table = document.createElement("table");
+		table.id = "CourseTable_"+toString(RequirementCount);
+		coursesDiv.appendChild(table);
+		requirementDiv.appendChild(coursesDiv);
+		var addCourseButton = document.createElement("button");
+		addCourseButton.onclick = "addCourse("+toString(RequirementCount)+")"
+		addCourseButton.innerHTML = "Add Course to Requirement";
+		requirementDiv.appendChild(addCourseButton);
+		var removeRequirementButton = document.createElement("button");
+		removeRequirementButton.onclick = "removeRequirement("+toString(RequirementCount)+")";
+		removeRequirementButton.innerHTML = "Remove Requirement";
+		requirementDiv.appendChild(removeRequirementButton);
+		var AOCDiv = document.getElementById("AOCDIV");
+		AOCDiv.appendChild(requirementDiv);
+		addCourse(RequirementCount);
+	}
+	function holdNumbers(countDic){
+		RequirementCount = countDic['Requirements']
+		listOfInnerCounts = countDic['listOfInnerCounts']
+	}
 </script>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
-	<h1>Edit AOC</h1>
+	<h1>Edit AOC {{ AOC[1] }}</h1>
 	<form>
-		<div class="AOC_div">
-			<p class="course_name" id="Requirement_1">Requirement:</p>
-			<div class="requirement_div">
+		<div class="AOC_div" id="AOCDIV">
+			{% set listOfCourseNumbers = [] %}
+			{% set numOfRequirement = 0 %}
+			{% for Requirement in AOC[2] %}
+			<div class="requirement_div" id="Requirement_{{ loop.index }}_div">
+			<p class="course_name" id="Requirement_{{ loop.index }}_text">Requirement {{ loop.index }}:</p>
+			<input type="text" name="RequirementName_{{ loop.index }}" value="{{ Requirement[1] }}" required>
 				<div class="req_num">
 					<p class="req_num_p">Minimum number of Courses for this Requirement:</p>
-					<input class="req_num_input" type="number">
+					<input class="req_num_input" type="number" name="MinRequired_{{ loop.index }}" min="1" value="{{ Requirement[4] }}" required>
 				</div>
 				<div class="Course_div">
 					<p>Course Options for this Requirement</p>
-					<table>
-						<tr>
-							<td id="Course_1">Course: </td>
+					<table id="CourseTable_{{ loop.index }}">
+						{% set numOfCourses = 0 %}
+						{% set outer_loop = loop %}
+						{% for CourseR in Requirement[3] %}
+						<tr id="Course_{{ loop.index }}_table_{{ outer_loop.index }}">
+							<td id="Course_{{ loop.index }}">Course: </td>
 							<td>
-								<select>
-									{% for Course in CourseList %}
-										<option value="{{ Course }}">{{ Course }}</option>
+								<select name="course_{{ loop.index }}_for_Requirement_{{ outer_loop.index }}" required>
+									{% for CourseL in CourseList %}
+										{% if CourseL[0] == CourseR[0] %}
+										<option value="{{ CourseL[0] }}" selected>{{ CourseL[1] }}</option>
+										{% else %}
+										<option value="{{ CourseL[0] }}">{{ CourseL[1] }}</option>
+										{% endif %}
 									{% endfor %}
 								</select>
 							</td>
 							<td>
-								<button>Remove Course</button>
+								<button onclick="removeCourse({{ loop.index }},{{ outer_loop.index }})">Remove Course</button>
 							</td>
 						</tr>
+						{% set numOfCourses = numOfCourses+1 %}
+						{% endfor %}
+						{{ listOfCourseNumbers.append(numOfCourses) }}
 					</table>
 				</div>
-				<button>Add Course to Requirement</button>
+				<button onclick="addCourse({{ loop.index }})">Add Course to Requirement</button>
+				<button onclick="removeRequirement({{ loop.index }})">Remove Requirement</button>
 			</div>
-			<button>Add New Requirement</button>
+			{% set numOfRequirement = numOfRequirement+1 %}
+			{% endfor %}
+			{% set numberDic = {Requirements: numOfRequirement, listOfInnerCounts: listOfCourseNumbers} %}
 		</div>
-		<button class="cancel">Cancel</button>
+		<div onload="holdNumbers({{ numberDic }})"></div>
+		<button onclick="addRequirement()">Add New Requirement</button>
+		<button class="cancel" onclick="location.href='{{ BACK }}'">Cancel</button>
 		<button type="submit">Submit AOC Changes</button>
 	</form>
 </body>

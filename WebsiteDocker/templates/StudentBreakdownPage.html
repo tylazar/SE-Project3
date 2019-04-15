@@ -14,11 +14,11 @@
 	<!--things here -->
 	{% for AOC in AOC_List %}
 		<div class="AOC_div"><!-- this is the AOC progress div -->
-			<h4>{{ AOC[0] }}</h4>
-			{% for requirement in AOC[1] %}
-			<p>{{ requirement[0] }}</p>
-				{% for course in requirement[1] %}
-				<input type="checkbox" name="{{ course }}" value="{{ course }}">{{ course }}<br>
+			<h4>{{ AOC[1] }}</h4>
+			{% for requirement in AOC[2] %}
+			<p>{{ requirement[1] }}</p>
+				{% for course in requirement[3] %}
+				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}">{{ course[1] }}<br>
 				{% endfor %}
 			{% endfor %}
 		</div>
