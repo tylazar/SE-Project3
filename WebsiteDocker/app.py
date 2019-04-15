@@ -253,8 +253,8 @@ def getLAC(student):
 	return [('What goes', 'here?')]
 
 def getCourses(student):
-	return [('Scheme',1), ('Competitive Programming',2), ('Intro to Pekes',3), ('Advance Pekeonomics',4), 
-	('Gender, Equality, & the Pekingese',5), ('Pekesis',6)]
+	return [(1,'Scheme'), (2,'Competitive Programming'), (3,'Intro to Pekes'), (4,'Advance Pekeonomics'), 
+	(5,'Gender, Equality, & the Pekingese'), (6,'Pekesis')]
 
 def getStudentName(student):
 	return "Hunt Sparra"
