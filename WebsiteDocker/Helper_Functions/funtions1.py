@@ -76,7 +76,7 @@ def aocInformation(AOC):
 	AOCname = ""
 
 	for name in results:
-		AOCname = name
+		AOCname = name[0]
 
 	query = "SELECT * FROM Requirements WHERE AOC_id = %s"
 	values = (AOC,)
