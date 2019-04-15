@@ -169,7 +169,7 @@ def newAccountAuthentication(email):
 			return False
 	return True
 
-def newAccountCreation(name,email,studentOrProfessor):
+def newAccountCreation(name,email,EGY,AOC,studentOrProfessor):
 	'''
 	this function will create the new account in either student or professors
 	the variable studentOrProfessor is a boolean
@@ -178,15 +178,37 @@ def newAccountCreation(name,email,studentOrProfessor):
 	if not newAccountAuthentication(email):
 		return False
 	connection, cur = connectCursor()
-	query = "INSERT INTO %s (name,email) VALUES (%s,%s)"
-	if studentOrProfessor:
-		table = "Students"
+	query = ""
+	values = ("","")
+	if studentOrProfessor == True:
+		query = "INSERT INTO Students (name,email,Graduation_year) VALUES (%s,%s,%s)"
+		values = (name,email,EGY)
 	else:
-		table = "Professors"
-	values = (table,name,email)
+		query = "INSERT INTO Professors (name,email) VALUES (%s,%s)"
+		values = (name,email)
 	cur.execute(query,values)
 	connection.commit()
 	cur.close()
+	cur = connection.cursor()
+	if studentOrProfessor == True:
+		query = "SELECT id FROM AOCs WHERE name = %s"
+		values = (AOC,)
+		cur.execute(query,values)
+		AOC_ID = cur.fetchall()[0]
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		query = "SELECT id FROM Students WHERE email = %s"
+		values = (email,)
+		cur.execute(query,values)
+		Student_ID = cur.fetchall()[0]
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		query = "INSERT INTO Student_aoc (Student_id,AOC_id) VALUES (%s,%s)"
+		values = (Student_ID,AOC_ID)
+		connection.commit()
+		cur.close()
 
 
 #-----------------------------------------------------------------------------
@@ -255,6 +277,17 @@ def studentInformation(student):
 
 #-----------------------------------------------------------------------------
 #PROFESSOR HOMEPAGE
+
+def getProfessorProfile(professor):
+	'''
+	returns basic information on professor
+	'''
+	connection, cur = connectCursor()
+	query = "SELECT * FROM Professors WHERE email = %s"
+	values = (professor,)
+	cur.execute(query,values)
+	results = cur.fetchall()[0]
+	return results2
 
 def adviseeInfo(professor):
 	'''
