@@ -28,7 +28,7 @@ def getstudentProgress(student):
 	now = datetime.datetime.now()
 	currentYear = int(now.year)
 	Total_NUM_to_complete = 0
-	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id = %s"
+	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id=%s"
 	values = (student,)
 	cur.execute(query,values)
 	results = cur.fetchall()
@@ -38,7 +38,7 @@ def getstudentProgress(student):
 	AOCID = ""
 	for AOC_id in results:
 		AOCID = AOC_id
-	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id = %s"
+	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id=%s"
 	values = (AOCID,)
 	cur.execute(query,values)
 	results = cur.fetchall()
@@ -47,7 +47,7 @@ def getstudentProgress(student):
 	cur = connection.cursor()
 	for NUM_to_complete in results:
 		Total_NUM_to_complete += NUM_to_complete
-	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s"
+	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id=%s"
 	values = (student,)
 	cur.execute(query,values)
 	results = cur.fetchall()
