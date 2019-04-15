@@ -591,7 +591,7 @@ def getAoCs():
 	'''
 	retuns a list of tuples of AOC information from the AOC table
 	'''
-	connection, cur = connectionCurson()
+	connection, cur = connectCursor()
 	query = "SELECT * FROM AOCs"
 	cur.execute()
 	ret = cur.fetchall()
