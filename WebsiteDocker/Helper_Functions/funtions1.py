@@ -593,7 +593,7 @@ def getAoCs():
 	'''
 	connection, cur = connectCursor()
 	query = "SELECT * FROM AOCs"
-	cur.execute()
+	cur.execute(query)
 	ret = cur.fetchall()
 	connection.commit()
 	cur.close()
