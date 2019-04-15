@@ -11,21 +11,43 @@
 	<form>
 		<div>
 			<h3 class="label">Name:</h3>
-			<input class="input" type="text" name="name" value="{{ StudentName }}">
+			<input class="input" type="text" name="name" value="{{ StudentName }}" required>
 		</div>
 		<br>
 		<div>
 			<h3 class="label">AOC:</h3>
-			<select class="input" id="dropdown" name="StudentAOC">
+			<select class="input" id="AOCdropdown" name="StudentAOC" required>
 				{% for AOC in AOCList %}
-				<option value="{{ AOC }}">{{ AOC }}</option>
+					{% if AOC[1] == oldAOC %}
+					<option value="{{ AOC[1] }}" selected>{{ AOC[0] }}</option>
+					{% else %}
+					<option value="{{ AOC[1] }}">{{ AOC[0] }}</option>
+					{% endif %}
 				{% endfor %}
 			</select>
 		</div>
 		<br>
 		<div>
 			<h3 class="label">Expected Graduation Year:</h3>
-			<input class="input" type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10">
+			<input class="input" type="number" name="StudentGraduationYear" min="{{ currentYear }}" max="{{ currentYear }}+10" value="{{ oldEGY }}" required>
+		</div>
+		<br>
+		<div>
+			<h3 class="label">Advisor:</h3>
+			<select class="input" id="Advisordropdown" name="Advisor" required>
+				{% for advisor in advisorList %}
+					{% if advisor[1] == oldAdvisor %}
+					<option value="{{ advisor[1] }}" selected>{{ advisor[0] }}</option>
+					{% else %}
+					<option value="{{ advisor[1] }}">{{ advisor[0] }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+		</div>
+		<br>
+		<div>
+			<h3 class="label">Agree to share information with your advisor:</h3>
+			<input type="checkbox" name="Agreement" value="{{ oldAgreement }}" required="">
 		</div>
 		<br><br>
 		<button>Cancel</button>

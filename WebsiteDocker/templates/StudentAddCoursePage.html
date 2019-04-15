@@ -6,25 +6,53 @@
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <script>
-	//this is here for later, this page will definarlt require it
+	var count = 2;
+	function AnotherCourse() {
+		var bigDiv = document.getElementById("bigDiv");
+		var smallerDiv = document.createElement("div");
+		smallerDiv.setAttribute("class","Course_indiviual");
+		smallerDiv.setAttribute("id",toString(count));
+		var Xbutton = document.createElement("button");
+		Xbutton.setAttribute("class","course_item");
+		Xbutton.setAttribute("id","x"+toString(count));
+		Xbutton.setAttribute("onclick","removeChoice("+toString(count)+")");
+		var AddCourseText = document.createElement("p");
+		AddCourseText.setAttribute("class","course_item");
+		var courseListInput = document.createElement("input");
+		courseListInput.setAttribute("list","dropdown");
+		courseListInput.setAttribute("id","course"+toString(count));
+		courseListInput.setAttribute("name","courseChoice"+toString(count));
+		smallerDiv.appendChild(Xbutton);
+		smallerDiv.appendChild(AddCourseText);
+		smallerDiv.appendChild(courseListInput);
+		bigDiv.appendChild(smallerDiv);
+		count++;
+	}
+	function removeChoice(IDnumber) {
+		var smallerDiv = document.getElementById(IDnumber);
+		var bigDiv = smallerDiv.parentNode;
+		bigDiv.removeChild(smallerDiv);
+	}
 </script>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>Add Courses</h1>
 	<p>To find the course you would like to add click on 'Browse Courses' and select the course you want from the menu. If you would like to add multiple courses at one time simply click 'Add Another Course' and repeat the process above. If you decide you don't want to add a course simply click the red X next to that course. When you are done with adding courses click 'Submit New Courses'.</p>
 	<form>
-		<div class="Courses">
+		<div class="Courses" id="bigDiv">
 			<div class="Course_indiviual" id="1">
-				<button class="course_item" id="x">X</button>
+				<button class="course_item" id="x1" onclick="removeChoice(1)">X</button>
 				<p class="course_item">Add Course</p>
-				<input list="dropdown">
+				<input list="dropdown" id="course1" name="courseChoice1">
 				<select class="course_item" id="dropdown">
 					{% for Course in CourseList %}
-					<option value="{{ Course }}">{{ Course }}</option>
+					<option value="{{ Course[1] }}">{{ Course[0] }}</option>
 					{% endfor %}
 				</select>
 			</div>
-			<button>Add Another Course</button>
+		</div>
+		<div class="Courses">
+			<button onclick="AnotherCourse()">Add Another Course</button>
 		</div>
 		<button type="submit">Submit New Courses</button>
 	</form>

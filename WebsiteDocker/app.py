@@ -103,7 +103,7 @@ def newAccountPage(SoP):
 		session['name'] = request.form['name']
 		return redirect('/FERPA')
 	return render_template("GeneralNewAccount.html", BACK='http://www.ncfbluedream.com', 
-		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP, courseList=getCourseList(),
+		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP, AOCList=getAOCList(),
 		currentYear=dt.datetime.now().year)
 
 @app.route('/<user>/homepage')
@@ -132,19 +132,44 @@ def professorHomepage(professor):
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
 	#global addr
+	if request.method = 'POST':
+		studentID = getStudentID(student)
+		for x in xrange(1,20):
+			courseID = request.form['courseChoice'+str(x)]
+			studentAddCourse(studentID,courseID)
+		redirect('/'+student+'/homepage')
 	return render_template("StudentAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
 		ADDRESS='http://www.ncfbluedream.com', CourseList=getCourses(student))
 
 @app.route('/<professor>/professorAddCourse')
 def professorAddCourse(professor):
 	#global addr
-	return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage")
+	if request.method = 'POST':
+		courseName = request.form['CourseName']
+		addedOrNot = addProfessorCourse(courseName)
+		if addedOrNot == True:
+			redirect('/'+professor+'/homepage')
+		else:
+			render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
+				Warning="That class already exsists")
+	return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
+		Warning=None)
 
 @app.route('/<student>/editProfile')
 def editStudentProfile(student):
 	#global addr
+	if request.method = 'POST':
+		newName = request.form['name']
+		newAOC = request.form['StudentAOC']
+		newEGY = request.form['StudentGraduationYear']
+		newAdvisor = request.form['Advisor']
+		newAgreement = request.form['Agreement']
+		studentID = getStudentID(student)
+		updateStudentProfile(studentID,newName,newAdvisor,newEGY,newAOC,newAgreement)
+	oldInfo = getStudentProfile(student)
 	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
-		StudentName=getStudentName(student), AOCList=getAOCList(), currentYear=dt.datetime.now().year)
+		StudentName=getStudentName(student), AOCList=getAOCList(), currentYear=dt.datetime.now().year, 
+		oldAOC=oldInfo[1][0], oldEGY=oldInfo[0][4], oldAdvisor=oldInfo[0][3], oldAgreement=oldInfo[0][5])
 
 @app.route('/browseClasses')
 def browseClasses():
@@ -182,8 +207,17 @@ def Disclaimer():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#global addr
+	if request.method = 'POST':
+		redirect('/')
 	return render_template("GeneralAOCDetailPage.html", BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, 
 		StudentorProfessor=SoP, requirements=getAOC(''))
+
+@app.route('/Edit/<AOC>')
+def editAOC(AOC):
+	#things and stuff here
+	allAOC = getAOC(AOC)
+	return render_template("EditAOCPage.html", BACK='http://www.ncfbluedream.com'+'/AOCDetails/Professor/'+AOC, 
+		AOC=allAOC)
 
 # We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
 @app.route('/<student>/studentProgressBreakdown')
@@ -213,14 +247,14 @@ def getLAC(student):
 	return [('What goes', 'here?')]
 
 def getCourses(student):
-	return ['Scheme', 'Competitive Programming', 'Intro to Pekes', 'Advance Pekeonomics', 
-	'Gender, Equality, & the Pekingese', 'Pekesis']
+	return [('Scheme',1), ('Competitive Programming',2), ('Intro to Pekes',3), ('Advance Pekeonomics',4), 
+	('Gender, Equality, & the Pekingese',5), ('Pekesis',6)]
 
 def getStudentName(student):
 	return "Hunt Sparra"
 
 def getAOCList():
-	return ["Computer Science", "Biology", "Political Science", "Pekeology"]
+	return [("Computer Science",1), ("Biology",2), ("Political Science",3), ("Pekeology",4)]
 
 def getAdviseeList():
 	hts = ["Hunt Thomas Sparra", "Panting", "...no comment"]
@@ -228,7 +262,7 @@ def getAdviseeList():
 	return [hts, ys]
 
 def getCourseList():
-	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]	
+	return [("Intro to Python",1), ("Scheme",2), ("Linear Algebra",3), ("Intro to Buddhism",4), ("Discrete Mathematics",5)]	
 
 def progressSentence(studentEmail):
 	studentProfile = getStudentProfile(studentEmail)
@@ -254,4 +288,12 @@ def getStudentAOC(studentEmail):
 	studentProfile = getStudentProfile(studentEmail)
 	AOCinfo = aocInformation(studentProfile[1][0])
 	return [AOCinfo]
+
+def getStudentID(studentEmail):
+	studentProfile = getStudentProfile(studentEmail)
+	ID = studentProfile[0][0]
+	return ID
+
+def getAOC(aoc):
+	aocInformation(aoc)
 

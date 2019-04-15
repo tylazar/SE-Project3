@@ -111,7 +111,7 @@ def aocInformation(AOC):
 
 		tempReqList.append((id,name,AOC_id,Courses_for_requirementList,NUM_to_complete))
 
-	return (AOCname,tempReqList)
+	return (AOC,AOCname,tempReqList)
 
 def grabAllCourses():
 	'''
@@ -515,7 +515,7 @@ def getStudentProfile(studentEmail):
 		studentEmail: The email of the student. This is used as
 			a key for getting the student row.
 	Returns
-		student_row: [ID, name, email, advisor, graduation-year, agreed_to_advisee_info_trad]
+		student_row: [ID, name, email, advisor, graduation-year, agreed_to_advisee]
 		aoc_row: [ID, name]
 	'''
 	connection, cur = connectCursor()
@@ -548,7 +548,7 @@ def getStudentProfile(studentEmail):
 
 	return student_row, aoc_row
 
-def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id):
+def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id, agreement):
 	'''
 	Main function is to submit all info for a student’s “profile”,
 	submits to the student table and student AOC table
@@ -562,8 +562,8 @@ def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id):
 	cur.close()
 	cur = connection.commit()
 
-	query = "UPDATE Students SET name=%s,advisor=%s,graduation_year=%s WHERE student_id=%s"
-	values = (name, advisor, graduation_year, student_id)
+	query = "UPDATE Students SET name=%s,advisor=%s,graduation_year=%s,agreed_to_advisee=%s WHERE student_id=%s"
+	values = (name, advisor, graduation_year, agreement, student_id)
 	cur.execute()
 	connection.commit()
 	cur.close()

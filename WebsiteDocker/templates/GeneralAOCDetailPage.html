@@ -7,17 +7,20 @@
 </head>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
-	<h1>{{ AOC }} Details:</h1>
-	<h3>Department: {{ Department }}</h3>
+	<h1>{{ AOC[1] }} Details:</h1>
 	{% if StudentorProfessor == "Professor" %}
-		<p>You may edit this AOC, but be warned this will change this AOC for EVERYONE!</p>
-		<button>Edit AOC</button>
+		<button type="submit">Edit AOC</button>
 	{% endif %}
 	<div class="AOC_Detils_div">
-		<p>{{ AOC }} Requirements </p>
+		<p>{{ AOC[1] }} Requirements </p>
 		<ul>
-			{% for Requirement in Requirements %}
-			<li>{{ Requirement }}</li> <!-- this will be expanded apon later -->
+			{% for Requirement in AOC[2] %}
+			<li>{{ Requirement[1] }} : {{ Requirement[2] }}</li>
+				<ul>
+				{% for course in Requirement[3] %}
+					<li>{{ course[1] }}</li>
+				{% endfor %}
+				</ul>
 			{% endfor %}
 		</ul>
 	</div>
