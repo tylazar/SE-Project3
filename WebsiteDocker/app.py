@@ -213,8 +213,8 @@ def Disclaimer():
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
 	#global addr
-	if request.method = 'POST':
-		redirect('/')
+	if request.method == 'POST':
+		redirect('/Edit/'+AOC)
 	return render_template("GeneralAOCDetailPage.html", BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, 
 		StudentorProfessor=SoP, requirements=getAOC(''))
 
