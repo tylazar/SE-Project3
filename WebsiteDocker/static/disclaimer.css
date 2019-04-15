@@ -1,0 +1,82 @@
+body {
+	text-align: center;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	background-image: url("background2.jpg");
+	background-color: #53256C; /*if image isn't available*/
+	background-size: cover;
+	color: #D3D9FF;
+	width: 75%;
+	margin: auto;
+	font-size: 1.5em;
+}
+
+button {
+ 	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
+ 	background-color: transparent;
+ 	padding: 12px;
+ 	margin-bottom: 20px;
+ 	color: #D3D9FF;
+ 	font-family: 'Amatic SC', cursive;
+	font-size: 1.2em;
+}
+
+button:hover {
+ border-radius: 12px;
+ border: 1px solid #D3D9FF;
+ background-color: #53256C;
+ padding: 12px;
+}
+
+ul {
+	border: 1px solid #D3D9FF;
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	height: 50vh;
+	overflow-y: scroll;
+	background-color: #050608;
+	line-height: 1.6em;
+	padding: 1vw;
+	text-align: left;
+}
+
+li {
+	list-style-position: outside;
+	list-style-type: square;
+	margin-left: 20px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+  border: 1px solid #D3D9FF;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #D3D9FF; 
+}
+
+.buttons {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.no {
+	display: inline-block;
+	float: left;
+}
+
+.yes {
+	display: inline-block;
+	float: right;
+}
