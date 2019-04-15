@@ -38,9 +38,8 @@ def getstudentProgress(student):
 	AOCID = ""
 	for AOC_id in results:
 		AOCID = AOC_id
-	return (2021,1)
 	query = "SELECT NUM_to_complete FROM Requirements WHERE AOC_id=%s"
-	values = (AOCID,)
+	values = (AOCID[0],)
 	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
@@ -48,7 +47,6 @@ def getstudentProgress(student):
 	cur = connection.cursor()
 	for NUM_to_complete in results:
 		Total_NUM_to_complete += NUM_to_complete
-	return (2021,2)
 	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id=%s"
 	values = (student,)
 	cur.execute(query,values)
