@@ -52,7 +52,7 @@ def getstudentProgress(student):
 	cur.close()
 	cur = connection.cursor()
 	for NUM_to_complete in results:
-		Total_NUM_to_complete += NUM_to_complete
+		Total_NUM_to_complete += NUM_to_complete[0]
 	query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id=%s"
 	values = (student,)
 	cur.execute(query,values)
