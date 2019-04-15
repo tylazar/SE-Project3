@@ -539,7 +539,7 @@ def getStudentProfile(studentEmail):
 	values = (student_id,)
 	cur.execute(query, values)
 	student_aoc_row = cur.fetchall()[0]
-	aoc_id = student_aoc_row[0]
+	aoc_id = student_aoc_row[1]
 	connection.commit()
 	cur.close()
 	cur = connection.cursor()
@@ -547,7 +547,7 @@ def getStudentProfile(studentEmail):
 	query = "SELECT * FROM AOCs WHERE id=%s"
 	values = (aoc_id,)
 	cur.execute(query, values)
-	aoc_row = cur.fetchall()[1]
+	aoc_row = cur.fetchall()[0]
 
 	connection.commit()
 	cur.close()
