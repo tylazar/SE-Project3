@@ -168,8 +168,9 @@ def editStudentProfile(student):
 		updateStudentProfile(studentID,newName,newAdvisor,newEGY,newAOC,newAgreement)
 	oldInfo = getStudentProfile(student)
 	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
-		StudentName=getStudentName(student), AOCList=getAOCList(), currentYear=dt.datetime.now().year, 
-		oldAOC=oldInfo[1][0], oldEGY=oldInfo[0][4], oldAdvisor=oldInfo[0][3], oldAgreement=oldInfo[0][5])
+		StudentName=getStudentName(student), AOCList=getAOCs(), currentYear=dt.datetime.now().year, 
+		maxYear=dt.datetime.now().year+10, oldAOC=oldInfo[1][0], oldEGY=oldInfo[0][4], oldAdvisor=oldInfo[0][3], 
+		oldAgreement=oldInfo[0][5])
 
 @app.route('/browseClasses')
 def browseClasses():
@@ -251,7 +252,9 @@ def getCourses(student):
 	(5,'Gender, Equality, & the Pekingese'), (6,'Pekesis')]
 
 def getStudentName(student):
-	return "Hunt Sparra"
+	studentProfile = getStudentProfile(student)
+	studentName = studentProfile[0][1]
+	return studentName
 
 def getAOCList():
 	return [("Computer Science",1), ("Biology",2), ("Political Science",3), ("Pekeology",4)]
@@ -262,7 +265,7 @@ def getAdviseeList():
 	return [hts, ys]
 
 def getCourseList():
-	return [("Intro to Python",1), ("Scheme",2), ("Linear Algebra",3), ("Intro to Buddhism",4), ("Discrete Mathematics",5)]	
+	return [(1,"Intro to Python"), (2,"Scheme"), (3,"Linear Algebra"), (4,"Intro to Buddhism"), (5,"Discrete Mathematics")]	
 
 def progressSentence(studentEmail):
 	studentProfile = getStudentProfile(studentEmail)
