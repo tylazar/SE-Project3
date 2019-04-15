@@ -111,7 +111,7 @@ def userHomepage(user):
 
 def studentHomepage(student):
 	#global addr
-	return render_template("StudentHomepage.html",Student=student,progress_sentece=progressSentence(student,session['user']), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
+	return render_template("StudentHomepage.html",Student=student,progress_sentece=progressSentence(student), LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
@@ -204,9 +204,10 @@ def getAdviseeList():
 def getCourseList():
 	return ["Intro to Python", "Scheme", "Linear Algebra", "Intro to Buddhism", "Discrete Mathematics"]	
 
-def progressSentence(student,studentEmail):
-	studentProgressVar = getstudentProgress(student)
+def progressSentence(studentEmail):
 	studentProfile = getStudentProfile(studentEmail)
+	studentID = studentProfile[0][0]
+	studentProgressVar = getstudentProgress(studentID)
 	studentAOC = studentProfile[1][1]
 	expectedGraduationYear = studentProfile[0][4]
 	string1 = "You have "
