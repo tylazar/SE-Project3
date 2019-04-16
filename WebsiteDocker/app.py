@@ -53,9 +53,10 @@ def get_google_token(token=None):
 # Flask Pages for OAuth                   #
 #=========================================#
 
-@app.route('/authorize')
-def oauth_google():
+@app.route('/<SoP>/authorize')
+def oauth_google(SoP):
 	#Page that redirects to Google's OAuth authorization page
+	session['user_type'] = SoP
 	return GOOGLE.authorize(callback=url_for('oauth_google_authorized', _external=True))
 
 @app.route('/authorized')
@@ -65,14 +66,14 @@ def oauth_google_authorized():
 		return redirect(url_for('/')) # Where to direct if the authorization fails
 	else:
 		# passed
-		print(resp)
+		# print(resp)
 		token = resp['access_token'] # "thing google uses to see if you are logged in"
 		session['token'] = token
 
 		user_info = GOOGLE.get('userinfo').data # "namesake"
 		username = user_info['email']
 
-		session['email'] = username
+		session['userEmail'] = username
 
 		return redirect('/'+username+'/homepage') # Do normal string construction later on
 
@@ -85,32 +86,37 @@ def oauth_google_authorized():
 @app.route('/')
 def landingPage():
 	#stuff here
-	funtions1.connectionTest()
+	#funtions1.connectionTest()
+	session.clear()
 	return render_template("LandingPage.html")
 
-@app.route('/login/<SoP>', methods=['GET', 'POST'])
-def loginPage(SoP):
-	#global addr
-	if request.method == 'POST':
-		session['userEmail'] = request.form['email']
-		session['user_type'] = SoP
-		return redirect('/'+request.form['email']+'/homepage')
-	return render_template("GeneralLogin.html", BACK='http://www.ncfbluedream.com', 
-		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
-	
+#@app.route('/login/<SoP>', methods=['GET', 'POST'])
+#def loginPage(SoP):
+#	#global addr
+#	session.clear()
+#	if request.method == 'POST':
+#		session['userEmail'] = request.form['email']
+#		session['user_type'] = SoP
+#		return redirect('/'+request.form['email']+'/homepage')
+#	return render_template("GeneralLogin.html", BACK='http://www.ncfbluedream.com', 
+#		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP)
+
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	#global addr
 	if request.method == 'POST':
-		session['userEmail'] = request.form['email']
+		# session['userEmail'] = request.form['email']
 		session['user_type'] = SoP
-		session['EGY'] = request.form['ExpectedGraduationYear']
-		session['AOC'] = request.form['AOC']
+		if SoP == 'Student':
+			session['EGY'] = request.form['ExpectedGraduationYear']
+			session['AOC'] = request.form['AOC']
+			session['agreement'] = request.form['agreement']
+			session['advisor'] = request.form['advisor']
 		session['name'] = request.form['name']
 		return redirect('/FERPA')
 	return render_template("GeneralNewAccount.html", BACK='http://www.ncfbluedream.com', 
-		ADDRESS='http://www.ncfbluedream.com', StudentorProfessor=SoP, AOCList=getAOCList(),
-		currentYear=dt.datetime.now().year)
+		ADDRESS='http://www.ncfbluedream.com', StudentOrProfessor=SoP, AOCList=getAoCs(),
+		AdvisorList=getAdvisors(), currentYear=dt.datetime.now().year)
 
 @app.route('/<user>/homepage')
 def userHomepage(user):
@@ -123,15 +129,21 @@ def userHomepage(user):
 
 def studentHomepage(student):
 	#global addr
-	if len(getStudentProfile(student)[0]) == 0:
-		newAccountCreation(session['name'],student,session['EGY'],session['AOC'],True)
+	if getStudentProfile(student) == None:
+		try:
+			newAccountCreation(session['name'],student,session['EGY'],session['AOC'],True)
+		except:
+			return redirect('/newAccount/Student')
 	return render_template("StudentHomepage.html", Student=student, progress_sentece=progressSentence(student), 
 		LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
-	if len(getProfessorProfile(professor)) == 0:
-		newAccountCreation(session['name'],professor,None,None,False)
+	if getProfessorProfile(professor) == None:
+		try:
+			newAccountCreation(session['name'],professor,None,None,False)
+		except:
+			return redirect('/newAccount/Professor')
 	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', 
 		ADDRESS='http://www.ncfbluedream.com', Professor=professor, adviseeList=getAdviseeList())
 
@@ -140,7 +152,7 @@ def studentAddCourse(student):
 	#global addr
 	if request.method == 'POST':
 		studentID = getStudentID(student)
-		for x in xrange(1,20):
+		for x in range(1,20):
 			courseID = request.form['courseChoice'+str(x)]
 			studentAddCourse(studentID,courseID)
 		redirect('/'+student+'/homepage')
@@ -200,16 +212,11 @@ def addAOC(professor):
 
 @app.route('/FERPA')
 def FERPA():
-	#global addr
-	if request.method == 'POST':
-		redirect('/Welcome')
 	return render_template("FERPA.html")
 
 @app.route('/Welcome')
 def Disclaimer():
-	if request.method == 'POST':
-		redirect('/'+session['userEmail']+'/homepage')
-	return render_template("DisclaimerPage.html")
+	return render_template("DisclamerPage.html", StudentOrProfessor=session['user_type'])
 
 @app.route('/AOCDetails/<SoP>/<AOC>')
 def AOCDetails(SoP, AOC):
@@ -306,3 +313,5 @@ def getStudentID(studentEmail):
 def getAOC(aoc):
 	aocInformation(aoc)
 
+def getAdvisors():
+	return getAdvisorList()

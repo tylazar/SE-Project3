@@ -158,16 +158,31 @@ def newAccountAuthentication(email):
 	returns a boolean
 	'''
 	connection, cur = connectCursor()
-	query = "SELECT (SELECT email FROM Students) as student, (SELECT email FROM Professors) as professor"
+	query = "SELECT email FROM Students"
 	cur.execute(query,)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
+	cur = connection.cursor()
+	query = "SELECT email FROM Professors"
+	cur.execute(query,)
+	results2 = cur.fetchall()
+	connection.commit()
+	cur.close()
 
-	for student, professor in results:
-		if (student or professor) == email:
+	for row in results+results2:
+		if row[0] == email:
 			return False
 	return True
+
+def getAdvisorList():
+	connection, cur = connectCursor()
+	query = "SELECT id,name FROM Professors"
+	cur.execute(query)
+	results = cur.fetchall()
+	connection.commit()
+	cur.close()
+	return results
 
 def newAccountCreation(name,email,EGY,AOC,studentOrProfessor):
 	'''
@@ -191,22 +206,16 @@ def newAccountCreation(name,email,EGY,AOC,studentOrProfessor):
 	cur.close()
 	cur = connection.cursor()
 	if studentOrProfessor == True:
-		query = "SELECT id FROM AOCs WHERE name = %s"
-		values = (AOC,)
-		cur.execute(query,values)
-		AOC_ID = cur.fetchall()[0]
-		connection.commit()
-		cur.close()
-		cur = connection.cursor()
 		query = "SELECT id FROM Students WHERE email = %s"
 		values = (email,)
 		cur.execute(query,values)
-		Student_ID = cur.fetchall()[0]
+		Student_ID = cur.fetchall()[0][0]
 		connection.commit()
 		cur.close()
 		cur = connection.cursor()
 		query = "INSERT INTO Student_aoc (Student_id,AOC_id) VALUES (%s,%s)"
-		values = (Student_ID,AOC_ID)
+		values = (Student_ID,AOC)
+		cur.execute(query,values)
 		connection.commit()
 		cur.close()
 
@@ -286,8 +295,12 @@ def getProfessorProfile(professor):
 	query = "SELECT * FROM Professors WHERE email = %s"
 	values = (professor,)
 	cur.execute(query,values)
-	results = cur.fetchall()[0]
-	return results2
+	
+	results = cur.fetchall()
+	if len(results) == 0:
+		return None
+	else:
+		return results[0]
 
 def adviseeInfo(professor):
 	'''
@@ -529,7 +542,11 @@ def getStudentProfile(studentEmail):
 	query = "SELECT * FROM Students WHERE email=%s"
 	values = (studentEmail,)
 	cur.execute(query, values)
-	student_row = cur.fetchall()[0]
+	student_row = cur.fetchall()
+	if len(student_row) == 0:
+		return None
+	else:
+		student_row = student_row[0]
 	student_id = student_row[0]
 	connection.commit()
 	cur.close()
