@@ -8,7 +8,7 @@
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>Edit Your Student Profile</h1>
-	<form>
+	<form method="post">
 		<div>
 			<h3 class="label">Name:</h3>
 			<input class="input" type="text" name="name" value="{{ StudentName }}" required>
@@ -19,9 +19,9 @@
 			<select class="input" id="AOCdropdown" name="StudentAOC" required>
 				{% for AOC in AOCList %}
 					{% if AOC[1] == oldAOC %}
-					<option value="{{ AOC[1] }}" selected>{{ AOC[0] }}</option>
+					<option value="{{ AOC[0] }}" selected>{{ AOC[1] }}</option>
 					{% else %}
-					<option value="{{ AOC[1] }}">{{ AOC[0] }}</option>
+					<option value="{{ AOC[0] }}">{{ AOC[1] }}</option>
 					{% endif %}
 				{% endfor %}
 			</select>
@@ -36,10 +36,10 @@
 			<h3 class="label">Advisor:</h3>
 			<select class="input" id="Advisordropdown" name="Advisor" required>
 				{% for advisor in advisorList %}
-					{% if advisor[1] == oldAdvisor %}
-					<option value="{{ advisor[1] }}" selected>{{ advisor[0] }}</option>
+					{% if advisor[0] == oldAdvisor %}
+					<option value="{{ advisor[0] }}" selected>{{ advisor[1] }}</option>
 					{% else %}
-					<option value="{{ advisor[1] }}">{{ advisor[0] }}</option>
+					<option value="{{ advisor[0] }}">{{ advisor[1] }}</option>
 					{% endif %}
 				{% endfor %}
 			</select>
@@ -50,7 +50,7 @@
 			<input type="checkbox" name="Agreement" value="{{ oldAgreement }}" required="">
 		</div>
 		<br><br>
-		<button>Cancel</button>
+		<button onclick="location.href='{{ BACK }}'">Cancel</button>
 		<button type="submit">Submit Profile Changes</button>
 	</form>
 </body>

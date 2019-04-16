@@ -578,16 +578,14 @@ def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id, agr
 	'''
 	connection, cur = connectCursor()
 
-	query = "UPDATE Student_aoc SET aoc_id=%s WHERE student_id=%s"
+	query = "UPDATE Student_aoc SET Aoc_id=%s WHERE Student_id=%s"
 	values = (aoc_id, student_id)
-	cur.execute()
+	cur.execute(query, values)
 	connection.commit()
-	cur.close()
-	cur = connection.commit()
 
-	query = "UPDATE Students SET name=%s,advisor=%s,graduation_year=%s,agreed_to_advisee=%s WHERE student_id=%s"
+	query = "UPDATE Students SET name=%s,advisor=%s,Graduation_year=%s,Agreed_to_advisee=%s WHERE id=%s"
 	values = (name, advisor, graduation_year, agreement, student_id)
-	cur.execute()
+	cur.execute(query, values)
 	connection.commit()
 	cur.close()
 

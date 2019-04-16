@@ -173,22 +173,24 @@ def professorAddCourse(professor):
 	return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
 		Warning=None)
 
-@app.route('/<student>/editProfile')
+@app.route('/<student>/editProfile', methods=['GET', 'POST'])
 def editStudentProfile(student):
 	#global addr
+	print('Loading student page')
 	if request.method == 'POST':
 		newName = request.form['name']
 		newAOC = request.form['StudentAOC']
 		newEGY = request.form['StudentGraduationYear']
 		newAdvisor = request.form['Advisor']
-		newAgreement = request.form['Agreement']
+		newAgreement = True if request.form.get('Agreement') else False
 		studentID = getStudentID(student)
+		print('POSTing new student info')
 		updateStudentProfile(studentID,newName,newAdvisor,newEGY,newAOC,newAgreement)
 	oldInfo = getStudentProfile(student)
 	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
 		StudentName=getStudentName(student), AOCList=getAoCs(), currentYear=dt.datetime.now().year, 
 		maxYear=dt.datetime.now().year+10, oldAOC=oldInfo[1][0], oldEGY=oldInfo[0][4], oldAdvisor=oldInfo[0][3], 
-		oldAgreement=oldInfo[0][5])
+		oldAgreement=oldInfo[0][5], advisorList=getAdvisorList())
 
 @app.route('/browseClasses')
 def browseClasses():
