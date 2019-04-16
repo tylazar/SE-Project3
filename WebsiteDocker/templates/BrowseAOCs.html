@@ -12,7 +12,7 @@
 		<p>Select an AOC from the dropdown menu to view more detail about that AOC</p>
 		<select name="AOCs">
 			{% for AOC in AOCList %}
-			<option value="{{ AOC }}">{{ AOC }}</option>
+			<option value="{{ AOC[1] }}">{{ AOC[0] }}</option>
 			{% endfor %}
 		</select>
 		<div class="AOC_info_div">
