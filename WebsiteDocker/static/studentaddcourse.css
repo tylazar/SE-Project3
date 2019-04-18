@@ -55,9 +55,8 @@ button:hover {
 }
 
 .back:hover {
-	border-color: #4e7075;
-	border-width: 2px;
-	border: solid;
+	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
 	padding-top: 0;
 	padding-bottom: 0;
 }
@@ -85,16 +84,25 @@ button:hover {
 }
 
 #dropdown {
-	background-color: transparent;
+	background-color: #050608;
 	border: 1px solid #D3D9FF;
 	color: #D3D9FF;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
 	padding-left: 1vw;
 	padding-right: 1vw;
 }
-
 #x {
 	border: none;
 	background-color: transparent;
 	margin-right: 1vw;
+}
+
+input {
+	margin-right: 3vw;
+	border: none;
+	border-bottom: 1px solid #D3D9FF;
+	color: #D3D9FF;
+	background-color: transparent;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
+	font-size: 1.3em;
 }

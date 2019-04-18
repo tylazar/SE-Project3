@@ -52,8 +52,8 @@ button:hover {
 }
 
 .back:hover {
-	border: 1px solid #4E7075;
-	border: solid;
+	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
 	padding-top: 0;
 	padding-bottom: 0;
 }

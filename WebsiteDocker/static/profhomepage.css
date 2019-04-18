@@ -50,9 +50,8 @@ button:hover {
 }
 
 .logout:hover {
-	border-color: #4e7075;
-	border-width: 2px;
-	border: solid;
+	border-radius: 12px;
+ 	border: 1px solid #D3D9FF;
 	padding-top: 0;
 	padding-bottom: 0;
 }
