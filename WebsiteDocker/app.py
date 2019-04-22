@@ -200,17 +200,32 @@ def browseClasses():
 @app.route('/browseAOCs', methods=['GET', 'POST'])
 def browseAOCs():
 	#global addr
-	if request.method == 'POST':
-		aoc = request.form['AOCs']
-		return redirect('/AOCDetails/'+session['user_type']+'/'+aoc)
-	return render_template("BrowseAOCs.html", BACK='http://www.ncfbluedream.com'+"/"+session['userEmail']+"/homepage", 
-		AOCList=getAOCList())
+	return render_template("BrowseAOCs.html", BACK='http://www.ncfbluedream.com'+"/"+session['userEmail']+"/homepage",
+		SoP = session['user_type'], AOCList=getAoCs())
 
-@app.route('/<professor>/addAOC')
+@app.route('/<professor>/addAOC', methods=['GET', 'POST'])
 def addAOC(professor):
 	#global addr
+	aoc = {'NAME':'', 'REQS':[]}
+	if request.method == "POST":
+		f = request.form
+
+		print(f)
+
+		aoc = build_aoc_from_form(f)
+
+		if f['action'] == 'add_requirement':
+			aoc['REQS'].append({'NAME':'', 'NUM':0, 'CLASSES':[]})
+		elif f['action'] != 'submit_form':
+			aoc['REQS'][int(f['action'])-1]['COURSES'].append(-1)
+		else:
+			sqlAddAOC(aoc)
+			return redirect('browseAOCs')
+
+		print(aoc)
+
 	return render_template("addAOCPage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
-		courses=getCourseList())
+		courses=grabAllCourses(), AOC_DATA=aoc)
 
 @app.route('/FERPA')
 def FERPA():
@@ -220,33 +235,103 @@ def FERPA():
 def Disclaimer():
 	return render_template("DisclamerPage.html", StudentOrProfessor=session['user_type'])
 
-@app.route('/AOCDetails/<SoP>/<AOC>')
-def AOCDetails(SoP, AOC):
+@app.route('/AOCDetails/<SoP>/<AoC>', methods=['GET', 'POST'])
+def AOCDetails(SoP, AoC):
 	#global addr
 	if request.method == 'POST':
-		redirect('/Edit/'+AOC)
-	return render_template("GeneralAOCDetailPage.html", BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=AOC, 
-		StudentorProfessor=SoP, requirements=getAOC(''))
+		redirect('/Edit/'+AoC)
+	return render_template("GeneralAOCDetailPage.html", ADDRESS='http://www.ncfbluedream.com', BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=getAOC(AoC),
+		StudentorProfessor=SoP)
 
 @app.route('/Edit/<AOC>')
 def editAOC(AOC):
 	#things and stuff here
 	allAOC = getAOC(AOC)
-	return render_template("EditAOCPage.html", BACK='http://www.ncfbluedream.com'+'/AOCDetails/Professor/'+AOC, 
+	return render_template("EditAOCPage.html", BACK='http://www.ncfbluedream.com'+'/AOCDetails/Professor/'+AOC,
 		AOC=allAOC)
 
-# We will want to rename AOC_List to something like just AOC (but that would break the HTML as is)
-@app.route('/<student>/studentProgressBreakdown')
+@app.route('/<student>/studentProgressBreakdown', methods=['GET', 'POST'])
 def studentProgressBreakdown(student, AOC="General Studies"):
 	#global addr
-	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
-		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), 
-		LACList=getLACProgress(student), Courses=getCourses(student))
+	AOCListText = ""
+	CoursesListText = ""
+	LACListText = ""
+	if request.method == 'POST':
+		AOCListText = request.form["AOC"]
+		CourseListText = request.form["Courses"]
+		LACListText = request.form["LAC"]
+		for course in request.form["AOC"]:
+			tryFormAOCCourses(student,course)
+		for course in request.form["Courses"]:
+			tryFormCourses(student,course)
+		for LAC in request.form["LAC"]:
+			tryFormLAC(student,LAC)
+	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage",
+		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), LACList=getLACProgress(student),
+		email=session['userEmail'], Courses=getStudentCourses(getStudentID(student)),AOCListText = AOCListText,
+		AOC_Courses=AOCCourses(getStudentAOC(student)[0]),LACDic = LACRequirements(),CoursesListText = CoursesListText,
+		LACListText = LACListText)
 
 if __name__ == "__main__":
 	app.run()
 
+#=========================================#
+# Other Helper Functions                  #
+#=========================================#
 
+def build_aoc_from_form(f):
+	print("Building AOC data...")
+	name = f['AOC_name']
+	print("Got AOC name...")
+
+	if 'requirement_names[]' in f:
+		req_names = f.getlist('requirement_names[]')
+	else:
+		req_names = []
+	
+	if 'courses[]' in f:
+		req_courses = list(map(int, f.getlist('courses[]')))
+	else:
+		req_courses = []
+
+	if 'courses_lens[]' in f:
+		req_courses_lengths = list(map(int, f.getlist('courses_lens[]')))
+	else:
+		req_courses_lengths = []
+	
+	if 'nums_for_requirements[]' in f:
+		req_nums = list(map(int, f.getlist('nums_for_requirements[]')))
+	else:
+		req_nums = []
+
+	req_courses_parsed = list()
+	courses_index = 0
+	for num in req_courses_lengths:
+		courses_for_req = list()
+
+		# Oh no, I'm tapping into my inner C++ developer
+		print("Loading courses...")
+		print(num)
+		while num > 0:
+			print(req_courses[courses_index])
+			courses_for_req.append(req_courses[courses_index])
+
+			courses_index += 1
+			num -= 1
+		print("Finished loading courses...")
+
+		print(courses_for_req)
+		req_courses_parsed.append(courses_for_req)
+
+	aoc = {'NAME':name, 'REQS':[]}
+
+	for req_index in range(0, len(req_names)):
+		req = {'NAME':req_names[req_index],'NUM':req_nums[req_index],'COURSES':req_courses_parsed[req_index]}
+		aoc['REQS'].append(req)
+
+	print("Finished building data...")
+
+	return aoc
 
 #=========================================#
 # Dummy Functions                         #
@@ -313,7 +398,50 @@ def getStudentID(studentEmail):
 	return ID
 
 def getAOC(aoc):
-	aocInformation(aoc)
+	return aocInformation(aoc)
 
 def getAdvisors():
 	return getAdvisorList()
+
+def LACRequirements():
+	return ["Math_proficiency","Divisional_coursework","Disiplinary_breadth","Diverse_perspective","Eight_liberal_art"]
+
+def AOCCourses(AOC):
+	list = []
+	for requirement in AOC[2]:
+		for courseList in requirement[3]:
+			list += courseList
+	return list
+
+def courseId(course):
+	courses = grabAllCourses()
+	for Course in courses:
+		if Course[1] == course:
+			return Course[0]
+
+def tryFormAOCCourses(student,course):
+	student = getStudentID(student)
+	try:
+		add = request.form[course]
+		if add == True:
+			studentAddCourse(student,courseId(course))
+		else:
+			studentRemoveCourse(student,courseId(course))
+	except:
+		pass
+
+def tryFormCourses(student,course):
+	student = getStudentId(student)
+	try:
+		remove = request.form[course]
+		studentRemoveCourse(student,courseId(course))
+	except:
+		pass
+
+def tryFormLAC(student,LAC):
+	student = getStudentID(student)
+	try:
+		LACvalue = request.form[LAC]
+		updateStudentLACProgress(student,LAC,LACvalue)
+	except:
+		pass

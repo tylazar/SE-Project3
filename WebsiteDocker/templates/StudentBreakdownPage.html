@@ -5,20 +5,73 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='coursebreakdown.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
-<body>
-	<div class="header">
+<script>
+	window.onbeforeunload = submitForm();
+
+	function addToForm(name,value){
+		var form = document.getElementById("form");
+		var newInput = document.createElement("input");
+		newInput.name = name;
+		newInput.value = value;
+		newInput.type = "hidden";
+		form.appendChild(newInput);
+	}
+	
+	function addToFormRemove(name,value){
+		addToForm(name,value);
+		var line = document.getElementByName(name).parentNode;
+		line.parentNode.removeChild(line);
+	}
+
+	function submitForm(){
+		alert("submiting changes");
+		document.getElementById("form").submit();
+	}
+
+	function callThisThing(){
+		AOC = {{ AOC_Courses|safe }}
+		Courses = {{ Courses|safe }}
+		LAC = {{ LACDic|safe }}
+		alert("adding things to form initally");
+		var form = document.getElementById("form");
+		var AOCInput = document.createElement("input");
+		AOCInput.type = "hidden";
+		AOCInput.name = "AOC";
+		AOCInput.value = AOC;
+		var CoursesInput = document.createElement("input");
+		CoursesInput.type = "hidden";
+		CoursesInput.name = "Courses";
+		CoursesInput.value = Courses;
+		var LACInput = document.createElement("input");
+		LACInput.type = "hidden";
+		LACInput.name = "LAC";
+		LACInput.value = LAC;
+		form.appendChild(AOCInput);
+		form.appendChild(CoursesInput);
+		form.appendChild(LACInput);
+	}
+</script>
+<body onload="callThisThing()">
+	<h1>{{ AOCListText }}</h1>
+	<h1>{{ CoursesListText }}</h1>
+	<h1>{{ LACListText }}</h1>
+	<div class="header" >
 		<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 		<h1>Detailed Progress Breakdown</h1>
 	</div>
 	<h2>{{ progress_sentence }}</h2>
 	<!--things here -->
-	{% for AOC in AOC_List %}
+	{% for AOC in AOC_List %} <!-- this is a for loop in case we add the ability for students to track multiple AOCs -->
 		<div class="AOC_div"><!-- this is the AOC progress div -->
 			<h4>{{ AOC[1] }}</h4>
 			{% for requirement in AOC[2] %}
 			<p>{{ requirement[1] }}</p>
 				{% for course in requirement[3] %}
-				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}">{{ course[1] }}<br>
+				{% if course in Courses %}
+				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}" onclick="addToForm(this.name,this.value)"checked>{{ course[1] }}<br>
+				{% else %}
+				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}" onclick="addToForm(this.name,this.value)">{{ course[1] }}<br>
+				{% endif %}
 				{% endfor %}
 			{% endfor %}
 		</div>
@@ -29,16 +82,24 @@
 		</div>
 	<!-- {% endfor %} -->
 	<div class="LAC_div"><!-- this is the LAC progress div -->
+		<h4>LAC Requirements</h4>
 		{% for LAC in LACList %}
-		<p>{{ LAC[0] }} : {{ LAC[1] }}</p>
+		{% if LAC[1] == True %}
+		<p><input type="checkbox" name="{{ LAC[0] }}" value="{{ LAC[1] }}" onclick="addToForm(this.name,this.value)" checked>{{ LAC[0] }} : {{ LAC[1] }}</p>
+		{% else %}
+		<p><input type="checkbox" name="{{ LAC[0] }}" value="{{ LAC[1] }}" onclick="addToForm(this.name,this.value)">{{ LAC[0] }} : {{ LAC[1] }}</p>
+		{% endif %}
 		{% endfor %}
 	</div>
 	<div class="Courses_div"><!-- this is the Courses taken div -->
+		<h4>Courses Taken</h4>
 		{% for class in Courses %}
-		<p>{{ class[1] }}</p>
+		<p><button name="remove{{ class[1] }}" value="{{ class[0] }}" onclick="addToFormRemove(this.name,this.value)">X</button>{{ class[1] }}</p>
 		{% endfor %}
 		<br>
-		<button>Add Course</button>
+		<button onclick="location.href='{{ ADDRESS }}/email/studentAddCourse'">Add Course</button>
 	</div>
+	<form id="form" onload="callThisThing({{ AOC_List[0] }},{{ Courses }},{{ LACList }})">
+	</form>
 </body>
 </html>

@@ -10,45 +10,60 @@
 	<h1>Add an AOC</h1>
 	<p>Please enter the following information to create a new AOC and add it to the database</p>
 	<br>
+	<form method="post">
 	<div class="aoc_name">
 		<p class="aoc_name_p">AOC Name:</p>
-		<input class="aoc_name_input" type="text" name="AOC_name">
+		{% if AOC_DATA['NAME'] == '' %}
+			<input class="aoc_name_input" type="text" name="AOC_name" required>
+		{% else %}
+			<input class="aoc_name_input" type="text" name="AOC_name" value={{ AOC_DATA['NAME'] }} required>
+		{% endif %}
 	</div>
-	<br>
-	<p>{{ Department }}  Note: this item is locked to what department you are part of, if you want to create an AOC in another department, contact a professor in that department to do so</p>
-	<br>
-	<form>
-		<h3>Enter Requirements for AOC</h3>
-		<div class="AOC_div">
-			<div class="Requirement_div">
-				<div class="name">
-					<p class="div_label">Requirement Name:</p>
-					<input type="text" name="requirement_name">
-				</div>
-
-				<div class="number">
-					<p class="div_label">Number of courses for this requirement:</p>
-					<input type="number" name="num_for_requirement">
-				</div>
-
-				<div class="req_courses">
-					<p class="div_label">Courses for the requirement:</p>
-					<div class="Courses_div">
-						<select name="courses">
-							{% for course in courses %}
-							<option value="{{ course }}">{{ course }}</option>
-							{% endfor %}
-						</select>
-					</div>
-				</div>
-
-				<button>Add another course to the Requirement</button>
-			</div>
-		</div>
-		<button>Add another Requirement</button>
 		<br>
-		<button class="cancel">Cancel</button>
-		<button type="submit">Submit</button>
-	</form>
-</body>
+			<h3>Enter Requirements for AOC</h3>
+			<div class="AOC_div">
+				{% for requirement in AOC_DATA['REQS'] %}
+					<div class="Requirement_div">
+						<div class="name">
+							<p class="div_label">Requirement Name:</p>
+							{% if requirement['NAME'] == '' %}
+								<input type="text" name="requirement_names[]" }} required>
+							{% else %}
+								<input type="text" name="requirement_names[]" value={{ requirement['NAME'] }} required>
+							{% endif %}
+						</div>
+
+						<div class="number">
+							<p class="div_label">Number of courses for this requirement:</p>
+							<input type="number" name="nums_for_requirements[]" min="0" value={{ requirement['NUM'] }} required>
+						</div>
+
+						<input type="hidden" name="courses_lens[]" value={{ requirement['COURSES']|length }}>
+						{% for required_course in requirement['COURSES'] %}
+							<div class="req_courses">
+								<p class="div_label">Courses for the requirement:</p>
+								<div class="Courses_div">
+									<select name="courses[]">
+										{% for course in courses %}
+											{% if course[0] == required_course %}
+												<option value="{{ course[0] }}" selected>{{ course[1] }}</option>
+											{% else %}
+												<option value="{{ course[0] }}">{{ course[1] }}</option>
+											{% endif %}
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						{% endfor %}
+
+						<input type="submit" name="action" value={{ loop.index }}>
+					</div>
+				{% endfor %}
+			</div>
+			<input type="submit" name="action" value="add_requirement">
+			<br>
+			<button onclick="location.href='{{ BACK }}'">Cancel</button>
+			<input type="submit" name="action" value="submit_form">
+		</form>
+	</body>
 </html>

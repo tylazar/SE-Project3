@@ -12,11 +12,11 @@
 		<button type="submit">Edit AOC</button>
 	{% endif %}
 	<div class="AOC_Detils_div">
-		<p>{{ AOC[1] }} Requirements </p>
-		<ul>
+		<p>{{ AOC[1] }} Requirements: </p>
+		<ul class="requirementList">
 			{% for Requirement in AOC[2] %}
-			<li>{{ Requirement[1] }} : {{ Requirement[2] }}</li>
-				<ul>
+			<li>{{ Requirement[1] }} : {{ Requirement[4] }}</li>
+				<ul class="courseList">
 				{% for course in Requirement[3] %}
 					<li>{{ course[1] }}</li>
 				{% endfor %}

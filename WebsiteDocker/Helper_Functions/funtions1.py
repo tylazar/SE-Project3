@@ -295,7 +295,7 @@ def getProfessorProfile(professor):
 	query = "SELECT * FROM Professors WHERE email = %s"
 	values = (professor,)
 	cur.execute(query,values)
-	
+
 	results = cur.fetchall()
 	if len(results) == 0:
 		return None
@@ -431,7 +431,7 @@ def getStudentCourses(student):
 
 	for Course_id in results:
 		query = "SELECT * FROM Courses WHERE id = %s"
-		values = (Course_id,)
+		values = (Course_id[0],)
 		cur.execute(query,values)
 		results2 = cur.fetchall()
 		connection.commit()
@@ -628,42 +628,38 @@ def getAoCs():
 #-----------------------------------------------------------------------------
 #ADD AOC PAGE
 
-def addAOC(AOC_name,Requirements):
+def sqlAddAOC(aoc):
 	'''
-	AOC_name is the name of the AOC, requirements is a list of tuples that hold information for each requirement
-	this tuple is structure as such, (requirement_name,NUM_to_complete,[list of courses associated with said requirement])
-	the list of courses is a list of tuples of ids and names, respectively
-	this structure makes this function and the editAOC function a lot easier
-	returns nothing
+	TO BE UPDATED	
 	'''
 	connection, cur = connectCursor()
 	query = "INSERT INTO AOCs (name) VALUES (%s)"
-	values = (AOC_name,)
+	values = (aoc['NAME'],)
 	cur.execute(query,values)
 	connection.commit()
 	cur.close()
 	cur = connection.cursor()
 	query = "SELECT id FROM AOCs WHERE name = %s"
-	values = (AOC_name,)
+	values = (aoc['NAME'],)
 	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
 	cur.close()
-	cur = connection.cursor()
 	AOC_id = 0
 
 	for id in results:
-		AOC_id = id
+		AOC_id = id[0]
 
-	for requirement in Requirements:
+	for requirement in aoc['REQS']:
 		query = "INSERT INTO Requirements (name,AOC_id,NUM_to_complete) VALUES (%s,%s,%s)"
-		values = (requirement[0],AOC_id,requirement[1])
+		values = (requirement['NAME'],AOC_id,int(requirement['NUM']))
+		cur = connection.cursor()
 		cur.execute(query,values)
 		connection.commit()
 		cur.close()
 		cur = connection.cursor()
 		query = "SELECT id FROM Requirements WHERE name = %s AND AOC_id = %s"
-		values = (requirement[0],AOC_id)
+		values = (requirement['NAME'],AOC_id)
 		cur.execute(query,values)
 		results2 = cur.fetchall()
 		connection.commit()
@@ -672,11 +668,12 @@ def addAOC(AOC_name,Requirements):
 		requirement_id = 0
 
 		for id in results2:
-			requirement_id = id
+			requirement_id = id[0]
 
-		for Course in requirement[2]:
+		for course in requirement['COURSES']:
+			cur = connection.cursor()
 			query = "INSERT INTO Courses_for_requirement (Requirement_id,Course_id) VALUES (%s,%s)"
-			values = (requirement_id,Course[0])
+			values = (requirement_id,int(course))
 			cur.execute(query,values)
 			connection.commit()
 			cur.close()
