@@ -39,6 +39,25 @@ button:hover {
 	padding: 12px;
 }
 
+.buttonCopy {
+    border-radius: 12px;
+    border: 1px solid #D3D9FF;
+    background-color: transparent;
+    padding: 12px;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    color: #D3D9FF;
+    font-family: 'Amatic SC', cursive;
+    font-size: 1.2em;
+}
+
+.buttonCopy:hover {
+    border-radius: 12px;
+    border: 1px solid #D3D9FF;
+    background-color: #53256C;
+    padding: 12px;
+}
+
 .back {
 	border-radius: 12px;
  	border: 1px solid #D3D9FF;

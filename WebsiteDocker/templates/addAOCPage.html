@@ -55,15 +55,14 @@
 								</div>
 							</div>
 						{% endfor %}
-
-						<input type="submit" name="action" value={{ loop.index }}>
 					</div>
+					<input class="buttonCopy" type="submit" name="action" value={{ loop.index }}>
 				{% endfor %}
 			</div>
-			<input type="submit" name="action" value="add_requirement">
+			<input class="buttonCopy" type="submit" name="action" value="add_requirement">
 			<br>
 			<button onclick="location.href='{{ BACK }}'">Cancel</button>
-			<input type="submit" name="action" value="submit_form">
+			<input class="buttonCopy" type="submit" name="action" value="submit_form">
 		</form>
 	</body>
 </html>
