@@ -184,7 +184,7 @@ def getAdvisorList():
 	cur.close()
 	return results
 
-def newAccountCreation(name,email,EGY,AOC,studentOrProfessor):
+def newAccountCreation(name,email,EGY,AOC,advisor,shareInfo,studentOrProfessor):
 	'''
 	this function will create the new account in either student or professors
 	the variable studentOrProfessor is a boolean
@@ -196,8 +196,8 @@ def newAccountCreation(name,email,EGY,AOC,studentOrProfessor):
 	query = ""
 	values = ("","")
 	if studentOrProfessor == True:
-		query = "INSERT INTO Students (name,email,Graduation_year) VALUES (%s,%s,%s)"
-		values = (name,email,EGY)
+		query = "INSERT INTO Students (name,email,Graduation_year,advisor,Agreed_to_advisee) VALUES (%s,%s,%s,%s,%s)"
+		values = (name,email,EGY,advisor,shareInfo)
 	else:
 		query = "INSERT INTO Professors (name,email) VALUES (%s,%s)"
 		values = (name,email)

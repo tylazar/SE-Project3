@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ Professor }} Homepage</title>
+    <title>{{ NAME }} Homepage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='profhomepage.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>
     <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
-    <h1>Welcome back Prof. {{ Professor }}!</h1>
+    <h1>Welcome back Prof. {{ NAME }}!</h1>
     <p>Below is a list of the students you're currently advising and their AOCS.</p>
     <p>To view an AOC's requirements, click on the AOC's name.</p>
     <table class="center" style="width:50%">

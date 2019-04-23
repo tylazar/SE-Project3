@@ -56,13 +56,16 @@
 							</div>
 						{% endfor %}
 					</div>
-					<input class="buttonCopy" type="submit" name="action" value={{ loop.index }}>
+					<input class="add_course_button" type="submit" name="action" value={{ loop.index }}>
 				{% endfor %}
 			</div>
-			<input class="buttonCopy" type="submit" name="action" value="add_requirement">
 			<br>
-			<button onclick="location.href='{{ BACK }}'">Cancel</button>
-			<input class="buttonCopy" type="submit" name="action" value="submit_form">
+			<input class="req_button" type="submit" name="action" value="add_requirement">
+			<br>
+			<div class="bottom_buttons">
+				<button onclick="location.href='{{ BACK }}'">Cancel</button>
+				<input class="buttonCopy" type="submit" name="action" value="submit_form">
+			</div>
 		</form>
 	</body>
 </html>

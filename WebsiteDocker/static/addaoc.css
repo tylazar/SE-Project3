@@ -39,6 +39,26 @@ button:hover {
 	padding: 12px;
 }
 
+.add_course_button {
+	margin-left: 40%;
+	margin-right: 40%;
+	border: 1px solid #D3D9FF;
+	border-radius: 12px;
+	display: block;
+}
+
+.req_button {
+	margin-left: 35%;
+	margin-right: 35%;
+	border: 1px solid #D3D9FF;
+	border-radius: 12px;
+	display: block;
+}
+
+.bottom_buttons {
+	display: flex;
+}
+
 .buttonCopy {
     border-radius: 12px;
     border: 1px solid #D3D9FF;
@@ -120,6 +140,7 @@ input {
 	width: 60%;
 	margin: auto;
 	border: 1px solid #D3D9FF;
+	padding-bottom: 13vh;
 }
 
 .div_label {

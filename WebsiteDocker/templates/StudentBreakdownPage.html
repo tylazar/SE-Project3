@@ -5,7 +5,7 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='coursebreakdown.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
-<script>
+<!--<script>
 	window.onbeforeunload = submitForm();
 
 	function addToForm(name,value){
@@ -50,8 +50,8 @@
 		form.appendChild(CoursesInput);
 		form.appendChild(LACInput);
 	}
-</script>
-<body onload="callThisThing()">
+</script>--!>
+<body>
 	<h1>{{ AOCListText }}</h1>
 	<h1>{{ CoursesListText }}</h1>
 	<h1>{{ LACListText }}</h1>
@@ -61,21 +61,21 @@
 	</div>
 	<h2>{{ progress_sentence }}</h2>
 	<!--things here -->
-	{% for AOC in AOC_List %} <!-- this is a for loop in case we add the ability for students to track multiple AOCs -->
+	<!-- {% for AOC in AOC_List %} this is a for loop in case we add the ability for students to track multiple AOCs -->
 		<div class="AOC_div"><!-- this is the AOC progress div -->
-			<h4>{{ AOC[1] }}</h4>
+			<h4>{{ AOC[1] }} Requirements</h4>
 			{% for requirement in AOC[2] %}
-			<p>{{ requirement[1] }}</p>
+			<p>{{ requirement[1] }} (Pick {{ requirement[4] }} )</p>
 				{% for course in requirement[3] %}
 				{% if course in Courses %}
-				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}" onclick="addToForm(this.name,this.value)"checked>{{ course[1] }}<br>
+				<input type="checkbox" name="courses[]" value="{{ course[0] }}" checked>{{ course[1] }}<br>
 				{% else %}
-				<input type="checkbox" name="{{ course[1] }}" value="{{ course[0] }}" onclick="addToForm(this.name,this.value)">{{ course[1] }}<br>
+				<input type="checkbox" name="courses[]" value="{{ course[0] }}">{{ course[1] }}<br>
 				{% endif %}
 				{% endfor %}
 			{% endfor %}
 		</div>
-	{% endfor %}
+	<!-- {% endfor %} --!>
 	<!-- {% for Slash in SlashList %} -->
 		<div class="Slash_div">
 			<!-- this is here simply for expansion purposes (if we do it) -->
@@ -85,21 +85,21 @@
 		<h4>LAC Requirements</h4>
 		{% for LAC in LACList %}
 		{% if LAC[1] == True %}
-		<p><input type="checkbox" name="{{ LAC[0] }}" value="{{ LAC[1] }}" onclick="addToForm(this.name,this.value)" checked>{{ LAC[0] }} : {{ LAC[1] }}</p>
+		<p><input type="checkbox" name="LACs[]" value="{{ LAC[0] }}" checked>{{ LAC[0] }} : {{ LAC[1] }}</p>
 		{% else %}
-		<p><input type="checkbox" name="{{ LAC[0] }}" value="{{ LAC[1] }}" onclick="addToForm(this.name,this.value)">{{ LAC[0] }} : {{ LAC[1] }}</p>
+		<p><input type="checkbox" name="LACs[]" value="{{ LAC[0] }}">{{ LAC[0] }} : {{ LAC[1] }}</p>
 		{% endif %}
 		{% endfor %}
 	</div>
 	<div class="Courses_div"><!-- this is the Courses taken div -->
 		<h4>Courses Taken</h4>
 		{% for class in Courses %}
-		<p><button name="remove{{ class[1] }}" value="{{ class[0] }}" onclick="addToFormRemove(this.name,this.value)">X</button>{{ class[1] }}</p>
+		<p><button name="remove{{ class[1] }}" value="{{ class[0] }}">X</button>{{ class[1] }}</p>
 		{% endfor %}
 		<br>
 		<button onclick="location.href='{{ ADDRESS }}/email/studentAddCourse'">Add Course</button>
 	</div>
-	<form id="form" onload="callThisThing({{ AOC_List[0] }},{{ Courses }},{{ LACList }})">
-	</form>
+	<!-- <form id="form" onload="callThisThing({{ AOC_List[0] }},{{ Courses }},{{ LACList }})">
+	</form> --!>
 </body>
 </html>

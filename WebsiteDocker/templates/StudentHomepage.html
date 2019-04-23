@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ Student }} Homepage</title>
+    <title>{{ NAME }} Homepage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='studenthomepage.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <body>        
     <button class="logout" onclick="location.href='{{ LOGOUT }}'">Logout</button>
-    <h1>Welcome back {{ Student }}!</h1>
+    <h1>Welcome back {{ NAME }}!</h1>
     <h2>{{ progress_sentece }}</h2>
     <br>
     <br>

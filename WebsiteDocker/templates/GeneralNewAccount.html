@@ -33,7 +33,7 @@
 	</select>
 	<br>
 	<p>Agree to share progress with advisor:</p>
-	<input type="checkbox" name="agreement" required>
+	<input type="checkbox" name="agreement">
 	<br>
         {% endif %}
         <input type="hidden" name="StudentorProfessor" value="{{ StudentorProfessor }}">
@@ -41,6 +41,6 @@
         <button type="submit">Create New Account</button>
         <br>
     </form>
-    <button onclick="location.href='{{ ADDRESS }}/login/{{ StudentorProfessor }}'">Login to Existing Account</button>
+    <button onclick="location.href='{{ ADDRESS }}/{{ StudentOrProfessor }}/authorize'">Login to Existing Account</button>
 </body>
 </html>

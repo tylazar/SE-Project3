@@ -76,7 +76,6 @@ def oauth_google_authorized():
 		session['userEmail'] = username
 
 		return redirect('/'+username+'/homepage') # Do normal string construction later on
-
 	# do redirects here
 
 #=========================================#
@@ -110,7 +109,11 @@ def newAccountPage(SoP):
 		if SoP == 'Student':
 			session['EGY'] = request.form['ExpectedGraduationYear']
 			session['AOC'] = request.form['AOC']
-			session['agreement'] = request.form['agreement']
+			if 'agreement' in request.form:
+				session['agreement'] = True
+			else:
+				session['agreement'] = False
+			# session['agreement'] = request.form['agreement']
 			session['advisor'] = request.form['advisor']
 		session['name'] = request.form['name']
 		return redirect('/FERPA')
@@ -130,22 +133,32 @@ def userHomepage(user):
 def studentHomepage(student):
 	#global addr
 	if getStudentProfile(student) == None:
-		try:
-			newAccountCreation(session['name'],student,session['EGY'],session['AOC'],True)
-		except:
+		if getProfessorProfile(student) != None:
 			return redirect('/newAccount/Student')
-	return render_template("StudentHomepage.html", Student=student, progress_sentece=progressSentence(student), 
+
+		#try:
+		newAccountCreation(session['name'],student,session['EGY'],session['AOC'],session['advisor'],session['agreement'],True)
+		#except:
+		#	return redirect('/newAccount/Student')
+	
+	student_name = getStudentProfile(student)[0][1]
+	return render_template("StudentHomepage.html", Student=student, NAME=student_name, progress_sentece=progressSentence(student), 
 		LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
 def professorHomepage(professor):
 	#global addr
 	if getProfessorProfile(professor) == None:
+		if getStudentProfile(professor) != None:
+			return redirect('/newAccount/Professor')
+
 		try:
 			newAccountCreation(session['name'],professor,None,None,False)
 		except:
 			return redirect('/newAccount/Professor')
+	
+	professor_name = getProfessorProfile(professor)[1]
 	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', 
-		ADDRESS='http://www.ncfbluedream.com', Professor=professor, adviseeList=getAdviseeList())
+		ADDRESS='http://www.ncfbluedream.com', Professor=professor, NAME=professor_name, adviseeList=getAdviseeList())
 
 @app.route('/<student>/studentAddCourse')
 def studentAddCourse(student):
@@ -187,6 +200,7 @@ def editStudentProfile(student):
 		print('POSTing new student info')
 		updateStudentProfile(studentID,newName,newAdvisor,newEGY,newAOC,newAgreement)
 	oldInfo = getStudentProfile(student)
+
 	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
 		StudentName=getStudentName(student), AOCList=getAoCs(), currentYear=dt.datetime.now().year, 
 		maxYear=dt.datetime.now().year+10, oldAOC=oldInfo[1][0], oldEGY=oldInfo[0][4], oldAdvisor=oldInfo[0][3], 
@@ -257,6 +271,7 @@ def studentProgressBreakdown(student, AOC="General Studies"):
 	CoursesListText = ""
 	LACListText = ""
 	if request.method == 'POST':
+		'''
 		AOCListText = request.form["AOC"]
 		CourseListText = request.form["Courses"]
 		LACListText = request.form["LAC"]
@@ -266,6 +281,12 @@ def studentProgressBreakdown(student, AOC="General Studies"):
 			tryFormCourses(student,course)
 		for LAC in request.form["LAC"]:
 			tryFormLAC(student,LAC)
+		'''
+		f = request.form
+		checkedCourses = f.getlist('courses')
+		checkLACs = f.getlist('LACs')
+		# Drop courses and LACs
+		# Add courses and LACs in list
 	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage",
 		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), LACList=getLACProgress(student),
 		email=session['userEmail'], Courses=getStudentCourses(getStudentID(student)),AOCListText = AOCListText,
