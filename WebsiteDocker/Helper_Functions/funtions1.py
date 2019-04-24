@@ -332,7 +332,9 @@ def adviseeInfo(professor):
 			cur.close()
 			cur = connection.cursor()
 			AOC_name = ""
+			results2 = results2
 			for AOC_id in results2:
+				AOC_id = AOC_id[0]
 				query = "SELECT name from AOCs WHERE id = %s"
 				values = (AOC_id,)
 				cur.execute(query,values)
@@ -340,8 +342,8 @@ def adviseeInfo(professor):
 				connection.commit()
 				cur.close()
 				cur = connection.cursor()
-				for name in results3:
-					AOC_name = name
+				for aoc_name in results3:
+					AOC_name = aoc_name[0]
 			adviseeList.append((name,AOC_name,adviseeInfoHelper(id)))
 
 	return adviseeList
@@ -363,7 +365,7 @@ def adviseeInfoHelper(student):
 	totalNumber = 0
 	completedNumber = 0
 	for AOC_id in results:
-		AOC_ID = AOC_id
+		AOC_ID = AOC_id[0]
 	query = "SELECT id, NUM_to_complete FROM Requirements WHERE AOC_id = %s"
 	values = (AOC_ID,)
 	cur.execute(query,values)
@@ -373,7 +375,7 @@ def adviseeInfoHelper(student):
 	cur = connection.cursor()
 	for id, NUM_to_complete in results:
 		totalNumber += NUM_to_complete
-		query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s, Requirement_id = %s"
+		query = "SELECT NUM_completed FROM Requirements_completed WHERE Student_id = %s AND Requirement_id = %s"
 		values = (student,id)
 		cur.execute(query,values)
 		results2 = cur.fetchall()
@@ -395,7 +397,7 @@ def getLACProgress(student):
 	tuples of that information
 	'''
 	connection, cur = connectCursor()
-	tempList = [("Math_proficiency",False),("Divisional_coursework",False),("Disiplinary_breadth",False),("Diverse_perspective",False),("Eight_liberal_art",False)]
+	tempList = [["Math_proficiency",False],["Divisional_coursework",False],["Disiplinary_breadth",False],["Diverse_perspective",False],["Eight_liberal_art",False]]
 	query = "SELECT Math_proficiency, Divisional_coursework, Disiplinary_breadth, Diverse_perspective, Eight_liberal_art FROM LAC_Requirements WHERE Student_id = %s"
 	values = (student,)
 	cur.execute(query,values)
@@ -442,6 +444,55 @@ def getStudentCourses(student):
 
 	return CoursesTaken
 
+def updateStudentClasses(student, classes):
+	'''
+	Changes the classes the student is taking to reflect the input
+
+	Parameters
+		student: The id of the student whose class list will be updated
+		classes: The classes that the student is currently being taken
+	'''
+	connection, cur = connectCursor()
+	query = "DELETE FROM Courses_completed WHERE Student_id=%s"
+	values = (student,)
+	cur.execute(query,values)
+	connection.commit()
+
+	query = "INSERT INTO Courses_completed (Student_id, Course_id) VALUES (%s, %s)"
+	for course in classes:
+		values = (student, course)
+		cur.execute(query, values)
+	
+	connection.commit()
+	cur.close()
+
+def updateStudentLACs(student, LACs):
+	'''
+	Changes the LACs the student has taken to be the given set
+
+	Parameters
+		student: The id of the student whose class list will be updated
+		LACs: The LACs that the student has completed
+	'''
+	connection, cur = connectCursor()
+	query = "DELETE FROM LAC_Requirements WHERE Student_id=%s"
+	values = (student,)
+	cur.execute(query,values)
+	connection.commit()
+
+	math = 'Math_proficiency' in LACs
+	coursework = 'Divisional_coursework' in LACs
+	breadth = 'Disiplinary_breadth' in LACs
+	perspective = 'Diverse_perspective' in LACs
+	eight = 'Eight_liberal_art' in LACs
+
+	query = "INSERT INTO LAC_Requirements VALUES (%s,%s,%s,%s,%s,%s)"
+	values = (student,math,coursework,breadth,perspective,eight)
+	cur.execute(query,values)
+
+	connection.commit()
+	cur.close()
+
 def updateStudentAOCProgress(student,requirement_id,requirement_progress):
 	'''
 	this function will update a students progress in aoc requirements
@@ -470,12 +521,21 @@ def updateStudentLACProgress(student,LAC_requirement_column,LAC_progress):
 #-----------------------------------------------------------------------------
 #STUDENT ADD COURSE PAGE
 
-def studentAddCourse(student,course):
+def studentAddCourseSQL(student,course):
 	'''
 	this function will add a course to a student's courses completed
 	returns nothing
 	'''
 	connection, cur = connectCursor()
+
+	query = "SELECT * FROM Courses_completed WHERE Student_id=%s AND Course_id=%s"
+	values = (student, course)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	if results != None and len(results) > 0:
+		cur.close()
+		return
+
 	query = "INSERT INTO Courses_completed (Student_id,Course_id) VALUES (%s,%s)"
 	values = (student,course)
 	cur.execute(query,values)
@@ -495,7 +555,7 @@ def authenticateProfessorCourse(course_name):
 	'''
 	connection, cur = connectCursor()
 	query = "SELECT * FROM Courses WHERE Name=%s"
-	values = (course_name)
+	values = (course_name,)
 	cur.execute(query,values)
 	results = cur.fetchall()
 	connection.commit()
@@ -513,7 +573,7 @@ def addProfessorCourse(course_name):
 		bool: If the course was created
 	'''
 	if not authenticateProfessorCourse(course_name):
-		# Should we log something too?
+		# Should we log something tooi?
 		return False
 
 	connection, cur = connectCursor()

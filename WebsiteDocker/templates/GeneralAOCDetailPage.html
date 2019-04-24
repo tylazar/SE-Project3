@@ -8,8 +8,10 @@
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>{{ AOC[1] }} Details:</h1>
-	{% if StudentorProfessor == "Professor" %}
-		<button type="submit">Edit AOC</button>
+	{% if StudentOrProfessor == "Professor" %}
+		<form method="post">
+			<button type="submit">Edit AOC</button>
+		</form>
 	{% endif %}
 	<div class="AOC_Detils_div">
 		<p>{{ AOC[1] }} Requirements: </p>

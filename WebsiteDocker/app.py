@@ -156,32 +156,38 @@ def professorHomepage(professor):
 		except:
 			return redirect('/newAccount/Professor')
 	
-	professor_name = getProfessorProfile(professor)[1]
-	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', 
-		ADDRESS='http://www.ncfbluedream.com', Professor=professor, NAME=professor_name, adviseeList=getAdviseeList())
+	professor_profile = getProfessorProfile(professor)
+	professor_name = professor_profile[1]
+	professor_id = professor_profile[0]
 
-@app.route('/<student>/studentAddCourse')
+	return render_template("ProfessorHomepage.html", LOGOUT='http://www.ncfbluedream.com', 
+		ADDRESS='http://www.ncfbluedream.com', Professor=professor, NAME=professor_name, adviseeList=adviseeInfo(professor_id))
+
+@app.route('/<student>/studentAddCourse', methods=['GET', 'POST'])
 def studentAddCourse(student):
 	#global addr
 	if request.method == 'POST':
-		studentID = getStudentID(student)
-		for x in range(1,20):
-			courseID = request.form['courseChoice'+str(x)]
-			studentAddCourse(studentID,courseID)
-		redirect('/'+student+'/homepage')
-	return render_template("StudentAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
-		ADDRESS='http://www.ncfbluedream.com', CourseList=getCourses(student))
+		student_id = getStudentID(student)
+		
+		f = request.form
+		courses = f.getlist('courseChoice[]')
+		for course in courses:
+			studentAddCourseSQL(student_id, course)
 
-@app.route('/<professor>/professorAddCourse')
+		return redirect('/'+student+'/studentProgressBreakdown')
+	return render_template("StudentAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
+		ADDRESS='http://www.ncfbluedream.com', CourseList=grabAllCourses())
+
+@app.route('/<professor>/professorAddCourse', methods=['GET', 'POST'])
 def professorAddCourse(professor):
 	#global addr
 	if request.method == 'POST':
 		courseName = request.form['CourseName']
 		addedOrNot = addProfessorCourse(courseName)
 		if addedOrNot == True:
-			redirect('/'+professor+'/homepage')
+			return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", Warning="Course added!")
 		else:
-			render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
+			return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
 				Warning="That class already exsists")
 	return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
 		Warning=None)
@@ -218,13 +224,26 @@ def browseAOCs():
 		SoP = session['user_type'], AOCList=getAoCs())
 
 @app.route('/<professor>/addAOC', methods=['GET', 'POST'])
-def addAOC(professor):
+def addAOC(professor, replace_id=None):
 	#global addr
-	aoc = {'NAME':'', 'REQS':[]}
+	if replace_id == None:
+		aoc = {'NAME':'', 'REQS':[]}
+	elif request.method != "POST":
+		aoc_data = getAOC(replace_id)
+
+		aoc = dict()
+		aoc['NAME'] = aoc_data[1]
+		
+		reqs = dict()
+		for req_data in aoc_data[2]:
+			req = {'NAME': req_data[1], 'NUM': req_data[4], 'CLASSES': [course[0] for course in req_data[3]]}
+			reqs.append(req)
+		aoc['REQS'] = reqs
+
 	if request.method == "POST":
 		f = request.form
 
-		print(f)
+		# print(f)
 
 		aoc = build_aoc_from_form(f)
 
@@ -253,9 +272,9 @@ def Disclaimer():
 def AOCDetails(SoP, AoC):
 	#global addr
 	if request.method == 'POST':
-		redirect('/Edit/'+AoC)
+		return redirect(url_for('.addAOC', professor=session['userEmail'], replace_id=AoC))
 	return render_template("GeneralAOCDetailPage.html", ADDRESS='http://www.ncfbluedream.com', BACK='http://www.ncfbluedream.com'+'/browseAOCs', AOC=getAOC(AoC),
-		StudentorProfessor=SoP)
+		StudentOrProfessor=SoP)
 
 @app.route('/Edit/<AOC>')
 def editAOC(AOC):
@@ -270,28 +289,23 @@ def studentProgressBreakdown(student, AOC="General Studies"):
 	AOCListText = ""
 	CoursesListText = ""
 	LACListText = ""
+
+	student_id = getStudentID(student)
 	if request.method == 'POST':
-		'''
-		AOCListText = request.form["AOC"]
-		CourseListText = request.form["Courses"]
-		LACListText = request.form["LAC"]
-		for course in request.form["AOC"]:
-			tryFormAOCCourses(student,course)
-		for course in request.form["Courses"]:
-			tryFormCourses(student,course)
-		for LAC in request.form["LAC"]:
-			tryFormLAC(student,LAC)
-		'''
 		f = request.form
-		checkedCourses = f.getlist('courses')
-		checkLACs = f.getlist('LACs')
+		checkedCourses = f.getlist('courses[]')
+		checkedLACs = f.getlist('LACs[]')
+		courses = set(checkedCourses) # remove duplicate courses
+		LACs = set(checkedLACs)
+		updateStudentClasses(student_id,courses)
+		updateStudentLACs(student_id, LACs)
 		# Drop courses and LACs
 		# Add courses and LACs in list
 	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage",
-		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), LACList=getLACProgress(student),
-		email=session['userEmail'], Courses=getStudentCourses(getStudentID(student)),AOCListText = AOCListText,
+		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), LACList=getLACProgress(student_id),
+		email=session['userEmail'], Courses=getStudentCourses(student_id),AOCListText = AOCListText,
 		AOC_Courses=AOCCourses(getStudentAOC(student)[0]),LACDic = LACRequirements(),CoursesListText = CoursesListText,
-		LACListText = LACListText)
+		LACListText = LACListText, Student=student)
 
 if __name__ == "__main__":
 	app.run()
