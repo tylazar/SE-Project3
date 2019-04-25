@@ -226,19 +226,27 @@ def browseAOCs():
 @app.route('/<professor>/addAOC', methods=['GET', 'POST'])
 def addAOC(professor, replace_id=None):
 	#global addr
-	if replace_id == None:
-		aoc = {'NAME':'', 'REQS':[]}
-	elif request.method != "POST":
+	aoc = {'NAME':'', 'REQS':[]}
+	
+	if 'replace_id' in request.args and request.method != 'POST':
+		replace_id = request.args.get('replace_id')
 		aoc_data = getAOC(replace_id)
+
+		# print(aoc_data)
 
 		aoc = dict()
 		aoc['NAME'] = aoc_data[1]
 		
-		reqs = dict()
+		reqs = list()
 		for req_data in aoc_data[2]:
-			req = {'NAME': req_data[1], 'NUM': req_data[4], 'CLASSES': [course[0] for course in req_data[3]]}
+			req = {'NAME': req_data[1], 'NUM': req_data[4], 'COURSES': list()}
+
+			for course in req_data[3]:
+				req['COURSES'].append(course[0])
 			reqs.append(req)
 		aoc['REQS'] = reqs
+
+		# print(aoc)
 
 	if request.method == "POST":
 		f = request.form
@@ -252,10 +260,15 @@ def addAOC(professor, replace_id=None):
 		elif f['action'] != 'submit_form':
 			aoc['REQS'][int(f['action'])-1]['COURSES'].append(-1)
 		else:
-			sqlAddAOC(aoc)
+			if 'replace_id' in request.args:
+				sqlUpdateAOC(aoc, request.args.get('replace_id'))
+			else:
+				sqlAddAOC(aoc)
 			return redirect('browseAOCs')
 
-		print(aoc)
+		# print(aoc)
+
+	print(aoc)
 
 	return render_template("addAOCPage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
 		courses=grabAllCourses(), AOC_DATA=aoc)
@@ -374,10 +387,6 @@ def build_aoc_from_form(f):
 
 def getProgressSentence(student):
 	return ["Bwee", "Bwee2"]
-
-def getAOC(student):
-	requirements = ["Intro to Programming Course", "Scheme", "C++", "Software Engineering"]
-	return ["Computer Science", requirements]
 
 def getLAC(student):
 	return [('What goes', 'here?')]

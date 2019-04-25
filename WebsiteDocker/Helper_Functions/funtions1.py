@@ -112,8 +112,8 @@ def aocInformation(AOC):
 			cur.close()
 			cur = connection.cursor()
 
-			for id,name in results3:
-				Courses_for_requirementList.append((id,name))
+			for id,course_name in results3:
+				Courses_for_requirementList.append((id,course_name))
 
 		tempReqList.append((id,name,AOC_id,Courses_for_requirementList,NUM_to_complete))
 
@@ -687,6 +687,35 @@ def getAoCs():
 
 #-----------------------------------------------------------------------------
 #ADD AOC PAGE
+
+def sqlUpdateAOC(aoc, replace_id):
+	connection, cur = connectCursor()
+
+	query = "UPDATE AOCs SET name=%s WHERE id=%s"
+	values = (aoc['NAME'], replace_id)
+	cur.execute(query,values)
+	connection.commit()
+
+	query = "DELETE FROM Requirements WHERE AOC_id=%s"
+	values = (replace_id,)
+	cur.execute(query,values)
+	connection.commit()
+
+	for requirement in aoc['REQS']:
+		query = "INSERT INTO Requirements (name,AOC_id,NUM_to_complete) VALUES (%s,%s,%s)"
+		values = (requirement['NAME'],replace_id,int(requirement['NUM']))
+		cur.execute(query,values)
+		connection.commit()
+
+		req_id = cur.lastrowid
+		
+		for course in requirement['COURSES']:
+			query = "INSERT INTO Courses_for_requirement (Requirement_id,Course_id) VALUES (%s,%s)"
+			values = (req_id,int(course))
+			cur.execute(query,values)
+			connection.commit()
+		
+	cur.close()
 
 def sqlAddAOC(aoc):
 	'''

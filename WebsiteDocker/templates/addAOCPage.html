@@ -16,7 +16,7 @@
 		{% if AOC_DATA['NAME'] == '' %}
 			<input class="aoc_name_input" type="text" name="AOC_name" required>
 		{% else %}
-			<input class="aoc_name_input" type="text" name="AOC_name" value={{ AOC_DATA['NAME'] }} required>
+			<input class="aoc_name_input" type="text" name="AOC_name" value="{{ AOC_DATA['NAME'] }}" required>
 		{% endif %}
 	</div>
 		<br>
@@ -29,7 +29,7 @@
 							{% if requirement['NAME'] == '' %}
 								<input type="text" name="requirement_names[]" }} required>
 							{% else %}
-								<input type="text" name="requirement_names[]" value={{ requirement['NAME'] }} required>
+								<input type="text" name="requirement_names[]" value="{{ requirement['NAME'] }}" required>
 							{% endif %}
 						</div>
 
