@@ -39,6 +39,7 @@ button {
  	color: #D3D9FF;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
  	font-size: 1.2em;
+	cursor: url('pickaxe.png'), pointer;
 }
 
 button:hover {

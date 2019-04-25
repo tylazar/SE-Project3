@@ -151,10 +151,10 @@ def professorHomepage(professor):
 		if getStudentProfile(professor) != None:
 			return redirect('/newAccount/Professor')
 
-		try:
-			newAccountCreation(session['name'],professor,None,None,False)
-		except:
-			return redirect('/newAccount/Professor')
+		#try:
+		newAccountCreation(session['name'],professor,None,None,False)
+		#except:
+		#	return redirect('/newAccount/Professor')
 	
 	professor_profile = getProfessorProfile(professor)
 	professor_name = professor_profile[1]

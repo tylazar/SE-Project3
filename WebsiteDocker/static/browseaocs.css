@@ -18,22 +18,37 @@ body {
 }
 
 button {
- 	border-radius: 12px;
- 	border: 1px solid #D3D9FF;
- 	background-color: transparent;
- 	padding: 12px;
- 	margin-top: 5vh;
- 	margin-bottom: 5vh;
+ 	background-color: #050608;
+	border: none;
+ 	margin-top: 1vh;
+ 	margin-bottom: 1vh;
 	color: #D3D9FF;
 	font-family: 'Amatic SC', cursive;
 	font-size: 1.2em;
+	cursor: url('pickaxe.png'), pointer;
+	height: 100%;
+	width: 60vw;
+	cursor: url('pickaxe.png'), pointer;
 }
 
 button:hover {
- 	border-radius: 12px;
- 	border: 1px solid #D3D9FF;
 	background-color: #53256C;
-	padding: 12px;
+}
+
+table {
+	width: 60vw;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #D3D9FF;
+	height: 60vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	display: block;
+	background-color: #050608;
+}
+
+tr {
+	text-align: center;
 }
 
 .back {
@@ -49,6 +64,7 @@ button:hover {
 	font-size: 1.2em;
 	padding-top: 0;
 	padding-bottom: 0;
+	width: auto;
 }
 
 .back:hover {

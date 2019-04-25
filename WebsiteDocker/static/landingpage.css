@@ -12,6 +12,7 @@ body {
 	background-image: url("background1.png");
 	background-color: #53256C; /*if image isn't available*/
 	background-size: cover;
+	background-repeat: no-repeat;
 	color: #D3D9FF;
 	width: 75%;
 	margin: auto;
@@ -39,6 +40,7 @@ button {
  	color: #D3D9FF;
  	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
  	font-size: 1.2em;
+	cursor: url('pickaxe.png'), pointer;
 }
 
 button:hover {

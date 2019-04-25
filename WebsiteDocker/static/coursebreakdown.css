@@ -25,6 +25,7 @@ button {
 	color: #D3D9FF;
 	font-family: 'Amatic SC', cursive;
 	font-size: 1.2em;
+	cursor: url('pickaxe.png'), pointer;
 }
 
 button:hover {
@@ -32,6 +33,10 @@ button:hover {
  	border: 1px solid #D3D9FF;
 	background-color: #53256C;
 	padding: 12px;
+}
+
+.submit_button {
+	margin-bottom: 10vh;
 }
 
 
@@ -44,6 +49,9 @@ button:hover {
     color: #D3D9FF;
     font-family: 'Amatic SC', cursive;
     font-size: 1.2em;
+    text-decoration: none;
+    margin-left: 28vw;
+    cursor: url('pickaxe.png'), pointer;
 }       
         
 .buttonCopy:hover {
@@ -117,4 +125,15 @@ th, td {
 	padding-top: 5vh;
 	padding-bottom: 5vh;
 	background-color: #050608;
+	text-align: left;
+	padding-left: 5vw;
 }
+
+.AOC_div input {
+	margin-left: 6vw;
+}
+
+h4 {
+	margin-left: 28vw;
+}
+

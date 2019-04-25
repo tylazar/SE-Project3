@@ -30,6 +30,7 @@ button {
 	color: #D3D9FF;
 	font-family: 'Amatic SC', cursive;
 	font-size: 1.2em;
+	cursor: url('pickaxe.png'), pointer;
 }
 
 button:hover {
@@ -83,14 +84,18 @@ button:hover {
 	font-size: 1.2em;
 }
 
-#dropdown {
+select {
 	background-color: #050608;
 	border: 1px solid #D3D9FF;
 	color: #D3D9FF;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
 	padding-left: 1vw;
 	padding-right: 1vw;
+	font-size: 1.2em;
+	width: 20vw;
 }
+
+
 #x {
 	border: none;
 	background-color: transparent;
