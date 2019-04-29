@@ -280,6 +280,7 @@ def addAOC(professor, replace_id=None):
 		else:
 			if 'replace_id' in request.args:
 				sqlUpdateAOC(aoc, request.args.get('replace_id'))
+				return redirect('browseAOCs')
 			else:
 				warning = sqlAddAOC(aoc)
 				if warning == False:

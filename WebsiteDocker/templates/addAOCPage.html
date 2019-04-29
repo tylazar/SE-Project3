@@ -6,6 +6,11 @@
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
 <script>
+	var dataMap = new Map();
+	{% for course in courses %}
+		dataMap.set("{{ course[1] }}", {{ course[0] }});
+	{% endfor %}
+
 	function removeCourseFromForm(element, counterId) {
 		element.parentElement.parentElement.removeChild(element.parentElement);
 		counter = document.getElementById(counterId);
@@ -17,13 +22,38 @@
 		button = document.getElementById(buttonId);
 		button.parentElement.removeChild(button);
 	}
+
+	function verifyCourses() {
+		var courseSelectors = document.getElementsByName("chooseCourse");
+		var courseInputs = document.getElementsByName("courses[]");
+
+		var i;
+		for (i=0; i<courseSelectors.length; i++) {
+			var selectedCourse = courseSelectors[i].value;
+			var actualValue = dataMap.get(selectedCourse);
+
+			if (actualValue == undefined) {
+				alert(selectedCourse+" is not a valid course!");
+				return false;
+			} else {
+				courseInputs[i].value = actualValue;
+			}
+		}
+
+		return true;
+	}
 </script>
+<datalist id="courses">
+	{% for course in courses %}
+		<option value="{{ course[1] }}">
+	{% endfor %}
+</datalist>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>Add an AOC</h1>
 	<p>Please enter the following information to create a new AOC and add it to the database</p>
 	<br>
-	<form id="form" method="post">
+	<form id="form" method="post" onsubmit="return verifyCourses();">
 	<div class="aoc_name">
 		<p class="aoc_name_p">AOC Name:</p>
 		{% if AOC_DATA['NAME'] == '' %}
@@ -60,7 +90,16 @@
 							<div class="req_courses">
 								<button class="inlineButton" onclick="removeCourseFromForm(this, 'counter_{{ loop_index }}')" type="button">X</button>
 								<div class="Courses_div">
-									<select name="courses[]">
+									<input name="courses[]" hidden>
+									{% set course_name = [] %}
+									{% for course in courses %}
+										{% if course[0] == required_course %}
+											{% if course_name.append(course[1]) %} {% endif %}
+										{% endif %}
+									{% endfor %}
+									{% if course_name|length == 0 %} {% if course_name.append("") %} {% endif %} {% endif %}
+									<input name="chooseCourse" list="courses" value="{{ course_name[0] }}">
+									<!--<select name="courses[]">
 										{% for course in courses %}
 											{% if course[0] == required_course %}
 												<option value="{{ course[0] }}" selected>{{ course[1] }}</option>
@@ -68,7 +107,7 @@
 												<option value="{{ course[0] }}">{{ course[1] }}</option>
 											{% endif %}
 										{% endfor %}
-									</select>
+									</select>--!>
 								</div>
 							</div>
 						{% endfor %}
