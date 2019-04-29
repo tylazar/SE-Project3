@@ -88,6 +88,11 @@ def oauth_google_authorized():
 def landingPage():
 	#stuff here
 	#funtions1.connectionTest()
+	if 'token' in session:
+		print('Clearing token...')
+		r = requests.get('https://accounts.google.com/o/oauth2/revoke?token='+session['token'])
+		print(r.json())
+
 	session.clear()
 	return render_template("LandingPage.html")
 
