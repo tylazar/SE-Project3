@@ -5,18 +5,31 @@
 	<link rel="stylesheet" href="{{ url_for('static', filename='addaoc.css') }}">
 	<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
 </head>
+<script>
+	function removeCourseFromForm(element, counterId) {
+		element.parentElement.parentElement.removeChild(element.parentElement);
+		counter = document.getElementById(counterId);
+		counter.value -= 1;
+	}
+
+	function removeRequirementFromForm(element, buttonId) {
+		element.parentElement.parentElement.removeChild(element.parentElement);
+		button = document.getElementById(buttonId);
+		button.parentElement.removeChild(button);
+	}
+</script>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>Add an AOC</h1>
 	<p>Please enter the following information to create a new AOC and add it to the database</p>
 	<br>
-	<form method="post">
+	<form id="form" method="post">
 	<div class="aoc_name">
 		<p class="aoc_name_p">AOC Name:</p>
 		{% if AOC_DATA['NAME'] == '' %}
-			<input class="aoc_name_input" type="text" name="AOC_name" required>
+			<input class="aoc_name_input" type="text" name="AOC_name" maxLength="50" required>
 		{% else %}
-			<input class="aoc_name_input" type="text" name="AOC_name" value="{{ AOC_DATA['NAME'] }}" required>
+			<input class="aoc_name_input" type="text" name="AOC_name" value="{{ AOC_DATA['NAME'] }}" maxLength="50" required>
 		{% endif %}
 	</div>
 		<br>
@@ -24,12 +37,13 @@
 			<div class="AOC_div">
 				{% for requirement in AOC_DATA['REQS'] %}
 					<div class="Requirement_div">
+						<button class="inlineButton" onclick="removeRequirementFromForm(this, 'button_{{ loop.index }}')" type="button">X</button>
 						<div class="name">
 							<p class="div_label">Requirement Name:</p>
 							{% if requirement['NAME'] == '' %}
-								<input type="text" name="requirement_names[]" }} required>
+								<input type="text" name="requirement_names[]" maxLength="50" required>
 							{% else %}
-								<input type="text" name="requirement_names[]" value="{{ requirement['NAME'] }}" required>
+								<input type="text" name="requirement_names[]" value="{{ requirement['NAME'] }}" maxLength="50" required>
 							{% endif %}
 						</div>
 
@@ -38,10 +52,13 @@
 							<input type="number" name="nums_for_requirements[]" min="0" value="{{ requirement['NUM'] }}" required>
 						</div>
 
-						<input type="hidden" name="courses_lens[]" value="{{ requirement['COURSES']|length }}">
+						{% set loop_index = loop.index %}
+						<input type="hidden" name="courses_lens[]" id="counter_{{ loop_index }}" value="{{ requirement['COURSES']|length }}">
+						<p class="div_label">Courses for the requirement:</p>
+						<br>
 						{% for required_course in requirement['COURSES'] %}
 							<div class="req_courses">
-								<p class="div_label">Courses for the requirement:</p>
+								<button class="inlineButton" onclick="removeCourseFromForm(this, 'counter_{{ loop_index }}')" type="button">X</button>
 								<div class="Courses_div">
 									<select name="courses[]">
 										{% for course in courses %}
@@ -56,15 +73,16 @@
 							</div>
 						{% endfor %}
 					</div>
-					<button class="add_course_button" type="submit" name="action" value="{{ loop.index }}">add course</button>
+					<button class="add_course_button" type="submit" name="action" id="button_{{ loop.index }}" value="{{ loop.index }}">add course</button>
 				{% endfor %}
 			</div>
 			<br>
 			<button class="req_button" type="submit" name="action" value="add_requirement">add requirement</button>
 			<br>
 			<div class="bottom_buttons">
-				<button onclick="location.href='{{ BACK }}'">Cancel</button>
-				<button class="buttonCopy" type="submit" name="action" value="submit_form">submit form</button>
+				<!--<button type="submit" name="action" value="cancel">Cancel</button>--!>
+				<a href="{{ BACK }}" style="text-decoration:none" class="buttonCopy">Cancel</a>
+				<button class="buttonCopy" type="submit" name="action" value="submit_form">Submit</button>
 			</div>
 		</form>
 	</body>

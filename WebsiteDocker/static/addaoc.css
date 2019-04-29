@@ -40,6 +40,14 @@ button:hover {
 	padding: 12px;
 }
 
+.inlineButton {
+	display: inline-block;
+	margin-right: 3vw;
+	font-size: 1.2em;
+	float: left;
+	margin: 0.5em;
+}
+
 .add_course_button {
 	margin-left: 40%;
 	margin-right: 40%;
@@ -154,7 +162,8 @@ input {
 	width: 60%;
 	margin: auto;
 	border: 1px solid #D3D9FF;
-	padding-bottom: 13vh;
+	padding-left: 2em;
+	padding-right: 2em;
 }
 
 .div_label {
@@ -162,8 +171,12 @@ input {
 	margin-right: 2vw;
 }
 
-.name, .number, .req_courses, .Courses_div {
+.name, .number, .req_courses {
 	display: inline-block;
+}
+
+.Courses_din {
+	display: inline-flex
 }
 
 .cancel {
@@ -177,4 +190,5 @@ select {
 	font-size: 1.2em;
 	color: #D3D9FF;
 	margin-top: 2.5vh;
+	width: 75%;
 }

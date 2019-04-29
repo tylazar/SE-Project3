@@ -722,6 +722,12 @@ def sqlAddAOC(aoc):
 	TO BE UPDATED	
 	'''
 	connection, cur = connectCursor()
+	query = "SELECT id FROM AOCs WHERE name = %s"
+	values = (aoc['NAME'],)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	if len(results) != 0:
+		return False
 	query = "INSERT INTO AOCs (name) VALUES (%s)"
 	values = (aoc['NAME'],)
 	cur.execute(query,values)

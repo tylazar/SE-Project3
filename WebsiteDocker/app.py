@@ -6,6 +6,8 @@ from Helper_Functions.funtions1 import *
 
 import datetime as dt
 
+import requests
+
 #app = Flask(__name__)
 
 import sys
@@ -103,6 +105,7 @@ def landingPage():
 @app.route('/newAccount/<SoP>', methods=['GET', 'POST'])
 def newAccountPage(SoP):
 	#global addr
+	session.clear()
 	if request.method == 'POST':
 		# session['userEmail'] = request.form['email']
 		session['user_type'] = SoP
@@ -182,13 +185,16 @@ def studentAddCourse(student):
 def professorAddCourse(professor):
 	#global addr
 	if request.method == 'POST':
-		courseName = request.form['CourseName']
-		addedOrNot = addProfessorCourse(courseName)
-		if addedOrNot == True:
-			return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", Warning="Course added!")
+		if request.form['submitType'] == "Cancel":
+			return redirect("/"+professor+"/homepage")
 		else:
-			return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
-				Warning="That class already exsists")
+			courseName = request.form['CourseName']
+			addedOrNot = addProfessorCourse(courseName)
+			if addedOrNot == True:
+				return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", Warning="Course added!")
+			else:
+				return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
+					Warning="That class already exsists")
 	return render_template("ProfessorAddCoursePage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
 		Warning=None)
 
@@ -205,6 +211,7 @@ def editStudentProfile(student):
 		studentID = getStudentID(student)
 		print('POSTing new student info')
 		updateStudentProfile(studentID,newName,newAdvisor,newEGY,newAOC,newAgreement)
+		return redirect("/"+student+"/homepage")
 	oldInfo = getStudentProfile(student)
 
 	return render_template("EditStudentProfile.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage", 
@@ -227,7 +234,8 @@ def browseAOCs():
 def addAOC(professor, replace_id=None):
 	#global addr
 	aoc = {'NAME':'', 'REQS':[]}
-	
+	Warning = ""
+
 	if 'replace_id' in request.args and request.method != 'POST':
 		replace_id = request.args.get('replace_id')
 		aoc_data = getAOC(replace_id)
@@ -251,6 +259,9 @@ def addAOC(professor, replace_id=None):
 	if request.method == "POST":
 		f = request.form
 
+		if f['action'] == 'cancel':
+			return redirect('http://www.ncfbluedream.com'+"/"+professor+"/homepage")
+
 		# print(f)
 
 		aoc = build_aoc_from_form(f)
@@ -263,15 +274,18 @@ def addAOC(professor, replace_id=None):
 			if 'replace_id' in request.args:
 				sqlUpdateAOC(aoc, request.args.get('replace_id'))
 			else:
-				sqlAddAOC(aoc)
-			return redirect('browseAOCs')
+				warning = sqlAddAOC(aoc)
+				if warning == False:
+					Warning = "AOC name already in use"
+				else:
+					return redirect('browseAOCs')
 
 		# print(aoc)
 
 	print(aoc)
 
 	return render_template("addAOCPage.html", BACK='http://www.ncfbluedream.com'+"/"+professor+"/homepage", 
-		courses=grabAllCourses(), AOC_DATA=aoc)
+		courses=grabAllCourses(), AOC_DATA=aoc, Warning=Warning)
 
 @app.route('/FERPA')
 def FERPA():
