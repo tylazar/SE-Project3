@@ -150,6 +150,7 @@ def studentHomepage(student):
 		#	return redirect('/newAccount/Student')
 	
 	student_name = getStudentProfile(student)[0][1]
+	updateProgressSentence(student)
 	return render_template("StudentHomepage.html", Student=student, NAME=student_name, progress_sentece=progressSentence(student), 
 		LOGOUT='http://www.ncfbluedream.com', ADDRESS='http://www.ncfbluedream.com')
 
@@ -179,6 +180,7 @@ def studentAddCourse(student):
 		
 		f = request.form
 		courses = f.getlist('courseChoice[]')
+		print(courses)
 		for course in courses:
 			studentAddCourseSQL(student_id, course)
 
@@ -333,6 +335,7 @@ def studentProgressBreakdown(student, AOC="General Studies"):
 		updateStudentLACs(student_id, LACs)
 		# Drop courses and LACs
 		# Add courses and LACs in list
+	updateProgressSentence(student)
 	return render_template("StudentBreakdownPage.html", BACK='http://www.ncfbluedream.com'+"/"+student+"/homepage",
 		progress_sentence=progressSentence(student), AOC_List=getStudentAOC(student), LACList=getLACProgress(student_id),
 		email=session['userEmail'], Courses=getStudentCourses(student_id),AOCListText = AOCListText,
@@ -508,3 +511,7 @@ def tryFormLAC(student,LAC):
 		updateStudentLACProgress(student,LAC,LACvalue)
 	except:
 		pass
+
+def updateProgressSentence(student):
+	student = getStudentID(student)
+	updateAllAOCStudent(student)

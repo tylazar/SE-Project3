@@ -61,7 +61,7 @@ def getstudentProgress(student):
 	cur.close()
 	cur = connection.cursor()
 	for NUM_completed in results:
-		Total_NUM_to_complete -= NUM_completed
+		Total_NUM_to_complete -= NUM_completed[0]
 	currentYear += (Total_NUM_to_complete/3)
 	return (currentYear,Total_NUM_to_complete)
 
@@ -218,6 +218,21 @@ def newAccountCreation(name,email,EGY,AOC,advisor,shareInfo,studentOrProfessor):
 		cur.execute(query,values)
 		connection.commit()
 		cur.close()
+		cur = connection.cursor()
+		query = "SELECT id FROM Requirements WHERE AOC_id=%s"
+		values = (AOC,)
+		cur.execute(query,values)
+		results = cur.fetchall()
+		connection.commit()
+		cur.close()
+		cur = connection.cursor()
+		for result in results:
+			ReqID = result[0]
+			query = "INSERT INTO Requirements_completed (Student_id,Requirement_id,NUM_completed,status) VALUES (%s,%s,%s,%s)"
+			values = (Student_ID,ReqID,0,False)
+			cur.execute(query,values)
+			connection.commit()
+			cur.close()
 
 
 #-----------------------------------------------------------------------------
@@ -384,6 +399,9 @@ def adviseeInfoHelper(student):
 		cur = connection.cursor()
 		for NUM_completed in results2:
 			completedNumber += NUM_completed
+
+	if float(totalNumber) == 0:
+		return 1
 
 	return float(float(completedNumber)/float(totalNumber))
 
@@ -647,7 +665,26 @@ def updateStudentProfile(student_id, name, advisor, graduation_year, aoc_id, agr
 	values = (name, advisor, graduation_year, agreement, student_id)
 	cur.execute(query, values)
 	connection.commit()
+
+	query = "DELETE FROM Requirements_completed WHERE Student_id=%s"
+	values = (student_id,)
+	cur.execute(query,values)
+	connection.commit()
+
+	query = "SELECT id FROM Requirements WHERE AOC_id=%s"
+	values = (aoc_id,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	connection.commit()
 	cur.close()
+	for result in results:
+		connection, cur = connectCursor()
+		ReqID = result[0]
+		query = "INSERT INTO Requirements_completed (Student_id,Requirement_id,NUM_completed,status) VALUES (%s,%s,%s,%s)"
+		values = (student_id,ReqID,0,False)
+		cur.execute(query,values)
+		connection.commit()
+		cur.close()
 
 #-----------------------------------------------------------------------------
 #BROWSE CLASSES PAGE
@@ -824,3 +861,59 @@ def studentRemoveCourse(student,course):
 	connection.commit()
 	cur.close()
 
+def updateAllAOCStudent(student):
+	'''
+	updates all aoc progress
+	'''
+	connection, cur = connectCursor()
+	query = "SELECT AOC_id FROM Student_aoc WHERE Student_id=%s"
+	values = (student,)
+	cur.execute(query,values)
+	AOCID = cur.fetchall()[0][0]
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	query = "SELECT id,NUM_to_complete FROM Requirements WHERE AOC_id=%s"
+	values = (AOCID,)
+	cur.execute(query,values)
+	RequirementID = cur.fetchall()
+	connection.commit()
+	cur.close()
+	cur = connection.cursor()
+	query = "SELECT Course_id FROM Courses_completed WHERE Student_id=%s"
+	values = (student,)
+	cur.execute(query,values)
+	results = cur.fetchall()
+	coursesTaken = []
+	for result in results:
+		courseID = result[0]
+		coursesTaken.append(courseID)
+	CourseIDs = []
+	updates = []
+	connection.commit()
+	cur.close()
+	for Req in RequirementID:
+		connection, cur = connectCursor()
+		id = Req[0]
+		numcomplete = Req[1]
+		updates.append((id,numcomplete))
+		query = "SELECT Course_id FROM Courses_for_requirement WHERE Requirement_id=%s"
+		values = (id,)
+		cur.execute(query,values)
+		results = cur.fetchall()
+		connection.commit()
+		cur.close()
+		for result in results:
+			CourseIDs.append((id,result[0]))
+	cur = connection.cursor()
+	updates2 = []
+	for Req in updates:
+		ReqId = Req[0]
+		ReqNum = 0
+		for course in CourseIDs:
+			if course[0] == ReqId:
+				if course[1] in coursesTaken:
+					ReqNum += 1
+		updates2.append((ReqId,ReqNum))
+	for Req in updates2:
+		updateStudentAOCProgress(student,Req[0],Req[1])

@@ -7,6 +7,12 @@
 </head>
 <script>
 	var count = 2;
+
+	var dataMap = new Map();
+	{% for course in CourseList %}
+		dataMap.set("{{ course[1] }}", {{ course[0] }});
+	{% endfor %}
+
 	function AnotherCourse() {
 		var bigDiv = document.getElementById("bigDiv");
 		var smallerDiv = document.createElement("div");
@@ -30,40 +36,68 @@
 		//courseListInput.setAttribute("id","course"+count.toString());
 		//courseListInput.setAttribute("name","courseChoice[]");
 
-		var courseListInput = document.createElement("select");
+		var courseListInput = document.createElement("input");
 		courseListInput.setAttribute("name","courseChoice[]");
+		courseListInput.hidden = true;
 
-		var option;
+
+		var courseSelector = document.createElement("input");
+		courseSelector.setAttribute("name", "chooseCourse");
+		courseSelector.setAttribute("list", "courses");
+		//smallerDiv.appendChild(courseSelector);
+
+		/*var option;
 		{% for course in CourseList %}
 			option = document.createElement("option");
 			courseListInput.appendChild(option);
 			option.value = "{{ course[0] }}";
 			option.innerHTML = "{{ course[1] }}";
-		{% endfor %}
+		{% endfor %}*/
 
 		smallerDiv.appendChild(Xbutton);
 		smallerDiv.appendChild(AddCourseText);
 		smallerDiv.appendChild(courseListInput);
+		smallerDiv.appendChild(courseSelector);
 		bigDiv.appendChild(smallerDiv);
 		count++;
 		return false;
 	}
+
 	function removeChoice(IDnumber) {
 		var smallerDiv = document.getElementById(IDnumber);
 		var bigDiv = smallerDiv.parentNode;
 		bigDiv.removeChild(smallerDiv);
 	}
+
+	function verifyCourses() {
+		var courseSelectors = document.getElementsByName("chooseCourse");
+		var courseInputs = document.getElementsByName("courseChoice[]");
+
+		var i;
+		for (i=0; i<courseSelectors.length; i++) {
+			var selectedCourse = courseSelectors[i].value;
+			var actualValue = dataMap.get(selectedCourse);
+			if (actualValue == undefined) {
+				alert(selectedCourse+" is not a valid course!")
+				return false;
+			} else {
+				courseInputs[i].value = actualValue;
+			}
+		}
+
+		return true;
+	}
 </script>
 <datalist id="courses">
 	{% for course in CourseList %}
-		<option value={{ course[0] }}>{{ course[1] }}</option>
+		<option value="{{ course[1] }}">
 	{% endfor %}
 </datalist>
 <body>
 	<button class="back" onclick="location.href='{{ BACK }}'">Back</button>
 	<h1>Add Courses</h1>
 	<p>To find the course you would like to add click on 'Browse Courses' and select the course you want from the menu. If you would like to add multiple courses at one time simply click 'Add Another Course' and repeat the process above. If you decide you don't want to add a course simply click the red X next to that course. When you are done with adding courses click 'Submit New Courses'.</p>
-	<form method="post">
+	<form method="post" onsubmit="return verifyCourses();">
 		<div class="Courses" id="bigDiv">
 		</div>
 		<div class="Courses">
