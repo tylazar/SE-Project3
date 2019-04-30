@@ -225,8 +225,8 @@ def newAccountCreation(name,email,EGY,AOC,advisor,shareInfo,studentOrProfessor):
 		results = cur.fetchall()
 		connection.commit()
 		cur.close()
-		cur = connection.cursor()
 		for result in results:
+			connection, cur = connectCursor()
 			ReqID = result[0]
 			query = "INSERT INTO Requirements_completed (Student_id,Requirement_id,NUM_completed,status) VALUES (%s,%s,%s,%s)"
 			values = (Student_ID,ReqID,0,False)
@@ -398,7 +398,7 @@ def adviseeInfoHelper(student):
 		cur.close()
 		cur = connection.cursor()
 		for NUM_completed in results2:
-			completedNumber += NUM_completed
+			completedNumber += NUM_completed[0]
 
 	if float(totalNumber) == 0:
 		return 1

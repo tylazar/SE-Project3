@@ -81,13 +81,17 @@ input {
 	border-bottom: 2px solid #D3D9FF;
 	background-color: transparent;
 	color: #D3D9FF;
+	font-size: 1.2em;
+	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
 }
 
-#dropdown {
+select {
 	background-color: #050608;
 	border: 1px solid #D3D9FF;
 	color: #D3D9FF;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
 	padding-left: 1vw;
 	padding-right: 1vw;
+	font-size: 1.2em;
+	width: 30%;
 }

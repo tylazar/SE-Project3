@@ -129,6 +129,10 @@ def newAccountPage(SoP):
 		ADDRESS='http://www.ncfbluedream.com', StudentOrProfessor=SoP, AOCList=getAoCs(),
 		AdvisorList=getAdvisors(), currentYear=dt.datetime.now().year)
 
+@app.route('/badEmail')
+def badEmail():
+	return render_template("badEmail.html")
+
 @app.route('/<user>/homepage')
 def userHomepage(user):
 	if session['user_type'] == 'Student':
@@ -144,6 +148,11 @@ def studentHomepage(student):
 		if getProfessorProfile(student) != None:
 			return redirect('/newAccount/Student')
 
+		if student[-8:] != '@ncf.edu':
+			return redirect('/badEmail')
+		
+		if 'name' not in session:
+			return redirect('/newAccount/Student')
 		#try:
 		newAccountCreation(session['name'],student,session['EGY'],session['AOC'],session['advisor'],session['agreement'],True)
 		#except:
@@ -160,8 +169,13 @@ def professorHomepage(professor):
 		if getStudentProfile(professor) != None:
 			return redirect('/newAccount/Professor')
 
+		if professor[-8:] != '@ncf.edu':
+			return redirect('/badEmail')
+		
+		if 'name' not in session:
+			return redirect('/newAccount/Professor')
 		#try:
-		newAccountCreation(session['name'],professor,None,None,False)
+		newAccountCreation(session['name'],professor,None,None,None,None,False)
 		#except:
 		#	return redirect('/newAccount/Professor')
 	

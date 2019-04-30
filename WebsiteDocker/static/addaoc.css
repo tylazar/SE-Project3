@@ -41,8 +41,7 @@ button:hover {
 }
 
 .inlineButton {
-	display: inline-block;
-	margin-right: 3vw;
+	display: inline;
 	font-size: 1.2em;
 	float: left;
 	margin: 0.5em;
@@ -151,6 +150,7 @@ input {
 	float: right;
 	border: none;
 	border-bottom: 1px solid #D3D9FF;
+	border-top: none;
 	color: #D3D9FF;
 	background-color: transparent;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
@@ -159,24 +159,49 @@ input {
 }
 
 .AOC_div {
-	width: 60%;
+	width: 70%;
 	margin: auto;
 	border: 1px solid #D3D9FF;
 	padding-left: 2em;
 	padding-right: 2em;
+	text-align: left;
 }
 
 .div_label {
+	display: inline-block;
 	float: left;
 	margin-right: 2vw;
+	margin-left: 2vw;
+	font-weight: bold;
+}
+
+.div_label::after {
+	content: '';
+	display: block;
+}
+
+.number p {
+	font-weight: normal;
 }
 
 .name, .number, .req_courses {
 	display: inline-block;
 }
 
+.req_courses {
+	display: flex;
+	align-content: left;
+	margin-top: 14vh;
+	margin-left: 5vw;
+	justify-content: flex-start;
+}
+
 .Courses_din {
 	display: inline-flex
+}
+
+.Courses_div input {
+	margin-left: 10vw;
 }
 
 .cancel {
@@ -186,9 +211,14 @@ input {
 select {
 	border: 1px solid #D3D9FF;
 	font-family: 'Amatic SC', 'Arial Narrow', sans-serif;
-	background: transparent;
+	background-color: #050608;
 	font-size: 1.2em;
 	color: #D3D9FF;
 	margin-top: 2.5vh;
 	width: 75%;
+}
+
+.name p {
+	font-weight: bold;
+	text-decoration: underline;
 }
